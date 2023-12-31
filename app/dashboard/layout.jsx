@@ -20,6 +20,7 @@ export default function DashboardLayout({ children }) {
             ml: `${DRAWER_WIDTH}px`,
             mt: ["48px", "56px", "64px"],
             p: 3,
+            overflow: "auto", // Make the main content scrollable
           }}
         >
           {children}
