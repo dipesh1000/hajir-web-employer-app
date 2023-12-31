@@ -18,11 +18,11 @@ export default function HomePage() {
   return (
     <Box sx={{ display: "flex" }}>
       <div>
-        <Alert severity="info" sx={{ mt: 2, mb: 5, bgcolor: "white" }}>
+        {/* <Alert severity="info" sx={{ mt: 2, mb: 5, bgcolor: "white" }}>
           <AlertTitle> Welcome to Hajir 👋</AlertTitle>
           <AlertTitle> BIraj Karki</AlertTitle>
           Manage your company and employee with the best management system.
-        </Alert>
+        </Alert> */}
 
         {isCompanyExists ? <MainDashboard /> : <FirstDashboard />}
       </div>

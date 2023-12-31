@@ -34,12 +34,14 @@ const UserAuthForm = ({ onSubmit, formik, className, ...props }) => {
           />
         </Grid>
         <Grid item xs={12}>
-          <Button type="submit" variant="contained" color="primary">
-            Login
-          </Button>
           {/* <Button type="submit" variant="contained" color="primary">
             Login
           </Button> */}
+          <Link href="/otp">
+            <Button type="submit" variant="contained" color="primary">
+              Login
+            </Button>
+          </Link>
         </Grid>
       </form>
     </Grid>

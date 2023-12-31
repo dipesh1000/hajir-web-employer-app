@@ -74,12 +74,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const DRAWER_WIDTH = 240;
 
 const LINKS = [
-  { text: "Dashboard", href: "/", icon: HomeIcon },
+  { text: "Dashboard", href: "/dashboard", icon: HomeIcon },
   { text: "Profile", href: "/profile", icon: StarIcon },
   { text: "My Plans", href: "/myplans", icon: ChecklistIcon },
 ];
 const PLACEHOLDER_LINKS = [
-  { text: "Settings", icon: SettingsIcon },
+  // { text: "Settings", icon: SettingsIcon },
   { text: "Logout", icon: LogoutIcon },
 ];
 
