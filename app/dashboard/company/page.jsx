@@ -9,7 +9,7 @@ const Company = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      officeHourStart: "10:00",
+      officeHourStart: "",
       officeHourEnd: "18:00",
       code: 1,
       calculationType: "calendar_days",

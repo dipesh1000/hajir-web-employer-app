@@ -1,9 +1,12 @@
+"use client";
 import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
+import SendIcon from "@mui/icons-material/Send";
+
 import {
   Autocomplete,
   Checkbox,
@@ -13,6 +16,7 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -49,6 +53,22 @@ const ProbationPeriod = [
 export default function CreateCompany({ formik }) {
   const [response, setResponse] = useState({});
   const router = useRouter();
+
+  const handleDecreaseTime = () => {
+    updateFormState("workingHours", (prevHours) => Math.max(prevHours - 10, 0));
+  };
+
+  const handleIncreaseTime = () => {
+    updateFormState("workingHours", (prevHours) => prevHours + 10);
+  };
+
+  const formatTime = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours.toString().padStart(2, "0")}:${mins
+      .toString()
+      .padStart(2, "0")}`;
+  };
 
   return (
     <Box sx={{ flexGrow: 1, height: "100vh", padding: "10px" }}>
@@ -184,8 +204,9 @@ export default function CreateCompany({ formik }) {
               </Grid>
             </Grid>
           </Grid>
-
-          <h2>Authentication</h2>
+          <Typography variant="h6" gutterBottom>
+            Business Leave Days *
+          </Typography>
           <FormGroup>
             <FormControlLabel control={<Checkbox />} label="Sunday" />
             <FormControlLabel control={<Checkbox />} label="Monday" />
@@ -195,6 +216,28 @@ export default function CreateCompany({ formik }) {
             <FormControlLabel control={<Checkbox />} label="Friday" />
             <FormControlLabel control={<Checkbox />} label="Saturday" />
           </FormGroup>
+          <div className="mb-4 mt-8">
+            <Typography variant="h6">Office Working Hours</Typography>
+            <div className="flex items-center space-x-3">
+              <Button
+                onClick={handleDecreaseTime}
+                variant="contained"
+                color="primary"
+                size="small"
+              >
+                -
+              </Button>
+              {/* <Typography>{formatTime(formState.workingHours)}</Typography> */}
+              <Button
+                onClick={handleIncreaseTime}
+                variant="contained"
+                color="primary"
+                size="small"
+              >
+                +
+              </Button>
+            </div>
+          </div>
           <FormControl component="fieldset">
             <FormLabel component="legend">Access Network</FormLabel>
             <RadioGroup
@@ -214,9 +257,12 @@ export default function CreateCompany({ formik }) {
               />
             </RadioGroup>
           </FormControl>
-          <Button type="submit" onClick={formik.handleSubmit}>
-            Create Company
-          </Button>
+          <br />
+          <Stack direction="row" spacing={2}>
+            <Button variant="contained" endIcon={<SendIcon />}>
+              Send
+            </Button>
+          </Stack>
         </Grid>
       </Grid>
     </Box>
