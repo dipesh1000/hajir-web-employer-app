@@ -1,17 +1,16 @@
 "use client";
+
 import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
-
 import Button from "@mui/material/Button";
-import Link from "next/link";
-import { TextField } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import { useAuth } from "@/context/AuthContext";
 import { useFormik } from "formik";
+import { useSearchParams } from "next/navigation";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -31,6 +30,7 @@ const LogoContainer = styled("div")({
 });
 
 export default function Otp() {
+  // const { useSearchParams } = require("next/router");
   const query = useSearchParams();
   const otpnumber = query.get("otp");
   const phone = query.get("phone");
@@ -87,6 +87,7 @@ export default function Otp() {
     let otpString = newOtp ? newOtp.join("") : "";
     formik.setFieldValue("otp", otpString);
   };
+
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Grid container spacing={2}>
@@ -123,66 +124,56 @@ export default function Otp() {
               autoComplete="off"
             >
               <form onSubmit={formik.handleSubmit}>
-                <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-                  {/* <div className="flex flex-col space-y-2 text-center">
-                    <h1 className="text-2xl font-semibold tracking-tight">
-                      Authentication{" "}
-                    </h1>
-                    <p className="text-sm text-muted-foreground">
-                      Salary calculation made easy, track your staffs overtime,
-                      leave day, late day and live daily wages interactive
-                      reports.
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Enter the one-time password sent to your mobile number
-                    </p>
-                  </div> */}
-
+                <div
+                  sx={{
+                    width: "100%",
+                    marginX: "auto",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    gap: "1.5rem",
+                    sm: { width: "350px" },
+                  }}
+                >
+                  {/* className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]"> */}
                   {/* OTP input boxes */}
-                  <div className="flex space-x-4">
+                  <div className="flex space-x-2" sx={{ gap: "8px" }}>
                     {otp.map((digit, index) => (
-                      <input
+                      <TextField
                         key={index}
                         type="text"
-                        maxLength="1"
+                        inputProps={{ maxLength: 1 }}
                         value={digit}
                         onChange={(e) =>
                           handleInputChange(index, e.target.value)
                         }
-                        className="w-12 h-12 text-center border rounded-md"
+                        variant="outlined"
+                        size="large"
+                        sx={{
+                          width: "60px",
+                          height: "12px",
+                          gap: "8px",
+                          textAlign: "center",
+                        }}
+                        // className="w-4 h-12 text-center"
                       />
                     ))}
                   </div>
+                  <br />
+                  <br />
+
+                  <br />
 
                   {/* Verify button */}
-                  {/* <Link href="/dashboard"> */}
-                  <Button type="submit">Verify</Button>
-                  {/* </Link> */}
-
-                  {/* <p className="px-8 text-center text-sm text-muted-foreground">
-                    <span className="font-bold">Resend OTP</span> |{" "}
-                    <span className="font-bold">Change Number</span>
-                  </p> */}
+                  <Button type="submit" variant="contained" color="primary">
+                    Verify
+                  </Button>
                 </div>
               </form>
-
-              {/* <label style={{ fontWeight: "bold", fontSize: "16px" }}>
-                Phone Number
-              </label> */}
-              {/* <TextField
-                id="filled-basic"
-                label="Enter your phone number"
-                variant="filled"
-                sx={{ width: "100%" }}
-              /> */}
             </Box>
-            {/* <Link href="/otp">
-              <Button variant="contained" color="primary">
-                Login
-              </Button>
-            </Link> */}
+
             <p style={{ whiteSpace: "pre-line", marginTop: "8px" }}>
-              Do not receive OTP? Resent OTP in 2:59{" "}
+              Do not receive OTP? Resend OTP in 2:59{" "}
             </p>
             <p style={{ whiteSpace: "pre-line" }}>Change number again </p>
           </Item>

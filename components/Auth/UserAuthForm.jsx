@@ -5,15 +5,14 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const UserAuthForm = ({ onSubmit, formik, className, ...props }) => {
-  // Use the useFormik hook to get the formik context
   formik = useFormik({
     initialValues: {
       phone: "",
     },
     onSubmit: (values) => {
-      // Your form submission logic here
       console.log("Form submitted with values:", values);
     },
   });
@@ -37,11 +36,20 @@ const UserAuthForm = ({ onSubmit, formik, className, ...props }) => {
           {/* <Button type="submit" variant="contained" color="primary">
             Login
           </Button> */}
-          <Link href="/otp">
+          {/* <Link href="/otp">
             <Button type="submit" variant="contained" color="primary">
               Login
             </Button>
-          </Link>
+          </Link> */}
+
+          <Button
+            type="submit"
+            // onClick={() => router.push('/signin')}
+            // disabled={isLoading}
+          >
+            {/* {isLoading && null} */}
+            Login
+          </Button>
         </Grid>
       </form>
     </Grid>
