@@ -7,10 +7,11 @@ import Grid from "@mui/material/Grid";
 import Image from "next/image";
 import Button from "@mui/material/Button";
 import Link from "next/link";
+import * as yup from "yup";
+
 import { TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import UserAuthForm from "@/components/Auth/UserAuthForm";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -30,40 +31,54 @@ const LogoContainer = styled("div")({
 });
 
 export default function Signin() {
-  const [response, setResponse] = useState({});
   const router = useRouter();
+  const [response, setResponse] = useState({});
+  const validationSchema = yup.object({
+    phone: yup
+      .string()
+      .required()
+      .matches(/^[0-9]+$/, "Must be only digits")
+      .min(10, "Number must be 10 digits")
+      .max(10, "Number must be 10 digits"),
+  });
+
   const formik = useFormik({
     initialValues: {
       phone: "",
     },
-    onSubmit: async (values) => {
-      try {
-        const apiResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/employer/register`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(values),
-          }
-        );
-        if (!apiResponse.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await apiResponse.json();
-        setResponse(data);
-        if (data.status === "success") {
-          alert(`Successfully Registered.  \n Your OTP is: ${data.data.otp}`);
-          console.log("OTP:values", data.data.otp);
-          // console.log('Token:', data.data.token);
-          router.push(`/signin?phone=${values.phone}&otp=${data.data.otp}`);
-        } else {
-          console.error("Registration failed. Message:", data.message);
-        }
-      } catch (error) {
-        console.error("Error during API request:", error.message);
-      }
+    validationSchema: validationSchema,
+    // onSubmit: async (values) => {
+    //   try {
+    //     const apiResponse = await fetch(
+    //       `${process.env.NEXT_PUBLIC_API_URL}/employer/register`,
+    //       {
+    //         method: "POST",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify(values),
+    //       }
+    //     );
+    //     if (!apiResponse.ok) {
+    //       throw new Error("Network response was not ok");
+    //     }
+    //     const data = await apiResponse.json();
+    //     setResponse(data);
+    //     if (data.status === "success") {
+    //       alert(`Successfully Registered.  \n Your OTP is: ${data.data.otp}`);
+    //       console.log("OTP:values", data.data.otp);
+    //       // console.log('Token:', data.data.token);
+    //       router.push(`/signin?phone=${values.phone}&otp=${data.data.otp}`);
+    //     } else {
+    //       console.error("Registration failed. Message:", data.message);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error during API request:", error.message);
+    //   }
+    // },
+    onSubmit: (values, { resetForm }) => {
+      alert(JSON.stringify(values, null, 2));
+      resetForm();
     },
   });
 
@@ -106,7 +121,40 @@ export default function Signin() {
               noValidate
               autoComplete="off"
             >
-              <UserAuthForm />
+              <form onSubmit={formik.handleSubmit}>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="phone"
+                    label="Phone Number"
+                    placeholder="+977 9841234567"
+                    name="phone"
+                    type="number"
+                    onChange={formik.handleChange}
+                    value={formik.values.phone}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  {/* <Button type="submit" variant="contained" color="primary">
+            Login
+          </Button> */}
+                  {/* <Link href="/otp">
+            <Button type="submit" variant="contained" color="primary">
+              Login
+            </Button>
+          </Link> */}
+
+                  <Button
+                    type="submit"
+                    // onClick={() => router.push('/signin')}
+                    // disabled={isLoading}
+                  >
+                    {/* {isLoading && null} */}
+                    Login
+                  </Button>
+                </Grid>
+              </form>
+              {/* <UserAuthForm /> */}
               {/* <label style={{ fontWeight: "bold", fontSize: "16px" }}>
                 Phone Number
               </label>
