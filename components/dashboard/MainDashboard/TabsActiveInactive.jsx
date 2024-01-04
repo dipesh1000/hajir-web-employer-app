@@ -34,13 +34,11 @@ function a11yProps(index) {
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
-
-export default function TabsActiveInactive() {
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+export default function TabsActiveInactive({ value, handleChange }) {
+  const a11yProps = (index) => ({
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  });
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -55,16 +53,6 @@ export default function TabsActiveInactive() {
           <Tab label="Inactive" {...a11yProps(2)} />
         </Tabs>
       </Box>
-      {/* Display the CompanyTable component based on the selected tab */}
-      <CustomTabPanel value={value} index={0}>
-        <CompanyTable />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        <CompanyTable />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        <CompanyTable />
-      </CustomTabPanel>
     </Box>
   );
 }

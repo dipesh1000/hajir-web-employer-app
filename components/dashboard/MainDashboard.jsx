@@ -1,3 +1,5 @@
+// MainDashboard.js
+
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -6,6 +8,7 @@ import Grid from "@mui/material/Grid";
 import DashboardFirstComponent from "./MainDashboard/DashboardFirstComponent";
 import DashboardSecondComponent from "./MainDashboard/DashboardSecondComponent";
 import TabsActiveInactive from "./MainDashboard/TabsActiveInactive";
+import CompanyTable from "./MainDashboard/CompanyTable";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -16,6 +19,12 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function MainDashboard() {
+  const [selectedTab, setSelectedTab] = React.useState(0);
+
+  const handleChangeTab = (event, newValue) => {
+    setSelectedTab(newValue);
+  };
+
   return (
     <Box
       sx={{
@@ -39,10 +48,24 @@ export default function MainDashboard() {
           </Item>
         </Grid>
         <Grid item xs={8}>
-          {/* <h4>Comapny</h4> */}
-          <h4>Dashboard /Company</h4>
+          <h4>Dashboard / Company</h4>
           <Item>
-            <TabsActiveInactive />
+            <TabsActiveInactive
+              value={selectedTab}
+              handleChange={handleChangeTab}
+            />
+            <Box sx={{ display: selectedTab === 0 ? "block" : "none" }}>
+              {/* All Companies */}
+              <CompanyTable />
+            </Box>
+            <Box sx={{ display: selectedTab === 1 ? "block" : "none" }}>
+              {/* Active Companies */}
+              <CompanyTable statusFilter="active" />
+            </Box>
+            <Box sx={{ display: selectedTab === 2 ? "block" : "none" }}>
+              {/* Inactive Companies */}
+              <CompanyTable statusFilter="inactive" />
+            </Box>
           </Item>
         </Grid>
         <Grid item xs={4}>

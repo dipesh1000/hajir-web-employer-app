@@ -13,7 +13,7 @@ import FirstDashboard from "@/components/dashboard/FirstDashboard";
 import MainDashboard from "@/components/dashboard/MainDashboard";
 
 export default function HomePage() {
-  const isCompanyExists = false;
+  const isCompanyExists = true;
 
   return (
     <Box sx={{ display: "flex" }}>
