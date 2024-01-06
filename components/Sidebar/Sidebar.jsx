@@ -1,4 +1,4 @@
-// DrawerMenu.jsx
+// Sidebar.jsx
 import React from "react";
 import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
@@ -11,17 +11,17 @@ import ProfileCard from "./ProfileCard";
 import HomeIcon from "@mui/icons-material/Home";
 import StarIcon from "@mui/icons-material/Star";
 import ChecklistIcon from "@mui/icons-material/Checklist";
-import LogoutIcon from "@mui/icons-material/Logout";
+import SettingsIcon from "@mui/icons-material/Settings";
+import LogoutButton from "./LogoutButton";
 import Link from "next/link";
 
-const DrawerMenu = ({ onLogoutClick }) => {
+const Sidebar = ({ onLogoutClick }) => {
   const LINKS = [
     { text: "Dashboard", href: "/dashboard", icon: HomeIcon },
     { text: "Profile", href: "/profile", icon: StarIcon },
     { text: "My Plans", href: "/myplans", icon: ChecklistIcon },
+    { text: "Settings", href: "/settings", icon: SettingsIcon },
   ];
-
-  const PLACEHOLDER_LINKS = [{ text: "Logout", icon: LogoutIcon }];
 
   return (
     <Drawer
@@ -53,25 +53,12 @@ const DrawerMenu = ({ onLogoutClick }) => {
           </ListItem>
         ))}
       </List>
-      <Divider sx={{ mt: "auto" }} />
+      <Divider />
       <List>
-        {PLACEHOLDER_LINKS.map(({ text, icon: Icon }) => (
-          <ListItem
-            key={text}
-            disablePadding
-            onClick={text === "Logout" ? onLogoutClick : null}
-          >
-            <ListItemButton>
-              <ListItemIcon>
-                <Icon />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <LogoutButton onClick={onLogoutClick} />
       </List>
     </Drawer>
   );
 };
 
-export default DrawerMenu;
+export default Sidebar;

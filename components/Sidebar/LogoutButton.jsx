@@ -8,7 +8,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 const LogoutButton = ({ onClick }) => (
   <ListItem disablePadding onClick={onClick}>
-    <ListItemButton>
+    <ListItemButton sx={{ color: "red" }}>
       <ListItemIcon>
         <LogoutIcon />
       </ListItemIcon>

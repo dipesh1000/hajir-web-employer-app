@@ -1,31 +1,46 @@
+// ProfileCard.jsx
 "use client";
-import { styled } from "@mui/material/styles";
+import React from "react";
+import { styled } from "@mui/system";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
+import Image from "next/image";
 
-const ExpandMore = styled(IconButton)(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  marginLeft: "auto",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
+const ProfileContainer = styled(Card)({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  marginTop: "20px",
+  marginBottom: "10px",
+  padding: "20px",
+  borderRadius: "remove",
+});
 
-export default function ProfileCard() {
+const ProfileCard = () => {
   return (
-    <Card sx={{ maxWidth: 300 }}>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="profile">
-            H
-          </Avatar>
-        }
-        title="Biraj Karki"
-        subheader="birajkarki9@gmail.com"
+    <ProfileContainer>
+      <Avatar
+        src="/avatar.png"
+        sx={{
+          width: 100,
+          height: 100,
+          bgcolor: red[500],
+        }}
+        alt="hj"
       />
-    </Card>
+      <CardContent>
+        <Typography variant="h6" align="center" sx={{ fontWeight: "bold" }}>
+          Biraj Karki
+        </Typography>
+        <Typography align="center" color="gray">
+          birajkarki9@gmail.com
+        </Typography>
+      </CardContent>
+    </ProfileContainer>
   );
-}
+};
+
+export default ProfileCard;
