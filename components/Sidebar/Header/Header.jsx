@@ -14,7 +14,7 @@ const Header = ({ onMenuIconClick }) => (
   <AppBar position="fixed" elevation={1} sx={{ background: "white" }}>
     <Toolbar>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Image src="/hajir-logo.png" width={120} height={50} alt="Hajir Logo" />
+        <Image src="/hajir-logo.png" width={140} height={50} alt="Hajir Logo" />
         {/* Add margin or gap here */}
         <div style={{ marginLeft: "20px" }} />
       </div>

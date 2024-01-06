@@ -5,8 +5,8 @@ const DashboardSecondComponent = () => {
   return (
     <>
       <Image
-        width={270}
-        height={270}
+        width={350}
+        height={350}
         alt="image"
         src="/dashboard/left-img.png"
       />

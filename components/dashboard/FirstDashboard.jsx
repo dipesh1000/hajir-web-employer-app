@@ -1,52 +1,59 @@
+// MainDashboard.js
+"use client";
 import * as React from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import { CardActionArea, Container, Stack } from "@mui/material";
-import Fab from "@mui/material/Fab";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import DashboardFirstComponent from "./MainDashboard/DashboardFirstComponent";
+import DashboardSecondComponent from "./MainDashboard/DashboardSecondComponent";
+import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+const StyledBox = styled(Box)(({ theme }) => ({
+  flexGrow: 1,
+  height: "100vh",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "start",
+  alignItems: "center",
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+}));
+
+const StyledButton = styled(Button)({
+  marginTop: "40px",
+  alignSelf: "center",
+  backgroundColor: "#3f51b5",
+  color: "#fff",
+  "&:hover": {
+    backgroundColor: "#2d3b55",
+  },
+});
 
 export default function FirstDashboard() {
+  const router = useRouter();
+
   return (
-    <Container
-      sx={{
-        display: "flex",
-        justifyContent: "flex-start", // Move content to the left
-        alignItems: "flex-start", // Move content up
-        height: "100vh",
-        paddingLeft: "20px", // Add padding to the left
-        paddingTop: "20px", // Add padding to the top
-      }}
-    >
-      <Card sx={{ width: "80%", maxWidth: 600, textAlign: "left" }}>
-        <CardActionArea>
-          <CardContent>
-            <Stack spacing={3} alignItems="center">
-              <Typography variant="h4" gutterBottom>
-                Welcome to Hajir 👋
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Best employee and staff management software with unique
-                features.
-              </Typography>
-              <CardMedia
-                component="img"
-                width="100%" // Ensure the image takes 100% width
-                height="auto" // Auto adjust the height to maintain aspect ratio
-                image="/dashboard/no-company.png"
-                alt="Picture of the author"
-              />
-              <Link href="/dashboard/company" passHref>
-                <Fab color="primary" aria-label="add">
-                  <AddIcon />
-                </Fab>
-              </Link>
-            </Stack>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    </Container>
+    <StyledBox>
+      <Grid container spacing={4}>
+        <Grid item xs={7}>
+          <Box p={3}>
+            <DashboardFirstComponent />
+          </Box>
+        </Grid>
+        <Grid item xs={5}>
+          <Box p={3}>
+            <DashboardSecondComponent />
+          </Box>
+        </Grid>
+      </Grid>
+      <StyledButton
+        variant="contained"
+        onClick={() => router.push("/dashboard/company/createcompany")}
+        startIcon={<AddIcon />}
+      >
+        Create Company
+      </StyledButton>
+    </StyledBox>
   );
 }

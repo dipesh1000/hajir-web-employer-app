@@ -1,150 +1,104 @@
+// MainDashboard.js
 "use client";
+import * as React from "react";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import TabsActiveInactive from "@/components/dashboard/MainDashboard/TabsActiveInactive";
+import CompanyTable from "@/components/dashboard/MainDashboard/CompanyTable";
+import AddIcon from "@mui/icons-material/Add";
+import { useRouter } from "next/navigation";
+import Button from "@mui/material/Button";
 
-import React from "react";
-import * as yup from "yup";
-import { useFormik } from "formik";
-// import { addCompany } from "@/redux/companySlice";
-// import { useDispatch, useSelector } from "react-redux";
-import {
-  Box,
-  Typography,
-  Button,
-  TextField,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-} from "@mui/material";
+const StyledButton = styled(Button)({
+  marginTop: "40px",
+  alignSelf: "center",
+  backgroundColor: "#3f51b5",
+  color: "#fff",
+  "&:hover": {
+    backgroundColor: "#2d3b55",
+  },
+});
 
-const Company = () => {
-  // const dispatch = useDispatch();
-  // const companies = useSelector((state) => state.company.companies);
-
-  const validationSchema = yup.object({
-    name: yup.string().required("Full name is required"),
-    staffCode: yup.string().required("Please select a staff code"),
-    dateSelect: yup.string().required("Please select a date"),
-    calculationType: yup.string().required("Please select a calculation type"),
-    department: yup.string().required("Please enter a department"),
-    holidays: yup.string().required("Please enter a holidays"),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      staffCode: "",
-      dateSelect: "",
-      calculationType: "",
-      department: "",
-      // holidays: [],
-      holidays: "",
+export default function MainDashboard() {
+  const router = useRouter();
+  const companies = [
+    {
+      id: 1,
+      name: "Company A",
+      employee: 20,
+      approver: 10,
+      status: "active",
+      qrCode: "qr_code_data_1",
     },
-    validationSchema: validationSchema,
-    onSubmit: (values, { resetForm }) => {
-      dispatch(addCompany(values));
-      alert("Company added successfully!");
-      resetForm();
-    },
-  });
+    // Add more companies as needed
+  ];
+  const handleEdit = (companyId) => {
+    // Implement edit logic
+    console.log(`Editing company with ID: ${companyId}`);
+  };
+
+  const handleDelete = (companyId) => {
+    // Implement delete logic
+    console.log(`Deleting company with ID: ${companyId}`);
+  };
+  const [selectedTab, setSelectedTab] = React.useState(0);
+
+  const handleChangeTab = (event, newValue) => {
+    setSelectedTab(newValue);
+  };
 
   return (
-    <Box sx={{ flexGrow: 1, height: "100vh", padding: "10px" }}>
-      <Typography variant="h5">Add New Company</Typography>
-      <form onSubmit={formik.handleSubmit}>
-        {/* Name of the company */}
-        <TextField
-          label="Name of The Company name"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          {...formik.getFieldProps("name")}
-          error={formik.touched.name && Boolean(formik.errors.name)}
-          helperText={formik.touched.name && formik.errors.name}
-        />
+    <Box
+      sx={{
+        flexGrow: 1,
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "start",
+      }}
+    >
+      <Grid container spacing={2} columns={16}>
+        <Grid item xs={8}>
+          <h2>Company</h2>
 
-        {/* Staff code Selection */}
-        <RadioGroup
-          row
-          name="staffCode"
-          value={formik.values.staffCode}
-          onChange={formik.handleChange}
-        >
-          <FormControlLabel value="auto" control={<Radio />} label="Auto" />
-          <FormControlLabel value="custom" control={<Radio />} label="Custom" />
-        </RadioGroup>
-        {formik.touched.staffCode && Boolean(formik.errors.staffCode) && (
-          <div className="text-red-500">{formik.errors.staffCode}</div>
-        )}
-
-        {/* Date selection */}
-        <RadioGroup
-          row
-          name="dateSelect"
-          value={formik.values.dateSelect}
-          onChange={formik.handleChange}
-        >
-          <FormControlLabel
-            value="English"
-            control={<Radio />}
-            label="English"
-          />
-          <FormControlLabel value="Nepali" control={<Radio />} label="Nepali" />
-        </RadioGroup>
-        {formik.touched.dateSelect && Boolean(formik.errors.dateSelect) && (
-          <div className="text-red-500">{formik.errors.dateSelect}</div>
-        )}
-
-        {/* Salary calculation */}
-        <RadioGroup
-          row
-          name="calculationType"
-          value={formik.values.calculationType}
-          onChange={formik.handleChange}
-        >
-          <FormControlLabel
-            value="Calendar Days"
-            control={<Radio />}
-            label="Calendar Days"
-          />
-          <FormControlLabel
-            value="30 Days"
-            control={<Radio />}
-            label="30 Days"
-          />
-        </RadioGroup>
-        {formik.touched.calculationType &&
-          Boolean(formik.errors.calculationType) && (
-            <div className="text-red-500">{formik.errors.calculationType}</div>
-          )}
-
-        {/* Create Department */}
-        <TextField
-          label="Create Department"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          {...formik.getFieldProps("department")}
-          error={formik.touched.department && Boolean(formik.errors.department)}
-          helperText={formik.touched.department && formik.errors.department}
-        />
-
-        {/* Holidays */}
-        <TextField
-          label="Holidays"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          {...formik.getFieldProps("holidays")}
-          error={formik.touched.holidays && Boolean(formik.errors.holidays)}
-          helperText={formik.touched.holidays && formik.errors.holidays}
-        />
-
-        {/* Submit Button */}
-        <Button type="submit" variant="contained" color="primary">
-          Submit
-        </Button>
-      </form>
+          <h4>Dashboard / Company</h4>
+          <Box>
+            <TabsActiveInactive
+              value={selectedTab}
+              handleChange={handleChangeTab}
+            />
+            <Box sx={{ display: selectedTab === 0 ? "block" : "none" }}>
+              {/* All Companies */}
+              <CompanyTable
+                companies={companies}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            </Box>
+            <Box sx={{ display: selectedTab === 1 ? "block" : "none" }}>
+              {/* Active Companies */}
+              <CompanyTable statusFilter="active" />
+            </Box>
+            <Box sx={{ display: selectedTab === 2 ? "block" : "none" }}>
+              {/* Inactive Companies */}
+              <CompanyTable statusFilter="inactive" />
+            </Box>
+          </Box>
+        </Grid>
+        <Grid item xs={4}>
+          <Box>
+            <StyledButton
+              variant="contained"
+              onClick={() => router.push("/dashboard/company/createcompany")}
+              startIcon={<AddIcon />}
+            >
+              Create Company
+            </StyledButton>
+          </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
-};
-
-export default Company;
+}
