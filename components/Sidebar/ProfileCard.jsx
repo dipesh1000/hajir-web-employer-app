@@ -1,4 +1,4 @@
-import * as React from "react";
+"use client";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -6,10 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import { red } from "@mui/material/colors";
 
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
+const ExpandMore = styled(IconButton)(({ theme, expand }) => ({
   transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
   marginLeft: "auto",
   transition: theme.transitions.create("transform", {
@@ -26,7 +23,7 @@ export default function ProfileCard() {
             H
           </Avatar>
         }
-        title="BIraj kARKI"
+        title="Biraj Karki"
         subheader="birajkarki9@gmail.com"
       />
     </Card>

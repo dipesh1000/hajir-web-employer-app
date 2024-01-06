@@ -1,3 +1,4 @@
+import Header from "@/components/Sidebar/Header/Header";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { Box } from "@mui/material";
 
@@ -11,6 +12,7 @@ export default function DashboardLayout({ children }) {
   return (
     <html lang="en">
       <body>
+        <Header />
         <Sidebar />
         <Box
           component="main"
