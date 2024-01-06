@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -30,6 +30,10 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import ProfileCard from "@/components/Sidebar/ProfileCard";
+
+// logout
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -84,6 +88,9 @@ const PLACEHOLDER_LINKS = [
 ];
 
 const Sidebar = () => {
+  const { setAuthUser, setIsLoggedIn } = useAuth();
+  const router = useRouter();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -107,6 +114,19 @@ const Sidebar = () => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  // Logout function
+  const handleLogout = () => {
+    // Clear authentication data
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    // Reset authentication state
+    setAuthUser(null);
+    setIsLoggedIn(false);
+
+    // Redirect to login page
+    router.push("/login");
+  };
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -293,7 +313,11 @@ const Sidebar = () => {
         <Divider sx={{ mt: "auto" }} />
         <List>
           {PLACEHOLDER_LINKS.map(({ text, icon: Icon }) => (
-            <ListItem key={text} disablePadding>
+            <ListItem
+              key={text}
+              disablePadding
+              onClick={text === "Logout" ? handleLogout : null}
+            >
               <ListItemButton>
                 <ListItemIcon>
                   <Icon />

@@ -3,8 +3,8 @@
 import React from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { addCompany } from "@/redux/slices/companySlice";
-import { useDispatch, useSelector } from "react-redux";
+// import { addCompany } from "@/redux/companySlice";
+// import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Typography,
@@ -16,8 +16,8 @@ import {
 } from "@mui/material";
 
 const Company = () => {
-  const dispatch = useDispatch();
-  const companies = useSelector((state) => state.company.companies);
+  // const dispatch = useDispatch();
+  // const companies = useSelector((state) => state.company.companies);
 
   const validationSchema = yup.object({
     name: yup.string().required("Full name is required"),

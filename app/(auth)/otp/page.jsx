@@ -28,9 +28,7 @@ const Item = styled(Paper)(({ theme }) => ({
 const LogoContainer = styled("div")({
   marginBottom: "16px",
 });
-
 export default function Otp() {
-  // const { useSearchParams } = require("next/router");
   const query = useSearchParams();
   const otpnumber = query.get("otp");
   const phone = query.get("phone");
@@ -66,19 +64,30 @@ export default function Otp() {
     onSubmit: async (values) => {
       try {
         const data = await getData(values);
-        // setResponse(data);
         if (data.status === "success") {
+          console.log("OTP verification successful");
           localStorage.setItem("token", JSON.stringify(data.data.token));
           localStorage.setItem("user", JSON.stringify(data.data.user));
+          setIsLoggedIn(true);
+          setAuthUser({ user: data.data.user, token: data.data.token });
+          router.push("/dashboard");
         } else {
-          console.error("Registration failed. Message:", data.message);
+          console.error("OTP verification failed. Message:", data.message);
         }
       } catch (error) {
-        console.error("Error during API request:", error.message);
+        console.error("Error during OTP verification:", error.message);
       }
     },
     enableReinitialize: true,
   });
+
+  // Add this check to handle the "OTP Not Found" scenario
+  if (otpnumber === "" || otpnumber === null) {
+    console.error(
+      "OTP is missing or empty. Please request a new OTP and verify."
+    );
+    // You may want to add a user-friendly error message and handle this case appropriately.
+  }
 
   const handleInputChange = (index, value) => {
     const newOtp = [...otp];
@@ -87,7 +96,6 @@ export default function Otp() {
     let otpString = newOtp ? newOtp.join("") : "";
     formik.setFieldValue("otp", otpString);
   };
-
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Grid container spacing={2}>
@@ -104,7 +112,7 @@ export default function Otp() {
               <p style={{ whiteSpace: "pre-line" }}>
                 Salary calculation made easy, track your
                 <br />
-                staffs overtime, leave day, late day and
+                staffs overtime, leave day, late day, and
                 <br />
                 live daily wages interactive reports.
                 <br />
@@ -122,54 +130,49 @@ export default function Otp() {
               }}
               noValidate
               autoComplete="off"
+              onSubmit={formik.handleSubmit}
             >
-              <form onSubmit={formik.handleSubmit}>
-                <div
-                  sx={{
-                    width: "100%",
-                    marginX: "auto",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    gap: "1.5rem",
-                    sm: { width: "350px" },
-                  }}
-                >
-                  {/* className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]"> */}
-                  {/* OTP input boxes */}
-                  <div className="flex space-x-2" sx={{ gap: "8px" }}>
-                    {otp.map((digit, index) => (
-                      <TextField
-                        key={index}
-                        type="text"
-                        inputProps={{ maxLength: 1 }}
-                        value={digit}
-                        onChange={(e) =>
-                          handleInputChange(index, e.target.value)
-                        }
-                        variant="outlined"
-                        size="large"
-                        sx={{
-                          width: "60px",
-                          height: "12px",
-                          gap: "8px",
-                          textAlign: "center",
-                        }}
-                        // className="w-4 h-12 text-center"
-                      />
-                    ))}
-                  </div>
-                  <br />
-                  <br />
-
-                  <br />
-
-                  {/* Verify button */}
-                  <Button type="submit" variant="contained" color="primary">
-                    Verify
-                  </Button>
+              <div
+                sx={{
+                  width: "100%",
+                  marginX: "auto",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  gap: "1.5rem",
+                  sm: { width: "350px" },
+                }}
+              >
+                {/* OTP input boxes */}
+                <div className="flex space-x-2" sx={{ gap: "8px" }}>
+                  {otp.map((digit, index) => (
+                    <TextField
+                      key={index}
+                      type="text"
+                      inputProps={{ maxLength: 1 }}
+                      value={digit}
+                      onChange={(e) => handleInputChange(index, e.target.value)}
+                      variant="outlined"
+                      size="large"
+                      sx={{
+                        width: "60px",
+                        height: "12px",
+                        gap: "8px",
+                        textAlign: "center",
+                      }}
+                    />
+                  ))}
                 </div>
-              </form>
+                <br />
+                <br />
+
+                <br />
+
+                {/* Verify button */}
+                <Button type="submit" variant="contained" color="primary">
+                  Verify
+                </Button>
+              </div>
             </Box>
 
             <p style={{ whiteSpace: "pre-line", marginTop: "8px" }}>
