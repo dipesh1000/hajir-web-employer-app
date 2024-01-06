@@ -3,6 +3,8 @@
 import React from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { addCompany } from "@/redux/slices/companySlice";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Typography,
@@ -14,6 +16,9 @@ import {
 } from "@mui/material";
 
 const Company = () => {
+  const dispatch = useDispatch();
+  const companies = useSelector((state) => state.company.companies);
+
   const validationSchema = yup.object({
     name: yup.string().required("Full name is required"),
     staffCode: yup.string().required("Please select a staff code"),
@@ -21,11 +26,6 @@ const Company = () => {
     calculationType: yup.string().required("Please select a calculation type"),
     department: yup.string().required("Please enter a department"),
     holidays: yup.string().required("Please enter a holidays"),
-    // holidays: yup
-    //   .array()
-    //   .min(2, "Select at least 2 days")
-    //   .max(4, "Select at most 6 days")
-    //   .required("Select at least 2 days"),
   });
 
   const formik = useFormik({
@@ -40,7 +40,8 @@ const Company = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
-      alert(JSON.stringify(values, null, 2));
+      dispatch(addCompany(values));
+      alert("Company added successfully!");
       resetForm();
     },
   });
