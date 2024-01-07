@@ -19,7 +19,7 @@ const template = ({ children }) => {
       setAuthUser({ user: user, token });
 
       if (token && user) {
-        return router.push("/dashboard");
+        // return router.push("/dashboard");
       }
     }
   }, []);

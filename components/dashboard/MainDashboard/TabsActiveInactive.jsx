@@ -1,58 +1,87 @@
 import * as React from "react";
-import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import CompanyTable from "./CompanyTable"; // Import the CompanyTable component
+import InboxIcon from "@mui/icons-material/Inbox";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import BlockIcon from "@mui/icons-material/Block";
+import Badge from "@mui/material/Badge";
 
-function CustomTabPanel(props) {
-  const { children, value, index, ...other } = props;
-
+export default function TabsActiveInactive({
+  value,
+  handleChange,
+  notificationsCount,
+}) {
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
+    <Box sx={{ width: "100%" }}>
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        indicatorColor="secondary"
+        textColor="inherit"
+        variant="fullWidth"
+        aria-label="full width tabs example"
+      >
+        <Tab
+          label={
+            <Badge badgeContent={notificationsCount.all} color="primary">
+              <div
+                style={{
+                  fontSize: "1rem",
+                  marginBottom: "4px",
+                  marginRight: "6px",
+                }}
+              >
+                All
+              </div>
+              <InboxIcon />
+            </Badge>
+          }
+          {...a11yProps(0)}
+        />
+        <Tab
+          label={
+            <Badge badgeContent={notificationsCount.active} color="secondary">
+              <div
+                style={{
+                  fontSize: "1rem",
+                  marginBottom: "4px",
+                  marginRight: "6px",
+                }}
+              >
+                Active
+              </div>
+              <InboxIcon />
+            </Badge>
+          }
+          {...a11yProps(1)}
+        />
+        <Tab
+          label={
+            <Badge badgeContent={notificationsCount.inactive} color="info">
+              <div
+                style={{
+                  fontSize: "1rem",
+                  marginBottom: "4px",
+                  marginRight: "6px",
+                }}
+              >
+                Inactive
+              </div>
+              <InboxIcon />
+            </Badge>
+          }
+          {...a11yProps(2)}
+        />
+      </Tabs>
+      {/* Your content here */}
+    </Box>
   );
 }
-
-CustomTabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
 
 function a11yProps(index) {
   return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    id: `full-width-tab-${index}`,
+    "aria-controls": `full-width-tabpanel-${index}`,
   };
-}
-export default function TabsActiveInactive({ value, handleChange }) {
-  const a11yProps = (index) => ({
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  });
-
-  return (
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="All" {...a11yProps(0)} />
-          <Tab label="Active" {...a11yProps(1)} />
-          <Tab label="Inactive" {...a11yProps(2)} />
-        </Tabs>
-      </Box>
-    </Box>
-  );
 }
