@@ -4,7 +4,6 @@ import React from "react";
 const page = () => {
   return (
     <>
-      <CompanyHeader />
       <h2>h</h2>
     </>
   );

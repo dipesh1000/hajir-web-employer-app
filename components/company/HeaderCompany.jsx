@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Header from "../Sidebar/Header/Header";
 import Sidebar from "../Sidebar/Sidebar";

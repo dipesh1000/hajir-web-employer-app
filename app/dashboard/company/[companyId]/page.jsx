@@ -48,7 +48,7 @@ export default function MainDashboard() {
     >
       <Grid container spacing={2} columns={16}>
         <Grid item xs={4}>
-          <CompanyHeader />
+          {/* <CompanyHeader /> */}
 
           <Box>
             <StyledButton

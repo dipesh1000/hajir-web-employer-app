@@ -1,5 +1,6 @@
 import Header from "@/components/Sidebar/Header/Header";
 import Sidebar from "@/components/Sidebar/Sidebar";
+import HeaderCompany from "@/components/company/HeaderCompany";
 import { Box } from "@mui/material";
 
 export const metadata = {
@@ -8,11 +9,12 @@ export const metadata = {
 };
 const DRAWER_WIDTH = 240;
 
-export default function DashboardLayout({ children }) {
+export default function CompanyLayout({ children }) {
   return (
     <>
       <Header />
       <Sidebar />
+      <HeaderCompany />
       <Box
         component="main"
         sx={{
