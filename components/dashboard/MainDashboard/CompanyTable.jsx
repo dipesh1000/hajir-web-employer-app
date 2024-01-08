@@ -1,5 +1,5 @@
 "use client";
-// company table// company table// CompanyTable.js
+// company table// company table// CompanyTable.js// CompanyTable.js
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
@@ -27,7 +27,6 @@ import { deleteCompany, toggleActiveState } from "@/redux/companySlice";
 
 const CompanyTable = ({ companies, statusFilter }) => {
   const dispatch = useDispatch();
-
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openInactiveDialog, setOpenInactiveDialog] = useState(false);
@@ -49,10 +48,15 @@ const CompanyTable = ({ companies, statusFilter }) => {
   };
 
   // Filter companies based on the statusFilter
-  const filteredCompanies =
-    statusFilter !== undefined
-      ? companies.filter((company) => company.status === statusFilter)
-      : companies;
+  const filteredCompanies = companies.filter((company) => {
+    if (statusFilter === "active") {
+      return company.status === "active";
+    } else if (statusFilter === "inactive") {
+      return company.status === "inactive";
+    } else {
+      return true; // "All" companies
+    }
+  });
 
   return (
     <Box>

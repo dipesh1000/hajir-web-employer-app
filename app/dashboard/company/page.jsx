@@ -1,6 +1,4 @@
-// MainDashboard.js
 "use client";
-// MainDashboard.js
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -90,6 +88,15 @@ export default function MainDashboard() {
             <StyledButton
               variant="contained"
               onClick={handleAddCompany}
+              startIcon={<AddIcon />}
+            >
+              Static data Create Company
+            </StyledButton>
+          </Box>
+          <Box>
+            <StyledButton
+              variant="contained"
+              onClick={() => router.push("/dashboard/company/createcompany")}
               startIcon={<AddIcon />}
             >
               Create Company

@@ -13,14 +13,16 @@ import StarIcon from "@mui/icons-material/Star";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutButton from "./LogoutButton";
+import BusinessIcon from "@mui/icons-material/Business";
 import Link from "next/link";
 
 const Sidebar = ({ onLogoutClick }) => {
   const LINKS = [
     { text: "Dashboard", href: "/dashboard", icon: HomeIcon },
-    { text: "Profile", href: "/profile", icon: StarIcon },
-    { text: "My Plans", href: "/myplans", icon: ChecklistIcon },
-    { text: "Settings", href: "/settings", icon: SettingsIcon },
+    { text: "Company", href: "/dashboard/company", icon: BusinessIcon },
+    { text: "Profile", href: "/dashboard/profile", icon: StarIcon },
+    { text: "My Plans", href: "/dashboard/myplans", icon: ChecklistIcon },
+    { text: "Settings", href: "/dashboard/settings", icon: SettingsIcon },
   ];
 
   return (
