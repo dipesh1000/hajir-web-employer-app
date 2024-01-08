@@ -28,7 +28,15 @@ const Item = styled(Paper)(({ theme }) => ({
 const LogoContainer = styled("div")({
   marginBottom: "16px",
 });
-// ... Other imports
+const validationSchema = yup.object({
+  phone: yup
+    .string()
+    .required("Phone number is required")
+    .matches(
+      /^\+?\d{10,}$/,
+      "Invalid phone number. Must be at least 10 digits"
+    ),
+});
 
 export default function Signin() {
   const router = useRouter();
@@ -38,6 +46,7 @@ export default function Signin() {
     initialValues: {
       phone: "",
     },
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
         const apiResponse = await fetch(
@@ -115,10 +124,13 @@ export default function Signin() {
                 label="Phone Number"
                 placeholder="+977 9841234567"
                 name="phone"
-                type="number"
+                type="tel"
                 onChange={formik.handleChange}
                 value={formik.values.phone}
+                error={formik.touched.phone && Boolean(formik.errors.phone)}
+                helperText={formik.touched.phone && formik.errors.phone}
               />
+
               <br />
               <br />
               <Button variant="contained" type="submit">

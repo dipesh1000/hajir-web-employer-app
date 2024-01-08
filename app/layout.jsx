@@ -1,9 +1,7 @@
-// "use client";
 import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
 import AuthProvider from "@/context/AuthContext";
+import { Providers } from "@/redux/providers";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
-// import store from "@/redux/store";
-// import { Provider } from "react-redux";
 
 export const metadata = {
   title: "Hajir's Next.js App",
@@ -17,9 +15,7 @@ export default function RootLayout({ children }) {
         <AppRouterCacheProvider>
           <AuthProvider>
             <ThemeRegistry>
-              {/* <Provider store={store}>  */}
-              {children}
-              {/* </Provider> */}
+              <Providers>{children}</Providers>
             </ThemeRegistry>
           </AuthProvider>
         </AppRouterCacheProvider>

@@ -10,7 +10,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useAuth } from "@/context/AuthContext";
 import { useFormik } from "formik";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -28,16 +28,18 @@ const Item = styled(Paper)(({ theme }) => ({
 const LogoContainer = styled("div")({
   marginBottom: "16px",
 });
-export default function Otp() {
+
+const Otp = () => {
   const query = useSearchParams();
   const otpnumber = query.get("otp");
   const phone = query.get("phone");
+  const router = useRouter();
 
-  const { authUser, setAuthUser, isLoggedIn, setIsLoggedIn } = useAuth();
-
+  const { authUser, setAuthUser, setIsLoggedIn } = useAuth();
   const [otp, setOtp] = useState(
     otpnumber?.toString().split("") || ["", "", "", ""]
   );
+  const [loading, setLoading] = useState(false);
 
   async function getData(values) {
     const apiResponse = await fetch(
@@ -63,6 +65,7 @@ export default function Otp() {
     },
     onSubmit: async (values) => {
       try {
+        setLoading(true);
         const data = await getData(values);
         if (data.status === "success") {
           console.log("OTP verification successful");
@@ -73,20 +76,22 @@ export default function Otp() {
           router.push("/dashboard");
         } else {
           console.error("OTP verification failed. Message:", data.message);
+          alert("Wrong OTP. Please enter the correct OTP.");
         }
       } catch (error) {
         console.error("Error during OTP verification:", error.message);
+        alert("An error occurred during OTP verification. Please try again.");
+      } finally {
+        setLoading(false);
       }
     },
     enableReinitialize: true,
   });
 
-  // Add this check to handle the "OTP Not Found" scenario
   if (otpnumber === "" || otpnumber === null) {
     console.error(
       "OTP is missing or empty. Please request a new OTP and verify."
     );
-    // You may want to add a user-friendly error message and handle this case appropriately.
   }
 
   const handleInputChange = (index, value) => {
@@ -96,6 +101,7 @@ export default function Otp() {
     let otpString = newOtp ? newOtp.join("") : "";
     formik.setFieldValue("otp", otpString);
   };
+
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Grid container spacing={2}>
@@ -143,6 +149,9 @@ export default function Otp() {
                   sm: { width: "350px" },
                 }}
               >
+                {/* Loading indicator */}
+                {loading && <p>Loading...</p>}
+
                 {/* OTP input boxes */}
                 <div className="flex space-x-2" sx={{ gap: "8px" }}>
                   {otp.map((digit, index) => (
@@ -166,8 +175,6 @@ export default function Otp() {
                 <br />
                 <br />
 
-                <br />
-
                 {/* Verify button */}
                 <Button type="submit" variant="contained" color="primary">
                   Verify
@@ -184,4 +191,6 @@ export default function Otp() {
       </Grid>
     </Box>
   );
-}
+};
+
+export default Otp;

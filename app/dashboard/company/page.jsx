@@ -20,7 +20,8 @@ const StyledButton = styled(Button)({
   },
 });
 
-export default function MainDashboard() {
+export default function MainDashboard(params) {
+  console.log(params);
   const router = useRouter();
   const companies = [
     {

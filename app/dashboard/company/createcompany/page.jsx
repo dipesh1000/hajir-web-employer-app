@@ -15,7 +15,7 @@ import {
 import { addCompany } from "@/redux/companySlice";
 
 const Company = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const validationSchema = yup.object({
     name: yup.string().required("Full name is required"),
