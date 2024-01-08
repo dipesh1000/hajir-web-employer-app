@@ -1,4 +1,7 @@
+"use client";
+// company table// company table// CompanyTable.js
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   Table,
   TableBody,
@@ -20,35 +23,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import BlockIcon from "@mui/icons-material/Block";
 import Link from "next/link";
+import { deleteCompany, toggleActiveState } from "@/redux/companySlice";
 
-const data = [
-  {
-    id: 1,
-    name: "Company A",
-    employee: 50,
-    approver: 30,
-    status: "Active",
-    qrCode: "qr_code_data_1",
-  },
-  {
-    id: 2,
-    name: "Company B",
-    employee: 30,
-    approver: 20,
-    status: "Inactive",
-    qrCode: "qr_code_data_2",
-  },
-  {
-    id: 3,
-    name: "Company C",
-    employee: 40,
-    approver: 25,
-    status: "Active",
-    qrCode: "qr_code_data_3",
-  },
-];
+const CompanyTable = ({ companies, statusFilter }) => {
+  const dispatch = useDispatch();
 
-const CompanyTable = ({ statusFilter }) => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openInactiveDialog, setOpenInactiveDialog] = useState(false);
@@ -60,31 +39,20 @@ const CompanyTable = ({ statusFilter }) => {
   };
 
   const handleInactive = () => {
-    // Perform inactive/active logic here, e.g., calling an API
-    console.log(
-      `${
-        selectedCompany?.status === "Active" ? "Inactivating" : "Activating"
-      } company: ${selectedCompany?.name}`
-    );
+    dispatch(toggleActiveState(selectedCompany.id));
     setOpenInactiveDialog(false);
   };
 
   const handleDelete = () => {
-    // Perform delete logic here, e.g., calling an API
-    console.log(`Deleting company: ${selectedCompany?.name}`);
+    dispatch(deleteCompany(selectedCompany.id));
     setOpenDeleteDialog(false);
   };
 
   // Filter companies based on the statusFilter
-  const filteredCompanies = data.filter((company) => {
-    if (statusFilter === "active") {
-      return company.status === "Active";
-    } else if (statusFilter === "inactive") {
-      return company.status === "Inactive";
-    } else {
-      return true; // "All" companies
-    }
-  });
+  const filteredCompanies =
+    statusFilter !== undefined
+      ? companies.filter((company) => company.status === statusFilter)
+      : companies;
 
   return (
     <Box>
@@ -118,7 +86,7 @@ const CompanyTable = ({ statusFilter }) => {
                   <IconButton onClick={() => handleEdit(company)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => handleInactive(company)}>
+                  <IconButton onClick={() => setOpenInactiveDialog(true)}>
                     <BlockIcon />
                   </IconButton>
                   <IconButton onClick={() => setOpenDeleteDialog(true)}>
@@ -153,20 +121,20 @@ const CompanyTable = ({ statusFilter }) => {
         onClose={() => setOpenInactiveDialog(false)}
       >
         <DialogTitle>
-          {selectedCompany?.status === "Active" ? "Inactivate" : "Activate"}{" "}
+          {selectedCompany?.status === "active" ? "Inactivate" : "Activate"}{" "}
           Company: {selectedCompany?.name}
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
             Are you sure you want to{" "}
-            {selectedCompany?.status === "Active" ? "inactivate" : "activate"}{" "}
+            {selectedCompany?.status === "active" ? "inactivate" : "activate"}{" "}
             this company?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenInactiveDialog(false)}>Cancel</Button>
           <Button onClick={handleInactive}>
-            {selectedCompany?.status === "Active" ? "Inactivate" : "Activate"}
+            {selectedCompany?.status === "active" ? "Inactivate" : "Activate"}
           </Button>
         </DialogActions>
       </Dialog>

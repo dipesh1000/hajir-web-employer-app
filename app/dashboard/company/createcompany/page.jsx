@@ -42,6 +42,7 @@ const Company = () => {
       dispatch(addCompany(values));
       alert("Company added successfully!");
       resetForm();
+      console.log(values);
 
       // push to company page after adding company
       router.push("/dashboard/company");

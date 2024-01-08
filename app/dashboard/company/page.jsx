@@ -1,4 +1,6 @@
+// MainDashboard.js
 "use client";
+// MainDashboard.js
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -8,6 +10,8 @@ import CompanyTable from "@/components/dashboard/MainDashboard/CompanyTable";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/navigation";
 import Button from "@mui/material/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { addCompany } from "@/redux/companySlice";
 
 const StyledButton = styled(Button)({
   marginTop: "40px",
@@ -19,29 +23,25 @@ const StyledButton = styled(Button)({
   },
 });
 
-export default function MainDashboard(params) {
-  console.log(params);
+export default function MainDashboard() {
   const router = useRouter();
-  const companies = [
-    {
-      id: 1,
-      name: "Company A",
-      employee: 20,
-      approver: 10,
+  const dispatch = useDispatch();
+  const companies = useSelector((state) => state.company.companies) || [];
+
+  const handleAddCompany = () => {
+    // For simplicity, I'm using a static company object. You should get this data from your form.
+    const newCompany = {
+      id: companies.length + 1,
+      name: "New Company",
+      employee: 0,
+      approver: 0,
       status: "active",
-      qrCode: "qr_code_data_1",
-    },
-    // Add more companies as needed
-  ];
-  const handleEdit = (companyId) => {
-    // Implement edit logic
-    console.log(`Editing company with ID: ${companyId}`);
+      qrCode: "qr_code_data_" + (companies.length + 1),
+    };
+
+    dispatch(addCompany(newCompany));
   };
 
-  const handleDelete = (companyId) => {
-    // Implement delete logic
-    console.log(`Deleting company with ID: ${companyId}`);
-  };
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   const handleChangeTab = (event, newValue) => {
@@ -73,19 +73,15 @@ export default function MainDashboard(params) {
             />
             <Box sx={{ display: selectedTab === 0 ? "block" : "none" }}>
               {/* All Companies */}
-              <CompanyTable
-                companies={companies}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
+              <CompanyTable companies={companies} />
             </Box>
             <Box sx={{ display: selectedTab === 1 ? "block" : "none" }}>
               {/* Active Companies */}
-              <CompanyTable statusFilter="active" />
+              <CompanyTable companies={companies} statusFilter="active" />
             </Box>
             <Box sx={{ display: selectedTab === 2 ? "block" : "none" }}>
               {/* Inactive Companies */}
-              <CompanyTable statusFilter="inactive" />
+              <CompanyTable companies={companies} statusFilter="inactive" />
             </Box>
           </Box>
         </Grid>
@@ -93,7 +89,7 @@ export default function MainDashboard(params) {
           <Box>
             <StyledButton
               variant="contained"
-              onClick={() => router.push("/dashboard/company/createcompany")}
+              onClick={handleAddCompany}
               startIcon={<AddIcon />}
             >
               Create Company
