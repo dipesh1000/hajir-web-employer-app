@@ -13,9 +13,11 @@ import {
   Radio,
 } from "@mui/material";
 import { addCompany } from "@/redux/companySlice";
+import { useRouter } from "next/navigation";
 
 const Company = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const validationSchema = yup.object({
     name: yup.string().required("Full name is required"),
@@ -40,6 +42,9 @@ const Company = () => {
       dispatch(addCompany(values));
       alert("Company added successfully!");
       resetForm();
+
+      // push to company page after adding company
+      router.push("/dashboard/company");
     },
   });
 
