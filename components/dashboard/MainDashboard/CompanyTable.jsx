@@ -17,6 +17,7 @@ import {
   DialogTitle,
   IconButton,
   Box,
+  Tooltip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -29,36 +30,58 @@ import {
   setRowsPerPage,
   toggleActiveState,
   deleteCompany,
+  setCompanyIdToEdit,
 } from "@/redux/companySlice";
+import EditCompanyForm from "@/components/company/EditCompanyForm";
 
 const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
   const dispatch = useDispatch();
+  const [selectedCompanyToEdit, setSelectedCompanyToEdit] = useState(null);
 
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [companyIdToDelete, setCompanyIdToDelete] = useState(null);
-  const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [openInactiveDialog, setOpenInactiveDialog] = useState(false);
+  const [openEditConfirmationDialog, setOpenEditConfirmationDialog] =
+    useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
 
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openStatusChangeDialog, setOpenStatusChangeDialog] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleEdit = (company) => {
+    setSelectedCompanyToEdit(company.id);
+    setOpenEditConfirmationDialog(true);
+  };
+
+  const handleEditConfirmation = () => {
+    setOpenEditConfirmationDialog(false);
+    setOpenEditModal(true);
+  };
+
+  const handleEditCancel = () => {
+    setSelectedCompanyToEdit(null);
+    setOpenEditConfirmationDialog(false);
+  };
+
+  const handleUpdate = (updatedCompany) => {
+    // Dispatch the action to update the company in the Redux store
+    dispatch(updatedCompany(updatedCompany));
+
+    // Close the editing modal
+    setOpenEditModal(false);
+  };
+
+  const handleStatusChange = (company) => {
     setSelectedCompany(company);
-    setOpenEditDialog(true);
+    setOpenStatusChangeDialog(true);
   };
 
-  const handleInactive = () => {
-    setOpenInactiveDialog(true);
-  };
-
-  const handleStatusConfirm = () => {
-    if (selectedCompany?.status === "active") {
-      dispatch(toggleActiveState(selectedCompany?.id));
-    } else {
-      dispatch(toggleActiveState(selectedCompany?.id));
+  const handleStatusConfirm = (newStatus) => {
+    if (selectedCompany) {
+      dispatch(toggleActiveState(selectedCompany.id));
     }
-    setOpenInactiveDialog(false);
+    setOpenStatusChangeDialog(false);
   };
 
   const handleDelete = () => {
@@ -85,7 +108,6 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
     dispatch(setRowsPerPage(parseInt(event.target.value, 10)));
   };
 
-  // Pagination
   let paginatedCompanies = [];
 
   if (pagination && pagination.currentPage && pagination.rowsPerPage) {
@@ -93,9 +115,9 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
     const endIndex = startIndex + pagination.rowsPerPage;
     paginatedCompanies = companies.slice(startIndex, endIndex);
   } else {
-    // Handle the case where pagination is not defined or missing required properties
     console.error("Invalid pagination object:", pagination);
   }
+
   return (
     <Box>
       <TableContainer component={Paper}>
@@ -126,13 +148,22 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
                   <IconButton onClick={() => handleEdit(company)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => handleInactive()}>
+
+                  <IconButton
+                    onClick={() => handleStatusChange(company)}
+                    // disabled={!company.active}
+                  >
                     {company.status === "active" ? (
-                      <BlockIcon />
+                      <Tooltip title="Make Inactive">
+                        <BlockIcon />
+                      </Tooltip>
                     ) : (
-                      <CheckIcon />
+                      <Tooltip title="Make Active">
+                        <CheckIcon />
+                      </Tooltip>
                     )}
                   </IconButton>
+
                   <IconButton
                     onClick={() => {
                       setCompanyIdToDelete(company.id);
@@ -147,7 +178,6 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* Pagination */}
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
@@ -157,15 +187,62 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-      {/* Inactive Dialog */}
-      <Dialog
-        open={openInactiveDialog}
-        onClose={() => setOpenInactiveDialog(false)}
-      >
-        {/* ... (Inactive Dialog content) */}
+      <Dialog open={openEditConfirmationDialog} onClose={handleEditCancel}>
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to edit this company?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditCancel}>Cancel</Button>
+          <Button onClick={handleEditConfirmation}>Yes, Edit</Button>
+        </DialogActions>
+      </Dialog>
+      {/* Edit Modal */}
+      {/* // Import the EditCompanyForm component at the top of your CompanyTable */}
+      {/* file // Inside the CompanyTable component, within the render method */}
+      <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)}>
+        <DialogTitle>Edit Company</DialogTitle>
+        <DialogContent>
+          <EditCompanyForm
+            companyIdToEdit={selectedCompanyToEdit}
+            onClose={() => setOpenEditModal(false)}
+            onUpdate={(updatedData) => handleUpdate(updatedData)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenEditModal(false)}>Cancel</Button>
+        </DialogActions>
       </Dialog>
 
-      {/* Delete Dialog */}
+      <Dialog
+        open={openStatusChangeDialog}
+        onClose={() => setOpenStatusChangeDialog(false)}
+      >
+        <DialogTitle>
+          {selectedCompany?.status === "active"
+            ? "Are you sure?"
+            : "Do you want to make this company active?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {selectedCompany?.status === "active"
+              ? "Are you sure you want to make this company inactive?"
+              : "Are you sure you want to make this company active?"}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenStatusChangeDialog(false)}>
+            Cancel
+          </Button>
+          <Button onClick={() => handleStatusConfirm()}>
+            {selectedCompany?.status === "active"
+              ? "Make Inactive"
+              : "Make Active"}
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Dialog
         open={openDeleteDialog}
         onClose={() => setOpenDeleteDialog(false)}
