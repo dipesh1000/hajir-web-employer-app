@@ -36,13 +36,16 @@ const Company = () => {
       calculationType: "",
       department: "",
       holidays: "",
+      employee: "0",
+      approver: "0",
+      qrcode: "null",
+      status: "active",
     },
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
       dispatch(addCompany(values));
       alert("Company added successfully!");
       resetForm();
-      console.log(values);
 
       // push to company page after adding company
       router.push("/dashboard/company");

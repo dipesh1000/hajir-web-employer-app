@@ -1,5 +1,5 @@
 import Header from "@/components/Sidebar/Header/Header";
-import Sidebar from "@/components/Sidebar/Sidebar";
+import Sidebar from "@/components/Sidebar/MainSidebar";
 import HeaderCompany from "@/components/company/HeaderCompany";
 import { Box } from "@mui/material";
 

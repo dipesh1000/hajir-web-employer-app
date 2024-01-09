@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import CheckIcon from "@mui/icons-material/Check";
 import BlockIcon from "@mui/icons-material/Block";
 import Link from "next/link";
 import { deleteCompany, toggleActiveState } from "@/redux/companySlice";
@@ -29,8 +30,8 @@ const CompanyTable = ({ companies, statusFilter }) => {
   const dispatch = useDispatch();
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [openInactiveDialog, setOpenInactiveDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openInactiveDialog, setOpenInactiveDialog] = useState(false);
 
   const handleEdit = (company) => {
     setSelectedCompany(company);
@@ -38,13 +39,25 @@ const CompanyTable = ({ companies, statusFilter }) => {
   };
 
   const handleInactive = () => {
-    dispatch(toggleActiveState(selectedCompany.id));
+    setOpenInactiveDialog(true);
+  };
+
+  const handleStatusConfirm = () => {
+    if (selectedCompany?.status === "active") {
+      dispatch(toggleActiveState(selectedCompany?.id));
+    } else {
+      dispatch(toggleActiveState(selectedCompany?.id));
+    }
     setOpenInactiveDialog(false);
   };
 
   const handleDelete = () => {
-    dispatch(deleteCompany(selectedCompany.id));
-    setOpenDeleteDialog(false);
+    console.log("Selected Company:", selectedCompany);
+    if (selectedCompany) {
+      console.log("Deleting Company...");
+      dispatch(deleteCompany(selectedCompany.id));
+      setOpenDeleteDialog(false);
+    }
   };
 
   // Filter companies based on the statusFilter
@@ -57,7 +70,6 @@ const CompanyTable = ({ companies, statusFilter }) => {
       return true; // "All" companies
     }
   });
-
   return (
     <Box>
       <TableContainer component={Paper}>
@@ -90,8 +102,12 @@ const CompanyTable = ({ companies, statusFilter }) => {
                   <IconButton onClick={() => handleEdit(company)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => setOpenInactiveDialog(true)}>
-                    <BlockIcon />
+                  <IconButton onClick={() => handleInactive()}>
+                    {company.status === "active" ? (
+                      <BlockIcon />
+                    ) : (
+                      <CheckIcon />
+                    )}
                   </IconButton>
                   <IconButton onClick={() => setOpenDeleteDialog(true)}>
                     <DeleteIcon />
@@ -102,22 +118,6 @@ const CompanyTable = ({ companies, statusFilter }) => {
           </TableBody>
         </Table>
       </TableContainer>
-
-      {/* Edit Dialog */}
-      <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
-        <DialogTitle>Edit Company: {selectedCompany?.name}</DialogTitle>
-        <DialogContent>
-          {/* Add your edit form or content here */}
-          <Link href={`/editpage/${selectedCompany?.id}`} passHref>
-            <Button component="a">Edit Company</Button>
-          </Link>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenEditDialog(false)}>Cancel</Button>
-          {/* Remove the following button if not needed */}
-          <Button onClick={() => setOpenEditDialog(false)}>Save</Button>
-        </DialogActions>
-      </Dialog>
 
       {/* Inactive Dialog */}
       <Dialog
@@ -137,7 +137,7 @@ const CompanyTable = ({ companies, statusFilter }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenInactiveDialog(false)}>Cancel</Button>
-          <Button onClick={handleInactive}>
+          <Button onClick={handleStatusConfirm}>
             {selectedCompany?.status === "active" ? "Inactivate" : "Activate"}
           </Button>
         </DialogActions>

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { nanoid } from "nanoid";
 
 const initialState = {
   companies: [],
@@ -9,7 +10,11 @@ const companySlice = createSlice({
   initialState,
   reducers: {
     addCompany: (state, action) => {
-      state.companies.push(action.payload);
+      const newCompany = {
+        id: nanoid(), // Generate a unique ID
+        ...action.payload,
+      };
+      state.companies.push(newCompany);
     },
     toggleActiveState: (state, action) => {
       const companyId = action.payload;
@@ -32,6 +37,13 @@ const companySlice = createSlice({
           ...state.companies[index],
           ...updatedCompany,
         };
+      } else {
+        // If the company with the provided ID doesn't exist, add a new one
+        const newCompany = {
+          id: nanoid(), // Generate a unique ID
+          ...updatedCompany,
+        };
+        state.companies.push(newCompany);
       }
     },
   },

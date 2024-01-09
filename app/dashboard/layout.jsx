@@ -1,5 +1,5 @@
 import Header from "@/components/Sidebar/Header/Header";
-import Sidebar from "@/components/Sidebar/Sidebar";
+import MainSidebar from "@/components/Sidebar/MainSidebar";
 import { Box } from "@mui/material";
 
 export const metadata = {
@@ -12,7 +12,7 @@ export default function DashboardLayout({ children }) {
   return (
     <>
       <Header />
-      <Sidebar />
+      <MainSidebar />
       <Box
         component="main"
         sx={{

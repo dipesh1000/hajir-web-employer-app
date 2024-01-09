@@ -16,13 +16,13 @@ import LogoutButton from "./LogoutButton";
 import BusinessIcon from "@mui/icons-material/Business";
 import Link from "next/link";
 
-const Sidebar = ({ onLogoutClick }) => {
+const MainSidebar = ({ onLogoutClick }) => {
   const LINKS = [
-    { text: "Dashboard", href: "/dashboard", icon: HomeIcon },
+    { text: "Home", href: "/dashboard", icon: HomeIcon },
     { text: "Company", href: "/dashboard/company", icon: BusinessIcon },
-    { text: "Profile", href: "/dashboard/profile", icon: StarIcon },
-    { text: "My Plans", href: "/dashboard/myplans", icon: ChecklistIcon },
-    { text: "Settings", href: "/dashboard/settings", icon: SettingsIcon },
+    // { text: "Profile", href: "/dashboard/profile", icon: StarIcon },
+    { text: "My Plans", href: "dashboard/myplans", icon: ChecklistIcon },
+    // { text: "Settings", href: "/dashboard/settings", icon: SettingsIcon },
   ];
 
   return (
@@ -63,4 +63,4 @@ const Sidebar = ({ onLogoutClick }) => {
   );
 };
 
-export default Sidebar;
+export default MainSidebar;
