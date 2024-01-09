@@ -28,7 +28,7 @@ const theme = createTheme(
       },
     },
   },
-  locales["zhCN"] // or any other locale you prefer
+  locales["en-US"] // or any other locale you prefer
 );
 
 export default theme;

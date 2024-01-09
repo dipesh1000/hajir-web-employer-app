@@ -9,6 +9,7 @@ import DashboardFirstComponent from "./MainDashboard/DashboardFirstComponent";
 import DashboardSecondComponent from "./MainDashboard/DashboardSecondComponent";
 import TabsActiveInactive from "./MainDashboard/TabsActiveInactive";
 import CompanyTable from "./MainDashboard/CompanyTable";
+import { useSelector } from "react-redux"; // Import useSelector to access Redux state
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -23,6 +24,15 @@ export default function MainDashboard() {
 
   const handleChangeTab = (event, newValue) => {
     setSelectedTab(newValue);
+  };
+
+  // Use useSelector to access companies data from Redux store
+  const companies = useSelector((state) => state.company.companies);
+
+  // Example pagination object, replace with your actual pagination logic
+  const pagination = {
+    currentPage: 1,
+    rowsPerPage: 5,
   };
 
   return (
@@ -56,15 +66,23 @@ export default function MainDashboard() {
             />
             <Box sx={{ display: selectedTab === 0 ? "block" : "none" }}>
               {/* All Companies */}
-              <CompanyTable />
+              <CompanyTable companies={companies} pagination={pagination} />
             </Box>
             <Box sx={{ display: selectedTab === 1 ? "block" : "none" }}>
               {/* Active Companies */}
-              <CompanyTable statusFilter="active" />
+              <CompanyTable
+                companies={companies}
+                statusFilter="active"
+                pagination={yourPaginationObject}
+              />
             </Box>
             <Box sx={{ display: selectedTab === 2 ? "block" : "none" }}>
               {/* Inactive Companies */}
-              <CompanyTable statusFilter="inactive" />
+              <CompanyTable
+                companies={companies}
+                statusFilter="inactive"
+                pagination={yourPaginationObject}
+              />
             </Box>
           </Item>
         </Grid>

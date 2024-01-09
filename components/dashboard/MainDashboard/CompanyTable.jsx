@@ -24,11 +24,15 @@ import CheckIcon from "@mui/icons-material/Check";
 import BlockIcon from "@mui/icons-material/Block";
 import Link from "next/link";
 import TablePagination from "@mui/material/TablePagination";
-import { deleteCompany, toggleActiveState } from "@/redux/companySlice";
+import {
+  setPage,
+  setRowsPerPage,
+  toggleActiveState,
+  deleteCompany,
+} from "@/redux/companySlice";
 
-const CompanyTable = ({ companies, statusFilter }) => {
+const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
   const dispatch = useDispatch();
-  // const companies = useSelector((state) => state.company.companies);
 
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [companyIdToDelete, setCompanyIdToDelete] = useState(null);
@@ -72,22 +76,26 @@ const CompanyTable = ({ companies, statusFilter }) => {
       return true; // "All" companies
     }
   });
-  // Pagination
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    dispatch(setPage(newPage + 1));
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 3));
-    setPage(0);
+    dispatch(setRowsPerPage(parseInt(event.target.value, 10)));
   };
 
-  const paginatedCompanies = filteredCompanies.slice(
-    page * rowsPerPage,
-    (page + 1) * rowsPerPage
-  );
+  // Pagination
+  let paginatedCompanies = [];
 
+  if (pagination && pagination.currentPage && pagination.rowsPerPage) {
+    const startIndex = (pagination.currentPage - 1) * pagination.rowsPerPage;
+    const endIndex = startIndex + pagination.rowsPerPage;
+    paginatedCompanies = companies.slice(startIndex, endIndex);
+  } else {
+    // Handle the case where pagination is not defined or missing required properties
+    console.error("Invalid pagination object:", pagination);
+  }
   return (
     <Box>
       <TableContainer component={Paper}>
@@ -141,14 +149,13 @@ const CompanyTable = ({ companies, statusFilter }) => {
       </TableContainer>
       {/* Pagination */}
       <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={filteredCompanies.length} // Use the total number of filtered companies
-        page={page}
-        onPageChange={handleChangePage}
-        rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        // Explicitly set the language to English (United States)
-        locale="en-US"
+        count={filteredCompanies.length}
+        rowsPerPage={pagination.rowsPerPage}
+        page={pagination.currentPage - 1}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
       />
       {/* Inactive Dialog */}
       <Dialog
