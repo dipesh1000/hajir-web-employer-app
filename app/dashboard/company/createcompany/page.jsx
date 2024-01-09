@@ -20,11 +20,34 @@ const Company = () => {
   const router = useRouter();
 
   const validationSchema = yup.object({
-    name: yup.string().required("Full name is required"),
+    name: yup
+      .string()
+      .required("Full name is required")
+      .matches(/^[A-Za-z][A-Za-z0-9 ]*$/, "Alphanumeric value only")
+      .test(
+        "first-letter-alphabet",
+        "First letter should be alphabetical for name",
+        (value) => {
+          // Check if the first letter is alphabetical
+          return /^[A-Za-z]/.test(value);
+        }
+      ),
+
     staffCode: yup.string().required("Please select a staff code"),
     dateSelect: yup.string().required("Please select a date"),
     calculationType: yup.string().required("Please select a calculation type"),
-    department: yup.string().required("Please enter a department"),
+    department: yup
+      .string()
+      .required("Please enter a department")
+      .matches(/^[A-Za-z][A-Za-z0-9 ]*$/, "Alphanumeric value only")
+      .test(
+        "first-letter-alphabet",
+        "First letter should be alphabetical for department",
+        (value) => {
+          // Check if the first letter is alphabetical
+          return /^[A-Za-z]/.test(value);
+        }
+      ),
     holidays: yup.string().required("Please enter holidays"),
   });
 

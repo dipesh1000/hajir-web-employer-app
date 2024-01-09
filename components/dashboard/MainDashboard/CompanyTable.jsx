@@ -1,7 +1,6 @@
 "use client";
-// company table// company table// CompanyTable.js// CompanyTable.js
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Table,
   TableBody,
@@ -24,14 +23,21 @@ import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
 import BlockIcon from "@mui/icons-material/Block";
 import Link from "next/link";
+import TablePagination from "@mui/material/TablePagination";
 import { deleteCompany, toggleActiveState } from "@/redux/companySlice";
 
 const CompanyTable = ({ companies, statusFilter }) => {
   const dispatch = useDispatch();
+  // const companies = useSelector((state) => state.company.companies);
+
   const [selectedCompany, setSelectedCompany] = useState(null);
+  const [companyIdToDelete, setCompanyIdToDelete] = useState(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openInactiveDialog, setOpenInactiveDialog] = useState(false);
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleEdit = (company) => {
     setSelectedCompany(company);
@@ -52,15 +58,11 @@ const CompanyTable = ({ companies, statusFilter }) => {
   };
 
   const handleDelete = () => {
-    console.log("Selected Company:", selectedCompany);
-    if (selectedCompany) {
-      console.log("Deleting Company...");
-      dispatch(deleteCompany(selectedCompany.id));
-      setOpenDeleteDialog(false);
-    }
+    console.log("Deleting Company with ID:", companyIdToDelete);
+    dispatch(deleteCompany(companyIdToDelete));
+    setOpenDeleteDialog(false);
   };
 
-  // Filter companies based on the statusFilter
   const filteredCompanies = companies.filter((company) => {
     if (statusFilter === "active") {
       return company.status === "active";
@@ -70,6 +72,22 @@ const CompanyTable = ({ companies, statusFilter }) => {
       return true; // "All" companies
     }
   });
+  // Pagination
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 3));
+    setPage(0);
+  };
+
+  const paginatedCompanies = filteredCompanies.slice(
+    page * rowsPerPage,
+    (page + 1) * rowsPerPage
+  );
+
   return (
     <Box>
       <TableContainer component={Paper}>
@@ -89,9 +107,7 @@ const CompanyTable = ({ companies, statusFilter }) => {
               <TableRow key={company.id}>
                 <TableCell>
                   <Link href={`/dashboard/company/${company.id}`} passHref>
-                    <Button component="a" color="primary">
-                      {company.name}
-                    </Button>
+                    <Button color="primary">{company.name}</Button>
                   </Link>
                 </TableCell>
                 <TableCell>{company.employee}</TableCell>
@@ -109,7 +125,12 @@ const CompanyTable = ({ companies, statusFilter }) => {
                       <CheckIcon />
                     )}
                   </IconButton>
-                  <IconButton onClick={() => setOpenDeleteDialog(true)}>
+                  <IconButton
+                    onClick={() => {
+                      setCompanyIdToDelete(company.id);
+                      setOpenDeleteDialog(true);
+                    }}
+                  >
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -118,29 +139,23 @@ const CompanyTable = ({ companies, statusFilter }) => {
           </TableBody>
         </Table>
       </TableContainer>
-
+      {/* Pagination */}
+      <TablePagination
+        component="div"
+        count={filteredCompanies.length} // Use the total number of filtered companies
+        page={page}
+        onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        // Explicitly set the language to English (United States)
+        locale="en-US"
+      />
       {/* Inactive Dialog */}
       <Dialog
         open={openInactiveDialog}
         onClose={() => setOpenInactiveDialog(false)}
       >
-        <DialogTitle>
-          {selectedCompany?.status === "active" ? "Inactivate" : "Activate"}{" "}
-          Company: {selectedCompany?.name}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to{" "}
-            {selectedCompany?.status === "active" ? "inactivate" : "activate"}{" "}
-            this company?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenInactiveDialog(false)}>Cancel</Button>
-          <Button onClick={handleStatusConfirm}>
-            {selectedCompany?.status === "active" ? "Inactivate" : "Activate"}
-          </Button>
-        </DialogActions>
+        {/* ... (Inactive Dialog content) */}
       </Dialog>
 
       {/* Delete Dialog */}
