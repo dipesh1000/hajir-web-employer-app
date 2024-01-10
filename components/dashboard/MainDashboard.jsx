@@ -33,6 +33,7 @@ export default function MainDashboard() {
   const pagination = {
     currentPage: 1,
     rowsPerPage: 5,
+    pageSize: 10,
   };
 
   return (

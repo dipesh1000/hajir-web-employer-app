@@ -31,6 +31,7 @@ import {
   toggleActiveState,
   deleteCompany,
   setCompanyIdToEdit,
+  changePage,
 } from "@/redux/companySlice";
 import EditCompanyForm from "@/components/company/EditCompanyForm";
 
@@ -47,7 +48,7 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openStatusChangeDialog, setOpenStatusChangeDialog] = useState(false);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(2);
 
   const handleEdit = (company) => {
     setSelectedCompanyToEdit(company.id);
@@ -101,7 +102,8 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
   });
 
   const handleChangePage = (event, newPage) => {
-    dispatch(setPage(newPage + 1));
+    setPage(newPage);
+    dispatch(changePage(newPage));
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -178,13 +180,14 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      {console.log({ rowsPerPage }, { filteredCompanies }, { pagination })}
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[2, 10, 25]}
         component="div"
         count={filteredCompanies.length}
-        rowsPerPage={pagination.rowsPerPage}
-        page={pagination.currentPage - 1}
-        onChangePage={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={(e, newPage) => handleChangePage(e, newPage)}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
       <Dialog open={openEditConfirmationDialog} onClose={handleEditCancel}>

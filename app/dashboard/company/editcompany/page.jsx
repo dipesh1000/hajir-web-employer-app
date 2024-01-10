@@ -15,7 +15,7 @@ import {
 import { addCompany } from "@/redux/companySlice";
 import { useRouter } from "next/navigation";
 
-const CreateCompany = () => {
+const EditCompany = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -238,4 +238,4 @@ const CreateCompany = () => {
   );
 };
 
-export default CreateCompany;
+export default EditCompany;

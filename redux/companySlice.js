@@ -5,6 +5,7 @@ const initialState = {
   companies: [],
   pagination: {
     currentPage: 1,
+    pageSize: 10,
     rowsPerPage: 5,
   },
   companyIdToEdit: null, // Add this line to track the company ID being edited
@@ -51,7 +52,7 @@ const companySlice = createSlice({
         state.companies.push(newCompany);
       }
     },
-    setPage: (state, action) => {
+    changePage: (state, action) => {
       state.pagination.currentPage = action.payload;
     },
     setRowsPerPage: (state, action) => {
@@ -69,7 +70,7 @@ export const {
   toggleActiveState,
   deleteCompany,
   editCompany,
-  setPage,
+  changePage,
   setRowsPerPage,
   setCompanyIdToEdit,
   // Export the new action
