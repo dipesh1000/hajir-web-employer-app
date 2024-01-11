@@ -24,17 +24,17 @@ const StyledButton = styled(Button)({
 export default function MainDashboard(params) {
   console.log(params);
   const router = useRouter();
-  const companies = [
-    {
-      id: 1,
-      name: "Company A",
-      employee: 20,
-      approver: 10,
-      status: "active",
-      qrCode: "qr_code_data_1",
-    },
-    // Add more companies as needed
-  ];
+  // const companies = [
+  //   {
+  //     id: 1,
+  //     name: "Company A",
+  //     employee: 20,
+  //     approver: 10,
+  //     status: "active",
+  //     qrCode: "qr_code_data_1",
+  //   },
+  //   // Add more companies as needed
+  // ];
 
   return (
     <Box

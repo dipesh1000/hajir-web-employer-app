@@ -26,19 +26,19 @@ export default function MainDashboard() {
   const dispatch = useDispatch();
   const companies = useSelector((state) => state.company.companies) || [];
 
-  const handleAddCompany = () => {
-    // For simplicity, I'm using a static company object. You should get this data from your form.
-    const newCompany = {
-      id: companies.length + 1,
-      name: "New Company",
-      employee: 0,
-      approver: 0,
-      status: "active",
-      qrCode: "qr_code_data_" + (companies.length + 1),
-    };
+  // const handleAddCompany = () => {
+  //   // For simplicity, I'm using a static company object. You should get this data from your form.
+  //   const newCompany = {
+  //     id: companies.length + 1,
+  //     name: "New Company",
+  //     employee: 0,
+  //     approver: 0,
+  //     status: "active",
+  //     qrCode: "qr_code_data_" + (companies.length + 1),
+  //   };
 
-    dispatch(addCompany(newCompany));
-  };
+  //   dispatch(addCompany(newCompany));
+  // };
 
   const [selectedTab, setSelectedTab] = React.useState(0);
 
@@ -60,8 +60,17 @@ export default function MainDashboard() {
       <Grid container spacing={2} columns={16}>
         <Grid item xs={8}>
           <h2>Company</h2>
-
+          <Box>
+            <StyledButton
+              variant="contained"
+              onClick={() => router.push("/dashboard/company/createcompany")}
+              startIcon={<AddIcon />}
+            >
+              Create Company
+            </StyledButton>
+          </Box>
           <h4>Dashboard / Company</h4>
+
           <Box>
             <TabsActiveInactive
               value={selectedTab}
@@ -84,7 +93,7 @@ export default function MainDashboard() {
           </Box>
         </Grid>
         <Grid item xs={4}>
-          <Box>
+          {/* <Box>
             <StyledButton
               variant="contained"
               onClick={handleAddCompany}
@@ -92,16 +101,7 @@ export default function MainDashboard() {
             >
               Static data Create Company
             </StyledButton>
-          </Box>
-          <Box>
-            <StyledButton
-              variant="contained"
-              onClick={() => router.push("/dashboard/company/createcompany")}
-              startIcon={<AddIcon />}
-            >
-              Create Company
-            </StyledButton>
-          </Box>
+          </Box> */}
         </Grid>
       </Grid>
     </Box>

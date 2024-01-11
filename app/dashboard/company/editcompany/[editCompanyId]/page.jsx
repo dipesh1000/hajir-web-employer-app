@@ -27,16 +27,31 @@ const EditCompany = () => {
   const { editCompanyId } = useParams();
 
   const companyToEdit = useSelector((state) => {
+    const companies = state.company.companies;
     console.log("state:", state); // Log the entire state to see its structure
 
-    const foundCompany = state.companies?.find(
-      (company) => company.id === String(editCompanyId)
-    );
+    const foundCompany =
+      companies && companies.length
+        ? companies.find((company) => company.id === String(editCompanyId))
+        : undefined;
 
     console.log("foundCompany:", foundCompany); // Log the found company
 
     return foundCompany;
   });
+
+  const defaultString = "";
+
+  const companyName = companyToEdit?.name || defaultString;
+  const staffCode = companyToEdit?.staffCode || defaultString;
+  const dateSelect = companyToEdit?.dateSelect || defaultString;
+  const calculationType = companyToEdit?.calculationType || defaultString;
+  const department = companyToEdit?.department || defaultString;
+  const holidays = companyToEdit?.holidays || defaultString;
+  const employee = companyToEdit?.employee || "0";
+  const approver = companyToEdit?.approver || "0";
+  const qrcode = companyToEdit?.qrcode || "null";
+  const status = companyToEdit?.status || "active";
 
   const validationSchema = yup.object({
     name: yup.string().required("Full name is required"),
@@ -49,16 +64,16 @@ const EditCompany = () => {
 
   const formik = useFormik({
     initialValues: {
-      name: companyToEdit?.name || "",
-      staffCode: companyToEdit?.staffCode || "",
-      dateSelect: companyToEdit?.dateSelect || "",
-      calculationType: companyToEdit?.calculationType || "",
-      department: companyToEdit?.department || "",
-      holidays: companyToEdit?.holidays || "",
-      employee: companyToEdit?.employee || "0",
-      approver: companyToEdit?.approver || "0",
-      qrcode: companyToEdit?.qrcode || "null",
-      status: companyToEdit?.status || "active",
+      name: companyName,
+      staffCode: staffCode,
+      dateSelect: dateSelect,
+      calculationType: calculationType,
+      department: department,
+      holidays: holidays,
+      employee: employee,
+      approver: approver,
+      qrcode: qrcode,
+      status: status,
     },
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
@@ -67,14 +82,6 @@ const EditCompany = () => {
       router.push("/dashboard/company");
     },
   });
-
-  useEffect(() => {
-    if (!companyToEdit) {
-      // Dispatch an action to fetch the company details based on companyId
-      // Example: dispatch(setCompanyIdToEdit(editCompanyId));
-      dispatch(setCompanyIdToEdit(editCompanyId));
-    }
-  }, [editCompanyId, companyToEdit, dispatch]);
 
   return (
     <Box
