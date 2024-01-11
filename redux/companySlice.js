@@ -5,10 +5,9 @@ const initialState = {
   companies: [],
   pagination: {
     currentPage: 1,
-    pageSize: 10,
     rowsPerPage: 5,
   },
-  companyIdToEdit: null, // Add this line to track the company ID being edited
+  companyIdToEdit: null,
 };
 
 const companySlice = createSlice({
@@ -27,7 +26,6 @@ const companySlice = createSlice({
       const company = state.companies.find((c) => c.id === companyId);
 
       if (company) {
-        // Update the status property instead of active
         company.status = company.status === "active" ? "inactive" : "active";
       }
     },
@@ -73,7 +71,6 @@ export const {
   changePage,
   setRowsPerPage,
   setCompanyIdToEdit,
-  // Export the new action
 } = companySlice.actions;
 
 export default companySlice.reducer;

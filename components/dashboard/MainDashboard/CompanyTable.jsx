@@ -34,9 +34,12 @@ import {
   changePage,
 } from "@/redux/companySlice";
 import EditCompanyForm from "@/components/company/EditCompanyForm";
+import { useRouter } from "next/navigation";
 
 const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const [selectedCompanyToEdit, setSelectedCompanyToEdit] = useState(null);
 
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -57,7 +60,7 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
 
   const handleEditConfirmation = () => {
     setOpenEditConfirmationDialog(false);
-    setOpenEditModal(true);
+    router.push(`/dashboard/company/editcompany/${selectedCompanyToEdit}`);
   };
 
   const handleEditCancel = () => {

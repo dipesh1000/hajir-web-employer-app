@@ -1,8 +1,11 @@
+// Import necessary modules
 "use client";
-import React from "react";
-import * as yup from "yup";
+import { useEffect } from "react";
+import { useParams } from "next/navigation";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
+import * as yup from "yup";
+import { useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Box,
   Typography,
@@ -12,68 +15,66 @@ import {
   FormControlLabel,
   Radio,
 } from "@mui/material";
-import { addCompany } from "@/redux/companySlice";
-import { useRouter } from "next/navigation";
+import {
+  editCompany,
+  setCompanyIdToEdit,
+  // Add the action to fetch company details
+} from "@/redux/companySlice";
 
 const EditCompany = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { editCompanyId } = useParams();
+
+  const companyToEdit = useSelector((state) => {
+    console.log("state:", state); // Log the entire state to see its structure
+
+    const foundCompany = state.companies?.find(
+      (company) => company.id === String(editCompanyId)
+    );
+
+    console.log("foundCompany:", foundCompany); // Log the found company
+
+    return foundCompany;
+  });
 
   const validationSchema = yup.object({
-    name: yup
-      .string()
-      .required("Full name is required")
-      .matches(/^[A-Za-z][A-Za-z0-9 ]*$/, "Alphanumeric value only")
-      .test(
-        "first-letter-alphabet",
-        "First letter should be alphabetical for name",
-        (value) => {
-          // Check if the first letter is alphabetical
-          return /^[A-Za-z]/.test(value);
-        }
-      ),
-
+    name: yup.string().required("Full name is required"),
     staffCode: yup.string().required("Please select a staff code"),
     dateSelect: yup.string().required("Please select a date"),
     calculationType: yup.string().required("Please select a calculation type"),
-    department: yup
-      .string()
-      .required("Please enter a department")
-      .matches(/^[A-Za-z][A-Za-z0-9 ]*$/, "Alphanumeric value only")
-      .test(
-        "first-letter-alphabet",
-        "First letter should be alphabetical for department",
-        (value) => {
-          // Check if the first letter is alphabetical
-          return /^[A-Za-z]/.test(value);
-        }
-      ),
+    department: yup.string().required("Please enter a department"),
     holidays: yup.string().required("Please enter holidays"),
   });
 
   const formik = useFormik({
     initialValues: {
-      name: "",
-      staffCode: "",
-      dateSelect: "",
-      calculationType: "",
-      department: "",
-      holidays: "",
-      employee: "0",
-      approver: "0",
-      qrcode: "null",
-      status: "active",
+      name: companyToEdit?.name || "",
+      staffCode: companyToEdit?.staffCode || "",
+      dateSelect: companyToEdit?.dateSelect || "",
+      calculationType: companyToEdit?.calculationType || "",
+      department: companyToEdit?.department || "",
+      holidays: companyToEdit?.holidays || "",
+      employee: companyToEdit?.employee || "0",
+      approver: companyToEdit?.approver || "0",
+      qrcode: companyToEdit?.qrcode || "null",
+      status: companyToEdit?.status || "active",
     },
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
-      dispatch(addCompany(values));
-      alert("Company added successfully!");
+      dispatch(editCompany({ id: editCompanyId, updatedCompany: values }));
       resetForm();
-
-      // push to company page after adding company
       router.push("/dashboard/company");
     },
   });
+
+  useEffect(() => {
+    if (!companyToEdit) {
+      // Dispatch an action to fetch the company details based on companyId
+      // Example: dispatch(setCompanyIdToEdit(editCompanyId));
+      dispatch(setCompanyIdToEdit(editCompanyId));
+    }
+  }, [editCompanyId, companyToEdit, dispatch]);
 
   return (
     <Box
@@ -84,7 +85,7 @@ const EditCompany = () => {
         backgroundColor: "#fff",
       }}
     >
-      <Typography variant="h5">Add New Company</Typography>
+      <Typography variant="h5">Update your Company</Typography>
       <form onSubmit={formik.handleSubmit}>
         {/* Name of the company */}
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
@@ -93,6 +94,8 @@ const EditCompany = () => {
             *
           </Typography>
         </Box>
+        <p>Company Id: {editCompanyId}</p>
+
         <TextField
           label="Enter Company Name"
           variant="outlined"
@@ -231,7 +234,7 @@ const EditCompany = () => {
 
         {/* Submit Button */}
         <Button type="submit" variant="contained" color="primary" mt={2}>
-          Submit
+          Update Company
         </Button>
       </form>
     </Box>
