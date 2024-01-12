@@ -61,7 +61,7 @@ const CreateCompany = () => {
       holidays: "",
       employee: "0",
       approver: "0",
-      qrcode: "null",
+      qrcode: "  qr code ",
       status: "active",
     },
     validationSchema: validationSchema,

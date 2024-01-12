@@ -29,9 +29,9 @@ const LogoContainer = styled("div")({
 
 export default function BasicGrid() {
   return (
-    <Box sx={{ flexGrow: 1, height: "100vh" }}>
+    <Box sx={{ flexGrow: 1 }}>
       {/* image showing grid  */}
-      <Grid container={1}>
+      <Grid container sx={{ height: "100vh" }}>
         {/* testing  */}
         <Grid item xs={12} md={6}>
           {/* Always render ImageSlider */}

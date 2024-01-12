@@ -14,6 +14,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
   flexGrow: 1,
   height: "100vh",
   display: "flex",
+  // width: "100vw",
   flexDirection: "column",
   justifyContent: "start",
   alignItems: "center",
