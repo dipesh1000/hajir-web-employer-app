@@ -134,20 +134,19 @@ export default function Signin() {
                 helperText={formik.touched.phone && formik.errors.phone}
               />
 
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{ mt: 5, width: "120px" }}
-              >
+              <br />
+              <br />
+              <Button variant="contained" type="submit">
                 Login
               </Button>
-              <p style={{ whiteSpace: "pre-line", marginTop: "8px" }}>
-                We will sent OTP on this mobile number
-              </p>
-              <p style={{ whiteSpace: "pre-line" }}>
-                I have read and agree to the Terms & Services
-              </p>
             </Box>
+
+            <p style={{ whiteSpace: "pre-line", marginTop: "8px" }}>
+              We will send you a one-time password on this mobile number
+            </p>
+            <p style={{ whiteSpace: "pre-line" }}>
+              I have read and agree to the Terms & Services
+            </p>
           </Item>
         </Grid>
       </Grid>
