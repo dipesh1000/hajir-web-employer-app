@@ -13,7 +13,7 @@ import FirstDashboard from "@/components/dashboard/FirstDashboard";
 import MainDashboard from "@/components/dashboard/MainDashboard";
 
 export default function HomePage() {
-  const isCompanyExists = false;
+  // const isCompanyExists = true;
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -23,8 +23,9 @@ export default function HomePage() {
           <AlertTitle> BIraj Karki</AlertTitle>
           Manage your company and employee with the best management system.
         </Alert> */}
+        <FirstDashboard />
 
-        {isCompanyExists ? <MainDashboard /> : <FirstDashboard />}
+        {/* {isCompanyExists ? <MainDashboard /> : <FirstDashboard />} */}
       </div>
     </Box>
   );

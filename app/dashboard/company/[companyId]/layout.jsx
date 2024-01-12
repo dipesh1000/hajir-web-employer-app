@@ -1,4 +1,6 @@
+import CompanySidebar from "@/components/Sidebar/CompanySidebar";
 import Header from "@/components/Sidebar/Header/Header";
+import MainSidebar from "@/components/Sidebar/MainSidebar";
 import Sidebar from "@/components/Sidebar/MainSidebar";
 import HeaderCompany from "@/components/company/HeaderCompany";
 import { Box } from "@mui/material";
@@ -13,8 +15,8 @@ export default function CompanyLayout({ children }) {
   return (
     <>
       <Header />
-      <Sidebar />
       <HeaderCompany />
+      <CompanySidebar />
       <Box
         component="main"
         sx={{

@@ -24,7 +24,8 @@ export default function TabsActiveInactive({
       >
         <Tab
           label={
-            <Badge badgeContent={notificationsCount.all} color="primary">
+            <Badge color="primary">
+              {/* <Badge badgeContent={notificationsCount.all} color="primary"> */}
               <div
                 style={{
                   fontSize: "1rem",
@@ -41,7 +42,8 @@ export default function TabsActiveInactive({
         />
         <Tab
           label={
-            <Badge badgeContent={notificationsCount.active} color="secondary">
+            <Badge color="secondary">
+              {/* <Badge badgeContent={notificationsCount.active} color="secondary"> */}
               <div
                 style={{
                   fontSize: "1rem",
@@ -58,7 +60,8 @@ export default function TabsActiveInactive({
         />
         <Tab
           label={
-            <Badge badgeContent={notificationsCount.inactive} color="info">
+            <Badge color="info">
+              {/* <Badge badgeContent={notificationsCount.inactive} color="info"> */}
               <div
                 style={{
                   fontSize: "1rem",

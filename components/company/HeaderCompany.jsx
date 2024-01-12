@@ -5,12 +5,12 @@ import Sidebar from "../Sidebar/MainSidebar";
 import CompanyHeader from "../Sidebar/CompanyHeader/CompanyHeader";
 import { useParams } from "next/navigation";
 
-const HeaderCompany = () => {
+const HeaderCompany = (props) => {
   const { companyId } = useParams();
   return (
     <>
-      <Header />
-      <Sidebar />
+      {/* <Header /> */}
+      {/* <Sidebar /> */}
       <CompanyHeader companyId={companyId} />
     </>
   );

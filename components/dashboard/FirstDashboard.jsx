@@ -47,13 +47,13 @@ export default function FirstDashboard() {
           </Box>
         </Grid>
       </Grid>
-      <StyledButton
+      {/* <StyledButton
         variant="contained"
         onClick={() => router.push("/dashboard/company/createcompany")}
         startIcon={<AddIcon />}
       >
         Create Company
-      </StyledButton>
+      </StyledButton> */}
     </StyledBox>
   );
 }

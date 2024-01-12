@@ -74,7 +74,7 @@ export default function MainDashboard() {
               <CompanyTable
                 companies={companies}
                 statusFilter="active"
-                pagination={yourPaginationObject}
+                pagination={pagination}
               />
             </Box>
             <Box sx={{ display: selectedTab === 2 ? "block" : "none" }}>
@@ -82,7 +82,7 @@ export default function MainDashboard() {
               <CompanyTable
                 companies={companies}
                 statusFilter="inactive"
-                pagination={yourPaginationObject}
+                pagination={pagination}
               />
             </Box>
           </Item>

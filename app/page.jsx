@@ -7,10 +7,8 @@ import Grid from "@mui/material/Grid";
 import Image from "next/image";
 import Button from "@mui/material/Button";
 import Link from "next/link";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "center",
@@ -20,6 +18,9 @@ const Item = styled(Paper)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   height: "100%",
+  boxShadow: "none",
+  elevation: 0,
+  background: "transparent",
 }));
 
 const LogoContainer = styled("div")({
@@ -27,23 +28,19 @@ const LogoContainer = styled("div")({
 });
 
 export default function BasicGrid() {
-  const isDesktop = useMediaQuery("(min-width: 600px)"); // Adjust the breakpoint as needed
-
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       {/* image showing grid  */}
       <Grid container={1}>
-        {isDesktop && (
-          <Grid item xs={12} md={6}>
-            {/* Conditionally render ImageSlider on desktop screens */}
-            <Image
-              width={750}
-              height={750}
-              alt="login image"
-              src="/auth/login-image-default.png"
-            />
-          </Grid>
-        )}
+        <Grid item xs={12} md={6}>
+          {/* Always render ImageSlider */}
+          <Image
+            width={750}
+            height={750}
+            alt="login image"
+            src="/auth/login-image-default.png"
+          />
+        </Grid>
         <Grid item xs={12} md={6}>
           <Item>
             <LogoContainer>
@@ -56,19 +53,21 @@ export default function BasicGrid() {
                 <br />
                 payroll and personal report of your company.
               </p>
-              {/* Hide the image on small and medium screens */}
+              {/* Always render the image */}
               <Image
                 src="/auth/sign-min.png"
                 width={140}
                 height={120}
                 alt="Logo"
-                sx={{
-                  display: { xs: "none", sm: "none", md: "block" }, // Hide on xs and sm, show on md and above
-                }}
               />
             </div>
             <Link href="/login">
-              <Button variant="contained" color="primary">
+              {/* make button width little bigger */}
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ mt: 5, width: "120px" }}
+              >
                 Login
               </Button>
             </Link>
