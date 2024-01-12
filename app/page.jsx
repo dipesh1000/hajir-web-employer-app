@@ -32,6 +32,7 @@ export default function BasicGrid() {
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       {/* image showing grid  */}
       <Grid container={1}>
+        {/* testing  */}
         <Grid item xs={12} md={6}>
           {/* Always render ImageSlider */}
           <Image
