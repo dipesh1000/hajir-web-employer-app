@@ -35,19 +35,19 @@ const CreateCompany = () => {
 
     staffCode: yup.string().required("Please select a staff code"),
     dateSelect: yup.string().required("Please select a date"),
-    calculationType: yup.string().required("Please select a calculation type"),
-    department: yup
-      .string()
-      .required("Please enter a department")
-      .matches(/^[A-Za-z][A-Za-z0-9 ]*$/, "Alphanumeric value only")
-      .test(
-        "first-letter-alphabet",
-        "First letter should be alphabetical for department",
-        (value) => {
-          // Check if the first letter is alphabetical
-          return /^[A-Za-z]/.test(value);
-        }
-      ),
+    // calculationType: yup.string().required("Please select a calculation type"),
+    // department: yup
+    //   .string()
+    //   .required("Please enter a department")
+    //   .matches(/^[A-Za-z][A-Za-z0-9 ]*$/, "Alphanumeric value only")
+    //   .test(
+    //     "first-letter-alphabet",
+    //     "First letter should be alphabetical for department",
+    //     (value) => {
+    //       // Check if the first letter is alphabetical
+    //       return /^[A-Za-z]/.test(value);
+    //     }
+    //   ),
     holidays: yup.string().required("Please enter holidays"),
   });
 
@@ -158,7 +158,7 @@ const CreateCompany = () => {
         )}
 
         {/* Salary calculation */}
-        <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
+        {/* <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
           <Typography variant="body1">Salary Calculation</Typography>
           <RadioGroup
             row
@@ -183,10 +183,10 @@ const CreateCompany = () => {
             <Typography sx={{ color: "red" }}>
               {formik.errors.calculationType}
             </Typography>
-          )}
+          )} */}
 
         {/* Create Department */}
-        <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
+        {/* <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
           <Typography variant="body1">Create Department</Typography>
           <Typography variant="body1" color="red" ml={1}>
             *
@@ -200,7 +200,7 @@ const CreateCompany = () => {
           {...formik.getFieldProps("department")}
           error={formik.touched.department && Boolean(formik.errors.department)}
           helperText={formik.touched.department && formik.errors.department}
-        />
+        /> */}
 
         {/* Holday */}
         <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
