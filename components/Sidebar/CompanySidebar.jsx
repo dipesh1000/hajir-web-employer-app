@@ -79,7 +79,7 @@ const CompanySidebar = ({ onLogoutClick }) => {
         "& .MuiDrawer-paper": {
           width: 240,
           boxSizing: "border-box",
-          top: ["48px", "56px", "64px"],
+          top: ["40px", "56px", "64px"],
           height: "auto",
           bottom: 0,
         },
