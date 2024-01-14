@@ -1,61 +1,74 @@
-// ProfileCard.jsx
 "use client";
-// ProfileCard.jsx
-// ProfileCard.jsx
-import React, { useState } from "react";
-import { styled } from "@mui/system";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
+import * as React from "react";
+import Button from "@mui/material/Button";
+import { styled } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import TextField from "@mui/material/TextField";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import Button from "@mui/material/Button";
 
-const ProfileContainer = styled(Card)({
+const ProfileContainer = styled(Button)({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  marginTop: "20px",
-  marginBottom: "10px",
   padding: "20px",
-  borderRadius: "remove",
-  cursor: "pointer", // Add cursor pointer for clickable effect
+  cursor: "pointer",
+  transition: "transform 0.2s",
+  "&:hover": {
+    transform: "scale(1.05)",
+  },
 });
 
-const ProfileCard = () => {
-  const [openModal, setOpenModal] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [userData, setUserData] = useState({
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
+
+export default function ProfileCard() {
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [editMode, setEditMode] = React.useState(false);
+  const [userData, setUserData] = React.useState({
     name: "Biraj Karki",
     email: "birajkarki9@gmail.com",
   });
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
 
   const handleEditProfile = () => {
     setEditMode(true);
+    setOpenDialog(true);
   };
 
   const handleSaveProfile = () => {
     // Save changes
     setEditMode(false);
+    handleCloseDialog();
   };
 
   const handleCancelEdit = () => {
     // Cancel editing
     setEditMode(false);
+    handleCloseDialog();
   };
 
   return (
     <>
-      <ProfileContainer onClick={handleOpenModal}>
+      <ProfileContainer onClick={handleOpenDialog}>
         <Avatar
           src="/avatar.png"
           sx={{
@@ -64,63 +77,41 @@ const ProfileCard = () => {
           }}
           alt="Profile Avatar"
         />
-        <CardContent>
-          <Typography variant="h6" align="center" sx={{ fontWeight: "bold" }}>
-            {userData.name}
-          </Typography>
-          <Typography align="center" color="gray">
-            {userData.email}
-          </Typography>
-        </CardContent>
+        <Typography
+          variant="h6"
+          align="center"
+          sx={{ fontWeight: "bold", mt: 1 }}
+        >
+          {userData.name}
+        </Typography>
+        <Typography align="center" color="textSecondary">
+          {userData.email}
+        </Typography>
       </ProfileContainer>
 
-      <Modal
-        open={openModal}
-        onClose={handleCloseModal}
-        aria-labelledby="user-modal-title"
-        aria-describedby="user-modal-description"
+      <BootstrapDialog
+        onClose={handleCloseDialog}
+        aria-labelledby="customized-dialog-title"
+        open={openDialog}
       >
-        <Box
+        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+          {editMode ? "Edit Profile" : "Profile Details"}
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleCloseDialog}
           sx={{
             position: "absolute",
-            top: "10%",
-            left: "10%",
-            width: 600,
-            bgcolor: "background.paper",
-            border: "2px solid #000",
-            boxShadow: 24,
-            pt: 2,
-            px: 4,
-            pb: 3,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
           }}
         >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent dividers>
           {editMode ? (
-            <Box>
-              <input
-                type="text"
-                placeholder="Name"
-                value={userData.name}
-                onChange={(e) =>
-                  setUserData({ ...userData, name: e.target.value })
-                }
-              />
-              <input
-                type="text"
-                placeholder="Email"
-                value={userData.email}
-                onChange={(e) =>
-                  setUserData({ ...userData, email: e.target.value })
-                }
-              />
-              <input type="file" accept="image/*" />
-              <Button onClick={handleSaveProfile}>Save Changes</Button>
-              <Button onClick={handleCancelEdit}>Cancel</Button>
-            </Box>
-          ) : (
-            <Box>
+            <>
               <Avatar
                 src="/avatar.png"
                 sx={{
@@ -129,18 +120,54 @@ const ProfileCard = () => {
                 }}
                 alt="Profile Avatar"
               />
-              <Typography variant="h6" sx={{ fontWeight: "bold", mt: 2 }}>
-                {userData.name}
-              </Typography>
-              <Typography color="gray">{userData.email}</Typography>
-              <Button onClick={handleEditProfile}>Edit Profile</Button>
-              <Button onClick={handleCloseModal}>Cancel</Button>
-            </Box>
+              <input
+                type="file"
+                accept="image/*"
+                style={{ margin: "10px 0" }}
+              />
+            </>
+          ) : (
+            <Avatar
+              src="/avatar.png"
+              sx={{
+                width: 100,
+                height: 100,
+              }}
+              alt="Profile Avatar"
+            />
           )}
-        </Box>
-      </Modal>
+          <TextField
+            label="Name"
+            fullWidth
+            margin="normal"
+            value={userData.name}
+            onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+            disabled={!editMode}
+          />
+          <TextField
+            label="Email"
+            fullWidth
+            margin="normal"
+            value={userData.email}
+            onChange={(e) =>
+              setUserData({ ...userData, email: e.target.value })
+            }
+            disabled={!editMode}
+          />
+        </DialogContent>
+        <DialogActions>
+          {editMode ? (
+            <>
+              <Button variant="contained" onClick={handleSaveProfile}>
+                Save Changes
+              </Button>
+              <Button onClick={handleCancelEdit}>Cancel</Button>
+            </>
+          ) : (
+            <Button onClick={handleEditProfile}>Edit Profile</Button>
+          )}
+        </DialogActions>
+      </BootstrapDialog>
     </>
   );
-};
-
-export default ProfileCard;
+}
