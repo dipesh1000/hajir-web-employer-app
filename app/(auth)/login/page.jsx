@@ -47,7 +47,7 @@ export default function Signin() {
 
   const formik = useFormik({
     initialValues: {
-      phone: "",
+      phone: "9808426215",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {

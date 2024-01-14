@@ -7,9 +7,9 @@ import Button from "@mui/material/Button";
 import { styled } from "@mui/system";
 import Link from "next/link";
 
-const StyledAppBar = styled(AppBar)({
-  backgroundColor: "#f0f0f0", // set your desired background color
-});
+// const StyledAppBar = styled(AppBar)({
+//   backgroundColor: "#f0f0f0", // set your desired background color
+// });
 
 const StyledButton = styled(Button)({
   flexGrow: 1,
@@ -26,22 +26,13 @@ const CompanyName = styled(Typography)({
 
 const CompanyHeader = ({ companyId }) => {
   return (
-    <StyledAppBar position="static">
-      <Toolbar>
-        <CompanyName variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Company
-        </CompanyName>
-        <Link href={`/dashboard/company/${companyId}/employee`}>
-          <StyledButton>Employee</StyledButton>
-        </Link>
-        <Link href={`/dashboard/company/${companyId}/attendance`}>
-          <StyledButton>Attendance</StyledButton>
-        </Link>
-        <Link href={`/dashboard/company/${companyId}/report`}>
-          <StyledButton>Report</StyledButton>
-        </Link>
-      </Toolbar>
-    </StyledAppBar>
+    // <StyledAppBar position="static">
+    <Toolbar>
+      <CompanyName variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        Company
+      </CompanyName>
+    </Toolbar>
+    // </StyledAppBar>
   );
 };
 
