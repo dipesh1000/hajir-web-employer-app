@@ -20,17 +20,13 @@ const StyledButton = styled(Button)({
   },
 });
 
-const CompanyName = styled(Typography)({
-  color: "black",
-});
-
 const CompanyHeader = ({ companyId }) => {
   return (
     // <StyledAppBar position="static">
     <Toolbar>
-      <CompanyName variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
         this is coming from company header
-      </CompanyName>
+      </Typography>
     </Toolbar>
     // </StyledAppBar>
   );

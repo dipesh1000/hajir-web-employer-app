@@ -1,8 +1,8 @@
-import { Roboto } from "next/font/google";
+import { Poppins } from "next/font/google";
 import { createTheme } from "@mui/material/styles";
 import { enUS } from "@mui/material/locale";
 
-const roboto = Roboto({
+const poppins = Poppins({
   weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
   display: "swap",
@@ -14,7 +14,7 @@ const theme = createTheme(
       mode: "light",
     },
     typography: {
-      fontFamily: roboto.style.fontFamily,
+      fontFamily: poppins.style.fontFamily,
     },
     components: {
       MuiAlert: {

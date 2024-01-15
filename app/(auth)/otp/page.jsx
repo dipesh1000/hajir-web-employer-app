@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -101,10 +101,57 @@ const Otp = () => {
   const handleInputChange = (index, value) => {
     const newOtp = [...otp];
     newOtp[index] = value;
+
+    // Move to the next input box if a number is entered
+    if (value !== "") {
+      const nextIndex = index + 1;
+      if (nextIndex < newOtp.length) {
+        document.getElementById(`otp-input-${nextIndex}`).focus();
+      }
+    } else {
+      // Move to the previous input box if deleted
+      const prevIndex = index - 1;
+      if (prevIndex >= 0) {
+        document.getElementById(`otp-input-${prevIndex}`).focus();
+      }
+    }
+
     setOtp(newOtp);
     let otpString = newOtp ? newOtp.join("") : "";
     formik.setFieldValue("otp", otpString);
   };
+
+  // timer
+
+  const [timer, setTimer] = useState(30); // 3 minutes in seconds
+  const [timerActive, setTimerActive] = useState(true);
+
+  useEffect(() => {
+    let interval;
+
+    if (timerActive) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [timerActive]);
+
+  const handleResendClick = () => {
+    // Handle resend logic here (use client)
+    console.log("Resend button clicked");
+
+    // Reset the timer
+    setTimer(30);
+    // Activate the timer
+    setTimerActive(true);
+  };
+
+  const timerMinutes = Math.floor(timer / 60);
+  const timerSeconds = timer % 60;
 
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
@@ -157,10 +204,14 @@ const Otp = () => {
                 {loading && <p>Loading...</p>}
 
                 {/* OTP input boxes */}
-                <div className="flex space-x-2" sx={{ gap: "20px" }}>
+                <div
+                  className="flex space-x-2"
+                  sx={{ gap: "20px", marginTop: "1rem", marginBottom: "1rem" }}
+                >
                   {otp.map((digit, index) => (
                     <TextField
                       key={index}
+                      id={`otp-input-${index}`}
                       type="text"
                       inputProps={{ maxLength: 1 }}
                       value={digit}
@@ -168,15 +219,15 @@ const Otp = () => {
                       variant="outlined"
                       size="large"
                       sx={{
-                        width: "60px",
-                        height: "60px",
+                        width: "80px", // Adjust the width as needed
+                        height: "80px", // Adjust the height as needed
                         textAlign: "center",
+                        marginRight: "20px", // Add marginRight to create a gap between input boxes
                       }}
                     />
                   ))}
                 </div>
 
-                <br />
                 <br />
 
                 {/* Verify button */}
@@ -186,9 +237,36 @@ const Otp = () => {
               </div>
             </Box>
 
-            <p style={{ whiteSpace: "pre-line", marginTop: "8px" }}>
-              Do not receive OTP? Resend OTP in 2:59{" "}
-            </p>
+            <div
+              style={{
+                whiteSpace: "pre-line",
+                marginTop: "8px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <p style={{ color: timer === 0 ? "red" : "inherit" }}>
+                Do not receive OTP? Resend OTP in{" "}
+                <span style={{ color: "red" }}>
+                  {timerMinutes}:
+                  {timerSeconds < 10 ? `0${timerSeconds}` : timerSeconds}
+                </span>
+              </p>
+              {timer === 0 && (
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleResendClick}
+                  style={{
+                    marginLeft: "8px",
+                    borderColor: "red",
+                    color: "red",
+                  }}
+                >
+                  Resend
+                </Button>
+              )}
+            </div>
 
             <p
               style={{
