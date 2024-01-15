@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import { useAuth } from "@/context/AuthContext";
 import { useFormik } from "formik";
 import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -23,6 +24,9 @@ const Item = styled(Paper)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   height: "100%",
+  boxShadow: "none",
+  elevation: 0,
+  background: "transparent",
 }));
 
 const LogoContainer = styled("div")({
@@ -106,7 +110,7 @@ const Otp = () => {
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Image src="/auth/login.png" width={700} height={700} alt="Logo" />
+          <Image src="/auth/login.png" width={950} height={925} alt="Logo" />
         </Grid>
         <Grid item xs={6}>
           <Item>
@@ -145,7 +149,7 @@ const Otp = () => {
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
-                  gap: "1.5rem",
+                  gap: "2.5rem",
                   sm: { width: "350px" },
                 }}
               >
@@ -153,7 +157,7 @@ const Otp = () => {
                 {loading && <p>Loading...</p>}
 
                 {/* OTP input boxes */}
-                <div className="flex space-x-2" sx={{ gap: "8px" }}>
+                <div className="flex space-x-2" sx={{ gap: "20px" }}>
                   {otp.map((digit, index) => (
                     <TextField
                       key={index}
@@ -165,13 +169,13 @@ const Otp = () => {
                       size="large"
                       sx={{
                         width: "60px",
-                        height: "12px",
-                        gap: "8px",
+                        height: "60px",
                         textAlign: "center",
                       }}
                     />
                   ))}
                 </div>
+
                 <br />
                 <br />
 
@@ -185,7 +189,18 @@ const Otp = () => {
             <p style={{ whiteSpace: "pre-line", marginTop: "8px" }}>
               Do not receive OTP? Resend OTP in 2:59{" "}
             </p>
-            <p style={{ whiteSpace: "pre-line" }}>Change number again </p>
+
+            <p
+              style={{
+                whiteSpace: "pre-line",
+                textDecoration: "underline",
+                cursor: "pointer",
+                color: "#3f51b5",
+              }}
+              onClick={() => router.push("/login")}
+            >
+              Change number again{" "}
+            </p>
           </Item>
         </Grid>
       </Grid>

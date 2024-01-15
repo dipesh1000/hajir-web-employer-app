@@ -45,6 +45,7 @@ const validationSchema = yup.object({
 export default function Signin() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -61,6 +62,12 @@ export default function Signin() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
+        if (buttonClicked) {
+          return;
+        }
+
+        setButtonClicked(true);
+
         const apiResponse = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/employer/register`,
           {
@@ -71,11 +78,13 @@ export default function Signin() {
             body: JSON.stringify(values),
           }
         );
+
         if (!apiResponse.ok) {
           throw new Error("Network response was not ok");
         }
+
         const data = await apiResponse.json();
-        setResponse(data);
+
         if (data.status === "success") {
           alert(`Successfully Registered.  \n Your OTP is: ${data.data.otp}`);
           console.log("OTP:values", data.data.otp);
@@ -91,10 +100,17 @@ export default function Signin() {
   });
 
   return (
-    <Box sx={{ flexGrow: 1, height: "100vh" }}>
+    <Box
+      sx={{
+        flexGrow: 1,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Image src="/auth/login.png" width={750} height={750} alt="Logo" />
+          <Image src="/auth/login.png" width={950} height={1000} alt="Logo" />
         </Grid>
         <Grid item xs={6}>
           <Item>
@@ -112,8 +128,8 @@ export default function Signin() {
               </p>
               <Image
                 src="/auth/login-min.png"
-                width={140}
-                height={120}
+                width={150}
+                height={150}
                 alt="Logo"
               />
             </div>
@@ -124,7 +140,7 @@ export default function Signin() {
                 "& > :not(style)": { m: 1 },
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "flex-start",
+                alignItems: "center",
               }}
               noValidate
               autoComplete="off"
@@ -143,9 +159,11 @@ export default function Signin() {
                 helperText={formik.touched.phone && formik.errors.phone}
               />
 
-              <br />
-              <br />
-              <Button variant="contained" type="submit">
+              <Button
+                variant="contained"
+                type="submit"
+                disabled={buttonClicked}
+              >
                 Login
               </Button>
             </Box>
