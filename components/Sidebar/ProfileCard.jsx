@@ -18,10 +18,10 @@ const ProfileContainer = styled(Button)({
   alignItems: "center",
   padding: "20px",
   cursor: "pointer",
-  transition: "transform 0.2s",
-  "&:hover": {
-    transform: "scale(1.05)",
-  },
+  // transition: "transform 0.2s",
+  // "&:hover": {
+  //   transform: "scale(1.05)",
+  // },
 });
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({

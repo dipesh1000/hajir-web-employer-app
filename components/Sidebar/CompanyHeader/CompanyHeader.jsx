@@ -29,7 +29,7 @@ const CompanyHeader = ({ companyId }) => {
     // <StyledAppBar position="static">
     <Toolbar>
       <CompanyName variant="h6" component="div" sx={{ flexGrow: 1 }}>
-        Company
+        this is coming from company header
       </CompanyName>
     </Toolbar>
     // </StyledAppBar>

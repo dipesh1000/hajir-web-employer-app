@@ -1,13 +1,15 @@
 "use client";
 import * as React from "react";
 import { styled } from "@mui/material/styles";
+// import FirstPageCompany from "@/components/company/FirstPageCompany";
+// import CompanyFormFirst from "@/components/company/CompanyFormFirst";
 import { useDispatch, useSelector } from "react-redux";
 import FirstPageEmployee from "@/components/employee/FirstPageEmployee";
 
-export default function MainDashboard() {
-  const dispatch = useDispatch();
-  const companies = useSelector((state) => state.company.companies) || [];
-  const hasCompanies = companies.length > 0;
+export default function CompanyDashboard() {
+  // const dispatch = useDispatch();
+  // const companies = useSelector((state) => state.company.companies) || [];
+  // const hasCompanies = companies.length > 0;
 
   return (
     <div
@@ -18,7 +20,8 @@ export default function MainDashboard() {
         }
       }
     >
-      {/* {hasCompanies ? <CompanyFormFirst /> : <FirstPageEmployee />} */}
+      {/* {hasCompanies ? <CompanyFormFirst /> : <FirstPageCompany />} */}
+      <FirstPageEmployee />
     </div>
   );
 }

@@ -5,8 +5,9 @@ import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // Corrected import
 import Image from "next/image";
+import { useParams } from "next/navigation";
 
 const StyledButton = styled(Button)({
   marginTop: "40px",
@@ -19,6 +20,12 @@ const StyledButton = styled(Button)({
 
 export default function FirstPageEmployee() {
   const router = useRouter();
+  const params = useParams();
+  const { companyId } = params;
+  console.log(params);
+
+  // Access companyId from the query parameters
+  // const { companyId } =
 
   return (
     <Box
@@ -27,7 +34,6 @@ export default function FirstPageEmployee() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        // height: "100vh", // This ensures the Box takes the full height of the viewport
       }}
     >
       <Image
@@ -36,11 +42,13 @@ export default function FirstPageEmployee() {
         src="/dashboard/employee/no-employee.svg"
         alt="noCompany"
       />
-      <p>You havent add employee yet?</p>
-      <p>What are you waiting for? add it now!</p>
+      <p>You havent added any employees yet?</p>
+      <p>What are you waiting for? Add them now!</p>
       <StyledButton
         variant="contained"
-        onClick={() => router.push("/dashboard/company/createcompany")}
+        onClick={() =>
+          router.push(`/dashboard/company/${companyId}/employee/createemployee`)
+        }
         startIcon={<AddIcon />}
       >
         Create Employee
