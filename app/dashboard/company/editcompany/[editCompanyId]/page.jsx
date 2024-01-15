@@ -57,8 +57,8 @@ const EditCompany = () => {
     name: yup.string().required("Full name is required"),
     staffCode: yup.string().required("Please select a staff code"),
     dateSelect: yup.string().required("Please select a date"),
-    calculationType: yup.string().required("Please select a calculation type"),
-    department: yup.string().required("Please enter a department"),
+    // calculationType: yup.string().required("Please select a calculation type"),
+    // department: yup.string().required("Please enter a department"),
     holidays: yup.string().required("Please enter holidays"),
   });
 
@@ -168,51 +168,10 @@ const EditCompany = () => {
         )}
 
         {/* Salary calculation */}
-        <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
-          <Typography variant="body1">Salary Calculation</Typography>
-          <RadioGroup
-            row
-            name="calculationType"
-            value={formik.values.calculationType}
-            onChange={formik.handleChange}
-          >
-            <FormControlLabel
-              value="Calendar Days"
-              control={<Radio sx={{ width: "50%" }} />}
-              label="Calendar Days"
-            />
-            <FormControlLabel
-              value="30 Days"
-              control={<Radio sx={{ width: "50%" }} />}
-              label="30 Days"
-            />
-          </RadioGroup>
-        </Box>
-        {formik.touched.calculationType &&
-          Boolean(formik.errors.calculationType) && (
-            <Typography sx={{ color: "red" }}>
-              {formik.errors.calculationType}
-            </Typography>
-          )}
 
         {/* Create Department */}
-        <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
-          <Typography variant="body1">Create Department</Typography>
-          <Typography variant="body1" color="red" ml={1}>
-            *
-          </Typography>
-        </Box>
-        <TextField
-          label="Enter Department Name"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          {...formik.getFieldProps("department")}
-          error={formik.touched.department && Boolean(formik.errors.department)}
-          helperText={formik.touched.department && formik.errors.department}
-        />
 
-        {/* Holday */}
+        {/* Holiday */}
         <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
           <Typography variant="body1">Holidays</Typography>
           <RadioGroup

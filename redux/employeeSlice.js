@@ -1,7 +1,14 @@
+// employeeSlice.js
 import { createSlice } from "@reduxjs/toolkit";
+import { nanoid } from "nanoid";
 
 const initialState = {
   employees: [],
+  pagination: {
+    currentPage: 1,
+    rowsPerPage: 5,
+  },
+  employeeIdToEdit: null, // Change companyIdToEdit to employeeIdToEdit
 };
 
 const employeeSlice = createSlice({
@@ -9,34 +16,65 @@ const employeeSlice = createSlice({
   initialState,
   reducers: {
     addEmployee: (state, action) => {
-      state.employees.push(action.payload);
+      const newEmployee = {
+        id: nanoid(),
+        ...action.payload,
+      };
+      state.employees.push(newEmployee); // Change newCompany to newEmployee
     },
     toggleActiveState: (state, action) => {
-      const employeeId = action.payload;
-      const employee = state.employees.find((e) => e.id === employeeId);
+      const employeeId = action.payload; // Change companyId to employeeId
+      const employee = state.employees.find((e) => e.id === employeeId); // Change company to employee
 
       if (employee) {
-        employee.active = !employee.active;
+        employee.status = employee.status === "active" ? "inactive" : "active";
       }
     },
     deleteEmployee: (state, action) => {
+      // Change deleteCompany to deleteEmployee
       const employeeId = action.payload;
-      state.employees = state.employees.filter((e) => e.id !== employeeId);
+      state.employees = state.employees.filter((e) => e.id !== employeeId); // Change company to employee
     },
     editEmployee: (state, action) => {
-      const { id, updatedEmployee } = action.payload;
-      const index = state.employees.findIndex((e) => e.id === id);
+      // Change editCompany to editEmployee
+      const { id, updatedEmployee } = action.payload; // Change id and updatedCompany to id and updatedEmployee
+      const index = state.employees.findIndex((e) => e.id === id); // Change company to employee
 
       if (index !== -1) {
         state.employees[index] = {
           ...state.employees[index],
           ...updatedEmployee,
         };
+      } else {
+        const newEmployee = {
+          id: nanoid(),
+          ...updatedEmployee,
+        };
+        state.employees.push(newEmployee);
       }
+    },
+    changePage: (state, action) => {
+      state.pagination.currentPage = action.payload;
+    },
+    setRowsPerPage: (state, action) => {
+      state.pagination.rowsPerPage = action.payload;
+      state.pagination.currentPage = 1;
+    },
+    setEmployeeIdToEdit: (state, action) => {
+      // Change setCompanyIdToEdit to setEmployeeIdToEdit
+      state.employeeIdToEdit = action.payload;
     },
   },
 });
 
-export const { addEmployee, toggleActiveState, deleteEmployee, editEmployee } =
-  employeeSlice.actions;
+export const {
+  addEmployee,
+  toggleActiveState,
+  deleteEmployee,
+  editEmployee,
+  changePage,
+  setRowsPerPage,
+  setEmployeeIdToEdit,
+} = employeeSlice.actions;
+
 export default employeeSlice.reducer;

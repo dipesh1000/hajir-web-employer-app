@@ -7,10 +7,10 @@ import Grid from '@mui/material/Grid';
 import Image from 'next/image';
 import Button from '@mui/material/Button';
 import * as yup from 'yup';
-
 import { TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
+import ScrollDialog from '@/components/Auth/ScrollDialog';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -31,6 +31,7 @@ const Item = styled(Paper)(({ theme }) => ({
 const LogoContainer = styled('div')({
   marginBottom: '16px',
 });
+
 const validationSchema = yup.object({
   phone: yup
     .string()
@@ -43,15 +44,30 @@ const validationSchema = yup.object({
 
 export default function Signin() {
   const router = useRouter();
-  const [response, setResponse] = useState({});
+  const [open, setOpen] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   const formik = useFormik({
     initialValues: {
-      phone: '',
+      phone: '9808426215',
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
+        if (buttonClicked) {
+          return;
+        }
+
+        setButtonClicked(true);
+
         const apiResponse = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/employer/register`,
           {
@@ -62,11 +78,13 @@ export default function Signin() {
             body: JSON.stringify(values),
           }
         );
+
         if (!apiResponse.ok) {
           throw new Error('Network response was not ok');
         }
+
         const data = await apiResponse.json();
-        setResponse(data);
+
         if (data.status === 'success') {
           alert(`Successfully Registered.  \n Your OTP is: ${data.data.otp}`);
           router.push(`/otp?phone=${values.phone}&otp=${data.data.otp}`);
@@ -80,10 +98,17 @@ export default function Signin() {
   });
 
   return (
-    <Box sx={{ flexGrow: 1, height: '100vh' }}>
+    <Box
+      sx={{
+        flexGrow: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Image src="/auth/login.png" width={750} height={750} alt="Logo" />
+          <Image src="/auth/login.png" width={950} height={1000} alt="Logo" />
         </Grid>
         <Grid item xs={6}>
           <Item>
@@ -101,8 +126,8 @@ export default function Signin() {
               </p>
               <Image
                 src="/auth/login-min.png"
-                width={140}
-                height={120}
+                width={150}
+                height={150}
                 alt="Logo"
               />
             </div>
@@ -113,7 +138,7 @@ export default function Signin() {
                 '& > :not(style)': { m: 1 },
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'flex-start',
+                alignItems: 'center',
               }}
               noValidate
               autoComplete="off"
@@ -132,9 +157,11 @@ export default function Signin() {
                 helperText={formik.touched.phone && formik.errors.phone}
               />
 
-              <br />
-              <br />
-              <Button variant="contained" type="submit">
+              <Button
+                variant="contained"
+                type="submit"
+                disabled={buttonClicked}
+              >
                 Login
               </Button>
             </Box>
@@ -142,9 +169,18 @@ export default function Signin() {
             <p style={{ whiteSpace: 'pre-line', marginTop: '8px' }}>
               We will send you a one-time password on this mobile number
             </p>
+
             <p style={{ whiteSpace: 'pre-line' }}>
-              I have read and agree to the Terms & Services
+              I have read and agree to the{' '}
+              <span
+                style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                onClick={handleOpen}
+              >
+                Terms & Services
+              </span>
             </p>
+
+            <ScrollDialog open={open} onClose={handleClose} />
           </Item>
         </Grid>
       </Grid>

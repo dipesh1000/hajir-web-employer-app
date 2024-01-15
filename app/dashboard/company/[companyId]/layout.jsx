@@ -17,7 +17,7 @@ export default function CompanyLayout({ children }) {
       <Header />
       <HeaderCompany />
       <CompanySidebar />
-      <Box
+      {/* <Box
         component="main"
         sx={{
           flexGrow: 1,
@@ -27,9 +27,9 @@ export default function CompanyLayout({ children }) {
           p: 3,
           overflow: "auto", // Make the main content scrollable
         }}
-      >
-        {children}
-      </Box>{" "}
+      > */}
+      {children}
+      {/* </Box>{" "} */}
     </>
   );
 }

@@ -29,14 +29,12 @@ const LogoContainer = styled("div")({
 
 export default function BasicGrid() {
   return (
-    <Box sx={{ flexGrow: 1, height: "100vh" }}>
-      {/* image showing grid  */}
-      <Grid container={1}>
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid container>
         <Grid item xs={12} md={6}>
-          {/* Always render ImageSlider */}
           <Image
-            width={750}
-            height={750}
+            width={950}
+            height={925}
             alt="login image"
             src="/auth/login-image-default.png"
           />
@@ -53,16 +51,14 @@ export default function BasicGrid() {
                 <br />
                 payroll and personal report of your company.
               </p>
-              {/* Always render the image */}
               <Image
                 src="/auth/sign-min.png"
-                width={140}
-                height={120}
+                width={175}
+                height={175}
                 alt="Logo"
               />
             </div>
             <Link href="/login">
-              {/* make button width little bigger */}
               <Button
                 variant="contained"
                 color="primary"

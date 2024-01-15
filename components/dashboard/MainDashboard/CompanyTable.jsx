@@ -53,6 +53,10 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(2);
 
+  // New state for QR Code modal
+  const [openQrCodeModal, setOpenQrCodeModal] = React.useState(false);
+  const [qrCodeContent, setQrCodeContent] = React.useState("");
+
   const handleEdit = (company) => {
     setSelectedCompanyToEdit(company.id);
     setOpenEditConfirmationDialog(true);
@@ -76,6 +80,11 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
     setOpenEditModal(false);
   };
 
+  // Function to handle opening QR Code modal
+  const handleQrCodeClick = (content) => {
+    setQrCodeContent(content);
+    setOpenQrCodeModal(true);
+  };
   const handleStatusChange = (company) => {
     setSelectedCompany(company);
     setOpenStatusChangeDialog(true);
@@ -124,7 +133,7 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
   }
 
   return (
-    <Box>
+    <Box sx={{ width: "100%" }}>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -147,36 +156,52 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
                 </TableCell>
                 <TableCell>{company.employee}</TableCell>
                 <TableCell>{company.approver}</TableCell>
-                <TableCell>{company.status}</TableCell>
-                <TableCell>{company.qrCode}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => handleEdit(company)}>
-                    <EditIcon />
-                  </IconButton>
-
-                  <IconButton
-                    onClick={() => handleStatusChange(company)}
-                    // disabled={!company.active}
-                  >
-                    {company.status === "active" ? (
-                      <Tooltip title="Make Inactive">
-                        <BlockIcon />
-                      </Tooltip>
-                    ) : (
-                      <Tooltip title="Make Active">
-                        <CheckIcon />
-                      </Tooltip>
-                    )}
-                  </IconButton>
-
-                  <IconButton
-                    onClick={() => {
-                      setCompanyIdToDelete(company.id);
-                      setOpenDeleteDialog(true);
+                  <span
+                    style={{
+                      background:
+                        company.status === "active" ? "#0070f3" : "#ff0000",
+                      color: "#ffffff", // Set text color to white
+                      padding: "8px", // Adjust padding as needed
+                      borderRadius: "4px", // Optional: Add rounded corners
                     }}
                   >
-                    <DeleteIcon />
-                  </IconButton>
+                    {company.status}
+                  </span>
+                </TableCell>
+                <TableCell onClick={() => handleQrCodeClick(company.qrcode)}>
+                  {company.qrcode}
+                </TableCell>
+                <TableCell>
+                  {/* Conditionally render buttons based on company status */}
+                  {company.status === "active" ? (
+                    <>
+                      <IconButton onClick={() => handleEdit(company)}>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton onClick={() => handleStatusChange(company)}>
+                        <Tooltip title="Make Inactive">
+                          <BlockIcon />
+                        </Tooltip>
+                      </IconButton>
+                    </>
+                  ) : (
+                    <>
+                      <IconButton
+                        onClick={() => {
+                          setCompanyIdToDelete(company.id);
+                          setOpenDeleteDialog(true);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                      <IconButton onClick={() => handleStatusChange(company)}>
+                        <Tooltip title="Make Active">
+                          <CheckIcon />
+                        </Tooltip>
+                      </IconButton>
+                    </>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -262,6 +287,16 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
         <DialogActions>
           <Button onClick={() => setOpenDeleteDialog(false)}>Cancel</Button>
           <Button onClick={handleDelete}>Delete</Button>
+        </DialogActions>
+      </Dialog>
+      {/* QR Code modal */}
+      <Dialog open={openQrCodeModal} onClose={() => setOpenQrCodeModal(false)}>
+        <DialogTitle>QR Code Content</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{qrCodeContent}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenQrCodeModal(false)}>Close</Button>
         </DialogActions>
       </Dialog>
     </Box>
