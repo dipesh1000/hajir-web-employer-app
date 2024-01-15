@@ -1,27 +1,27 @@
 // Sidebar.jsx
-import React from "react";
-import Drawer from "@mui/material/Drawer";
-import Divider from "@mui/material/Divider";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import ProfileCard from "./ProfileCard";
-import HomeIcon from "@mui/icons-material/Home";
-import StarIcon from "@mui/icons-material/Star";
-import ChecklistIcon from "@mui/icons-material/Checklist";
-import SettingsIcon from "@mui/icons-material/Settings";
-import LogoutButton from "./LogoutButton";
-import BusinessIcon from "@mui/icons-material/Business";
-import Link from "next/link";
+import React from 'react';
+import Drawer from '@mui/material/Drawer';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ProfileCard from './ProfileCard';
+import HomeIcon from '@mui/icons-material/Home';
+import StarIcon from '@mui/icons-material/Star';
+import ChecklistIcon from '@mui/icons-material/Checklist';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutButton from './LogoutButton';
+import BusinessIcon from '@mui/icons-material/Business';
+import Link from 'next/link';
 
 const MainSidebar = ({ onLogoutClick }) => {
   const LINKS = [
-    { text: "Home", href: "/dashboard", icon: HomeIcon },
-    { text: "Company", href: "/dashboard/company", icon: BusinessIcon },
+    { text: 'Home', href: '/dashboard', icon: HomeIcon },
+    { text: 'Company', href: '/dashboard/company', icon: BusinessIcon },
     // { text: "Profile", href: "/dashboard/profile", icon: StarIcon },
-    { text: "My Plans", href: "dashboard/myplans", icon: ChecklistIcon },
+    { text: 'My Plans', href: 'dashboard/myplans', icon: ChecklistIcon },
     // { text: "Settings", href: "/dashboard/settings", icon: SettingsIcon },
   ];
 
@@ -32,11 +32,11 @@ const MainSidebar = ({ onLogoutClick }) => {
       sx={{
         width: 240,
         flexShrink: 0,
-        "& .MuiDrawer-paper": {
+        '& .MuiDrawer-paper': {
           width: 240,
-          boxSizing: "border-box",
-          top: ["48px", "56px", "64px"],
-          height: "auto",
+          boxSizing: 'border-box',
+          top: ['48px', '56px', '64px'],
+          height: 'auto',
           bottom: 0,
         },
       }}

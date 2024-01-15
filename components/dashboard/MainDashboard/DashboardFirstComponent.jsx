@@ -1,29 +1,29 @@
-import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import ButtonBase from "@mui/material/ButtonBase";
-import { format } from "date-fns";
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import ButtonBase from '@mui/material/ButtonBase';
+import { format } from 'date-fns';
 
-const Img = styled("img")({
-  margin: "auto",
-  display: "block",
-  maxWidth: "100%",
-  maxHeight: "100%",
+const Img = styled('img')({
+  margin: 'auto',
+  display: 'block',
+  maxWidth: '100%',
+  maxHeight: '100%',
 });
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
-  margin: "auto",
+  margin: 'auto',
   maxWidth: 800,
   flexGrow: 1,
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#f2f2f2",
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#f2f2f2',
 }));
 
 export default function DashboardFirstComponent() {
   // Format today's date
-  const todayDate = format(new Date(), "EEEE, MMMM d, y");
+  const todayDate = format(new Date(), 'EEEE, MMMM d, y');
 
   return (
     <StyledPaper>
@@ -49,7 +49,7 @@ export default function DashboardFirstComponent() {
           </Grid>
         </Grid>
         <Grid item>
-          <ButtonBase sx={{ width: "100%", height: "100%" }}>
+          <ButtonBase sx={{ width: '100%', height: '100%' }}>
             <Img alt="complex" src="/dashboard/right-img.png" />
           </ButtonBase>
         </Grid>
