@@ -1,5 +1,7 @@
+// companySlice.js
 import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
+import { addEmployee } from "./employeeSlice";
 
 const initialState = {
   companies: [],
@@ -18,6 +20,7 @@ const companySlice = createSlice({
       const newCompany = {
         id: nanoid(),
         ...action.payload,
+        employees: [], // Add an employees array
       };
       state.companies.push(newCompany);
     },
@@ -46,8 +49,29 @@ const companySlice = createSlice({
         const newCompany = {
           id: nanoid(),
           ...updatedCompany,
+          employees: [],
         };
         state.companies.push(newCompany);
+      }
+    },
+    addEmployeeToCompany: (state, action) => {
+      const { companyId, employee } = action.payload;
+      const company = state.companies.find((c) => c.id === companyId);
+
+      if (company) {
+        const employeeId = nanoid(); // Generate employeeId
+        console.log("New employeeId:", employeeId); // Log employeeId
+
+        const updatedEmployee = {
+          id: employeeId,
+          ...employee,
+        };
+
+        // Log the updated employee object
+        console.log("Updated Employee:", updatedEmployee);
+
+        // Add the employee to the company
+        company.employees.push(updatedEmployee);
       }
     },
     changePage: (state, action) => {
@@ -61,6 +85,22 @@ const companySlice = createSlice({
       state.companyIdToEdit = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(addEmployee, (state, action) => {
+      const { companyId, employee } = action.payload;
+      const company = state.companies.find((c) => c.id === companyId);
+
+      if (company) {
+        const updatedEmployee = {
+          id: nanoid(),
+          ...employee,
+        };
+
+        // Add the employee to the company
+        company.employees.push(updatedEmployee);
+      }
+    });
+  },
 });
 
 export const {
@@ -68,6 +108,7 @@ export const {
   toggleActiveState,
   deleteCompany,
   editCompany,
+  addEmployeeToCompany,
   changePage,
   setRowsPerPage,
   setCompanyIdToEdit,

@@ -14,10 +14,13 @@ import {
 } from "@mui/material";
 import { addCompany } from "@/redux/companySlice";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 
 const CreateCompany = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  // const employees = useSelector((state) => state.employee.employees);
+  // const companies = useSelector((state) => state.company.companies);
 
   const validationSchema = yup.object({
     name: yup

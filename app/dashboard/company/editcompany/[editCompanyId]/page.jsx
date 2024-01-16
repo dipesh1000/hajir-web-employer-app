@@ -1,6 +1,5 @@
 // Import necessary modules
 "use client";
-import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -15,11 +14,7 @@ import {
   FormControlLabel,
   Radio,
 } from "@mui/material";
-import {
-  editCompany,
-  setCompanyIdToEdit,
-  // Add the action to fetch company details
-} from "@/redux/companySlice";
+import { editCompany, setCompanyIdToEdit } from "@/redux/companySlice";
 
 const EditCompany = () => {
   const dispatch = useDispatch();
@@ -28,7 +23,7 @@ const EditCompany = () => {
 
   const companyToEdit = useSelector((state) => {
     const companies = state.company.companies;
-    console.log("state:", state); // Log the entire state to see its structure
+    console.log("state:", state);
 
     const foundCompany =
       companies && companies.length
