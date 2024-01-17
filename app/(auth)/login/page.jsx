@@ -11,7 +11,27 @@ import { TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import ScrollDialog from "@/components/Auth/ScrollDialog";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
+// Styles for components
+const styles = {
+  container: {
+    flexGrow: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  image: {
+    display: "block",
+    maxWidth: "100%",
+    // Hide the image on screens smaller than 600px
+    "@media (max-width: 600px)": {
+      display: "none",
+    },
+  },
+};
+
+// Styled components
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -32,6 +52,7 @@ const LogoContainer = styled("div")({
   marginBottom: "16px",
 });
 
+// Validation schema
 const validationSchema = yup.object({
   phone: yup
     .string()
@@ -42,6 +63,7 @@ const validationSchema = yup.object({
     ),
 });
 
+// Main component
 export default function Signin() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -54,6 +76,9 @@ export default function Signin() {
   const handleOpen = () => {
     setOpen(true);
   };
+
+  // Use media query hook
+  const isScreenSmall = useMediaQuery("(max-width:900px)");
 
   const formik = useFormik({
     initialValues: {
@@ -100,19 +125,22 @@ export default function Signin() {
   });
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <Box sx={styles.container}>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Image src="/auth/login.png" width={950} height={1000} alt="Logo" />
+        <Grid item xs={12} md={6}>
+          {/* Apply styles to the image */}
+          <Image
+            src="/auth/login.png"
+            width={950}
+            height={1000}
+            alt="Logo"
+            style={{
+              ...styles.image,
+              display: isScreenSmall ? "none" : "block",
+            }}
+          />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Item>
             <LogoContainer>
               <Image src="/hajir-logo.png" width={140} height={50} alt="Logo" />

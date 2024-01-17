@@ -48,7 +48,7 @@ export default function CreateEmployee() {
       dispatch(addEmployeeToCompany({ companyId, employee: values }));
       alert("Employee added successfully!");
       resetForm();
-      router.push("/dashboard/company");
+      router.push(`/dashboard/company/${companyId}`);
     },
   });
 

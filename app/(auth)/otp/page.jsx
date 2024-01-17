@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -12,7 +11,25 @@ import { useAuth } from "@/context/AuthContext";
 import { useFormik } from "formik";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { SvgIcon, useMediaQuery } from "@mui/material";
 
+// Styles for components
+const styles = {
+  container: {
+    flexGrow: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  image: {
+    display: "block",
+    maxWidth: "100%",
+    // Hide the image on screens smaller than 600px
+    "@media (max-width: 600px)": {
+      display: "none",
+    },
+  },
+};
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -44,6 +61,7 @@ const Otp = () => {
     otpnumber?.toString().split("") || ["", "", "", ""]
   );
   const [loading, setLoading] = useState(false);
+  const isScreenSmall = useMediaQuery("(max-width:900px)");
 
   async function getData(values) {
     const apiResponse = await fetch(
@@ -157,9 +175,18 @@ const Otp = () => {
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Image src="/auth/login.png" width={950} height={925} alt="Logo" />
+          <Image
+            src="/auth/login.png"
+            width={950}
+            height={1000}
+            alt="Logo"
+            style={{
+              ...styles.image,
+              display: isScreenSmall ? "none" : "block",
+            }}
+          />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Item>
             <LogoContainer>
               <Image src="/hajir-logo.png" width={140} height={50} alt="Logo" />
@@ -169,7 +196,7 @@ const Otp = () => {
               <p style={{ whiteSpace: "pre-line" }}>
                 Salary calculation made easy, track your
                 <br />
-                staffs overtime, leave day, late day, and
+                staff overtime, leave day, late day, and
                 <br />
                 live daily wages interactive reports.
                 <br />
@@ -203,38 +230,53 @@ const Otp = () => {
                 {/* Loading indicator */}
                 {loading && <p>Loading...</p>}
 
-                {/* OTP input boxes */}
-                <div
-                  className="flex space-x-2"
-                  sx={{ gap: "20px", marginTop: "1rem", marginBottom: "1rem" }}
+                {/* Single OTP input box with underline effect */}
+
+                <TextField
+                  inputProps={{
+                    maxLength: 4,
+                    pattern: "[0-9]*",
+                  }}
+                  style={{
+                    width: "240px",
+                    fontSize: "32px",
+                    textAlign: "center",
+                    color: "#3e3e3e",
+
+                    border: "0px solid #3e3e3e",
+                    borderRadius: "4px",
+                    letterSpacing: "44px",
+                    fontFamily: "sans-serif",
+                  }}
+                />
+                <SvgIcon
+                  viewBox="0 0 240 1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{
+                    position: "relative",
+                    display: "block",
+                    width: "220px",
+                    height: "2px",
+                    margin: "2 auto",
+                  }}
                 >
-                  {otp.map((digit, index) => (
-                    <TextField
-                      key={index}
-                      id={`otp-input-${index}`}
-                      type="text"
-                      inputProps={{ maxLength: 1 }}
-                      value={digit}
-                      onChange={(e) => handleInputChange(index, e.target.value)}
-                      variant="outlined"
-                      size="large"
-                      sx={{
-                        width: "80px", // Adjust the width as needed
-                        height: "80px", // Adjust the height as needed
-                        textAlign: "center",
-                        marginRight: "20px", // Add marginRight to create a gap between input boxes
-                      }}
-                    />
-                  ))}
-                </div>
-
-                <br />
-
-                {/* Verify button */}
-                <Button type="submit" variant="contained" color="primary">
-                  Verify
-                </Button>
+                  <line
+                    x1="0"
+                    y1="0"
+                    x2="240"
+                    y2="0"
+                    stroke="#3e3e3e"
+                    strokeWidth="2"
+                    strokeDasharray="44,22"
+                  />
+                </SvgIcon>
               </div>
+              <br />
+
+              {/* Verify button */}
+              <Button type="submit" variant="contained" color="primary">
+                Verify
+              </Button>
             </Box>
 
             <div
