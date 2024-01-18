@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useCallback } from "react";
 import {
   Box,
   Typography,
@@ -8,7 +8,19 @@ import {
   FormControlLabel,
 } from "@mui/material";
 
-const CustomRadioGroup = ({ name, value, onChange, options }) => {
+const CustomRadioGroup = ({
+  name,
+  value,
+  options,
+  onChange,
+  setFieldValue,
+}) => {
+  const handleChange = useCallback(
+    (selectedValue) => {
+      setFieldValue(name, selectedValue);
+    },
+    [name, setFieldValue]
+  );
   return (
     <RadioGroup row name={name} value={value} onChange={onChange}>
       {options.map((option) => (
@@ -33,7 +45,7 @@ const CustomRadioGroup = ({ name, value, onChange, options }) => {
               ? { background: "#f5f5f5", border: "1px solid #2196F3" }
               : {}),
           }}
-          onClick={() => onChange(option.value)}
+          onClick={() => handleChange(option.value)}
         >
           <FormControlLabel
             value={option.value}
