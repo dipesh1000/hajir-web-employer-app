@@ -11,16 +11,15 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Grid,
 } from "@mui/material";
 import { addCompany } from "@/redux/companySlice";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
-
+import Link from "next/link";
+import { CheckCircleOutline } from "@mui/icons-material";
 const CreateCompany = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  // const employees = useSelector((state) => state.employee.employees);
-  // const companies = useSelector((state) => state.company.companies);
 
   const validationSchema = yup.object({
     name: yup
@@ -31,26 +30,11 @@ const CreateCompany = () => {
         "first-letter-alphabet",
         "First letter should be alphabetical for name",
         (value) => {
-          // Check if the first letter is alphabetical
           return /^[A-Za-z]/.test(value);
         }
       ),
-
     staffCode: yup.string().required("Please select a staff code"),
     dateSelect: yup.string().required("Please select a date"),
-    // calculationType: yup.string().required("Please select a calculation type"),
-    // department: yup
-    //   .string()
-    //   .required("Please enter a department")
-    //   .matches(/^[A-Za-z][A-Za-z0-9 ]*$/, "Alphanumeric value only")
-    //   .test(
-    //     "first-letter-alphabet",
-    //     "First letter should be alphabetical for department",
-    //     (value) => {
-    //       // Check if the first letter is alphabetical
-    //       return /^[A-Za-z]/.test(value);
-    //     }
-    //   ),
     holidays: yup.string().required("Please enter holidays"),
   });
 
@@ -59,8 +43,6 @@ const CreateCompany = () => {
       name: "",
       staffCode: "",
       dateSelect: "",
-      calculationType: "",
-      department: "",
       holidays: "",
       employee: "0",
       approver: "0",
@@ -72,8 +54,6 @@ const CreateCompany = () => {
       dispatch(addCompany(values));
       alert("Company added successfully!");
       resetForm();
-
-      // push to company page after adding company
       router.push("/dashboard/company");
     },
   });
@@ -87,155 +67,313 @@ const CreateCompany = () => {
         backgroundColor: "#fff",
       }}
     >
-      <Typography variant="h5">Add New Company</Typography>
-      <form onSubmit={formik.handleSubmit}>
-        {/* Name of the company */}
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <Typography variant="body1">Name of the Company</Typography>
-          <Typography variant="body1" color="red" ml={1}>
-            *
-          </Typography>
-        </Box>
-        <TextField
-          label="Enter Company Name"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          {...formik.getFieldProps("name")}
-          error={formik.touched.name && Boolean(formik.errors.name)}
-          helperText={formik.touched.name && formik.errors.name}
-        />
+      <Typography
+        sx={{
+          color: "#434345",
+          fontSize: "24px",
+          fontStyle: "normal",
+          fontWeight: 500,
+          lineHeight: "24px",
+          letterSpacing: "0.25px",
+        }}
+      >
+        Create New Company
+      </Typography>
 
-        {/* Staff code Selection */}
-        <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
-          <Typography variant="body1">Staff Code</Typography>
-          <RadioGroup
-            row
-            name="staffCode"
-            value={formik.values.staffCode}
-            onChange={formik.handleChange}
+      {/* breadcrumb area  */}
+      <div style={{ display: "flex", gap: "20px" }}>
+        <Link href="/dashboard" sx={{ textDecoration: "none" }}>
+          <Typography
+            sx={{
+              marginTop: "10px",
+              color: "#434345",
+              fontSize: "16px",
+              fontStyle: "normal",
+              fontWeight: "400",
+              lineHeight: "21px",
+              letterSpacing: "0.15px",
+            }}
           >
-            <FormControlLabel
-              value="auto"
-              control={<Radio sx={{ width: "50%" }} />}
-              label="Auto"
-            />
-            <FormControlLabel
-              value="custom"
-              control={<Radio sx={{ width: "50%" }} />}
-              label="Custom"
-            />
-          </RadioGroup>
-        </Box>
-        {formik.touched.staffCode && Boolean(formik.errors.staffCode) && (
-          <Typography sx={{ color: "red" }}>
-            {formik.errors.staffCode}
+            Dashboard
           </Typography>
-        )}
-
-        {/* Date selection */}
-        <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
-          <Typography variant="body1">Date Selection</Typography>
-          <RadioGroup
-            row
-            name="dateSelect"
-            value={formik.values.dateSelect}
-            onChange={formik.handleChange}
+        </Link>
+        <Link href="/dashboard" sx={{ textDecoration: "none" }}>
+          <Typography
+            sx={{
+              marginTop: "10px",
+              color: "#434345",
+              fontSize: "16px",
+              fontStyle: "normal",
+              fontWeight: "400",
+              lineHeight: "21px",
+              letterSpacing: "0.15px",
+            }}
           >
-            <FormControlLabel
-              value="English"
-              control={<Radio sx={{ width: "50%" }} />}
-              label="English"
-            />
-            <FormControlLabel
-              value="Nepali"
-              control={<Radio sx={{ width: "50%" }} />}
-              label="Nepali"
-            />
-          </RadioGroup>
-        </Box>
-        {formik.touched.dateSelect && Boolean(formik.errors.dateSelect) && (
-          <Typography sx={{ color: "red" }}>
-            {formik.errors.dateSelect}
+            Company
           </Typography>
-        )}
-
-        {/* Salary calculation */}
-        {/* <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
-          <Typography variant="body1">Salary Calculation</Typography>
-          <RadioGroup
-            row
-            name="calculationType"
-            value={formik.values.calculationType}
-            onChange={formik.handleChange}
+        </Link>
+        <Link href="/dashboard" sx={{ textDecoration: "none" }}>
+          <Typography
+            sx={{
+              marginTop: "10px",
+              color: "#434345",
+              fontSize: "16px",
+              fontStyle: "normal",
+              fontWeight: "400",
+              lineHeight: "21px",
+              letterSpacing: "0.15px",
+            }}
           >
-            <FormControlLabel
-              value="Calendar Days"
-              control={<Radio sx={{ width: "50%" }} />}
-              label="Calendar Days"
-            />
-            <FormControlLabel
-              value="30 Days"
-              control={<Radio sx={{ width: "50%" }} />}
-              label="30 Days"
-            />
-          </RadioGroup>
-        </Box>
-        {formik.touched.calculationType &&
-          Boolean(formik.errors.calculationType) && (
-            <Typography sx={{ color: "red" }}>
-              {formik.errors.calculationType}
-            </Typography>
-          )} */}
-
-        {/* Create Department */}
-        {/* <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
-          <Typography variant="body1">Create Department</Typography>
-          <Typography variant="body1" color="red" ml={1}>
-            *
+            New Company
           </Typography>
-        </Box>
-        <TextField
-          label="Enter Department Name"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          {...formik.getFieldProps("department")}
-          error={formik.touched.department && Boolean(formik.errors.department)}
-          helperText={formik.touched.department && formik.errors.department}
-        /> */}
+        </Link>
+      </div>
 
-        {/* Holday */}
-        <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
-          <Typography variant="body1">Holidays</Typography>
-          <RadioGroup
-            row
-            name="holidays"
-            value={formik.values.holidays}
-            onChange={formik.handleChange}
-          >
-            <FormControlLabel
-              value="Default Government Holidays"
-              control={<Radio sx={{ width: "50%" }} />}
-              label="Default Government Holidays"
-            />
-            <FormControlLabel
-              value="Custom Holidays"
-              control={<Radio sx={{ width: "50%" }} />}
-              label="Custom Holidays"
-            />
-          </RadioGroup>
-        </Box>
-        {formik.touched.holidays && Boolean(formik.errors.holidays) && (
-          <Typography sx={{ color: "red" }}>
-            {formik.errors.holidays}
-          </Typography>
-        )}
+      {/* form area  */}
 
-        {/* Submit Button */}
-        <Button type="submit" variant="contained" color="primary" mt={2}>
-          Submit
-        </Button>
+      <form
+        onSubmit={formik.handleSubmit}
+        style={{ marginTop: "20px", marginLeft: "30px" }}
+      >
+        <Grid container spacing={2}>
+          {/* Left Column */}
+          <Grid item xs={6}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "start",
+                mt: 2,
+              }}
+            >
+              {/* Name of the Company */}
+              <Typography variant="body1">
+                Name of the Company <span sx={{ color: "red" }}> *</span>
+              </Typography>
+              <TextField
+                label="Enter Company Name"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                {...formik.getFieldProps("name")}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
+              />
+              {/*
+              Staff code Selection
+              <Typography variant="body1">Staff Code</Typography>
+              <RadioGroup
+                row
+                name="staffCode"
+                value={formik.values.staffCode}
+                onChange={formik.handleChange}
+              >
+                <FormControlLabel
+                  value="auto"
+                  control={<Radio sx={{ width: "50%" }} />}
+                  label="Auto"
+                />
+                <FormControlLabel
+                  value="custom"
+                  control={<Radio sx={{ width: "50%" }} />}
+                  label="Custom"
+                />
+              </RadioGroup>
+              {formik.touched.staffCode && Boolean(formik.errors.staffCode) && (
+                <Typography sx={{ color: "red" }}>
+                  {formik.errors.staffCode}
+                </Typography>
+              )} */}
+
+              <Typography variant="body1" sx={{ marginBottom: "8px" }}>
+                Staff Code
+              </Typography>
+              <RadioGroup
+                row
+                name="staffCode"
+                value={formik.values.staffCode}
+                onChange={formik.handleChange}
+              >
+                <Box
+                  sx={{
+                    border: "1px solid #ccc",
+                    borderRadius: "4px",
+                    padding: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    flexDirection: "column", // Adjusted to make text below the box
+                    transition: "background 0.3s, border 0.3s", // Added transition for smoother effect
+                    "&:hover": {
+                      background: "#f5f5f5",
+                    },
+                    ...(formik.values.staffCode === "auto"
+                      ? { background: "#f5f5f5", border: "1px solid #2196F3" } // Add specific styles for selected option
+                      : {}),
+                  }}
+                  onClick={() => formik.setFieldValue("staffCode", "auto")}
+                >
+                  <FormControlLabel
+                    value="auto"
+                    control={
+                      <Radio sx={{ width: "50%", color: "transparent" }} />
+                    }
+                    label={
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          color:
+                            formik.values.staffCode === "auto"
+                              ? "#2196F3"
+                              : "#000",
+                        }}
+                      >
+                        Auto
+                      </Box>
+                    }
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      marginLeft: "8px",
+                      color: "#777",
+                    }}
+                  >
+                    e.g.: Something
+                  </Typography>
+                  {/* Additional text below the box */}
+                </Box>
+                <Box
+                  sx={{
+                    border: "1px solid #ccc",
+                    borderRadius: "4px",
+                    padding: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                    marginLeft: "8px",
+                    cursor: "pointer",
+                    flexDirection: "column", // Adjusted to make text below the box
+                    transition: "background 0.3s, border 0.3s", // Added transition for smoother effect
+                    "&:hover": {
+                      background: "#f5f5f5",
+                    },
+                    ...(formik.values.staffCode === "custom"
+                      ? { background: "#f5f5f5", border: "1px solid #2196F3" } // Add specific styles for selected option
+                      : {}),
+                  }}
+                  onClick={() => formik.setFieldValue("staffCode", "custom")}
+                >
+                  <FormControlLabel
+                    value="custom"
+                    control={
+                      <Radio sx={{ width: "50%", color: "transparent" }} />
+                    }
+                    label={
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          color:
+                            formik.values.staffCode === "custom"
+                              ? "#2196F3"
+                              : "#000",
+                        }}
+                      >
+                        Custom
+                      </Box>
+                    }
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      marginLeft: "8px",
+                      color: "#777",
+                    }}
+                  >
+                    e.g.: Something
+                  </Typography>
+                  {/* Additional text below the box */}
+                </Box>
+              </RadioGroup>
+              {formik.touched.staffCode && Boolean(formik.errors.staffCode) && (
+                <Typography sx={{ color: "red", marginTop: "4px" }}>
+                  {formik.errors.staffCode}
+                </Typography>
+              )}
+
+              {/* Date selection */}
+              <Typography variant="body1">Date Selection</Typography>
+              <RadioGroup
+                row
+                name="dateSelect"
+                value={formik.values.dateSelect}
+                onChange={formik.handleChange}
+              >
+                <FormControlLabel
+                  value="English"
+                  control={<Radio sx={{ width: "50%" }} />}
+                  label="English"
+                />
+                <FormControlLabel
+                  value="Nepali"
+                  control={<Radio sx={{ width: "50%" }} />}
+                  label="Nepali"
+                />
+              </RadioGroup>
+              {formik.touched.dateSelect &&
+                Boolean(formik.errors.dateSelect) && (
+                  <Typography sx={{ color: "red" }}>
+                    {formik.errors.dateSelect}
+                  </Typography>
+                )}
+            </Box>
+          </Grid>
+
+          {/* Right Column */}
+          <Grid item xs={6}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "start",
+                mt: 2,
+              }}
+            >
+              {/* Holidays */}
+              <Typography variant="body1">Holidays</Typography>
+              <RadioGroup
+                row
+                name="holidays"
+                value={formik.values.holidays}
+                onChange={formik.handleChange}
+              >
+                <FormControlLabel
+                  value="Default Government Holidays"
+                  control={<Radio sx={{ width: "50%" }} />}
+                  label="Default Government Holidays"
+                />
+                <FormControlLabel
+                  value="Custom Holidays"
+                  control={<Radio sx={{ width: "50%" }} />}
+                  label="Custom Holidays"
+                />
+              </RadioGroup>
+              {formik.touched.holidays && Boolean(formik.errors.holidays) && (
+                <Typography sx={{ color: "red" }}>
+                  {formik.errors.holidays}
+                </Typography>
+              )}
+            </Box>
+          </Grid>
+        </Grid>
+
+        {/* Submit Button (centered) */}
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+          <Button type="submit" variant="contained" color="primary">
+            Submit
+          </Button>
+        </Box>
       </form>
     </Box>
   );

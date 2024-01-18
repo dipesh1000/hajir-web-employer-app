@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -11,7 +12,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useFormik } from "formik";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { SvgIcon, useMediaQuery } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 
 // Styles for components
 const styles = {
@@ -120,7 +121,6 @@ const Otp = () => {
     const newOtp = [...otp];
     newOtp[index] = value;
 
-    // Move to the next input box if a number is entered
     if (value !== "") {
       const nextIndex = index + 1;
       if (nextIndex < newOtp.length) {
@@ -178,7 +178,7 @@ const Otp = () => {
           <Image
             src="/auth/login.png"
             width={950}
-            height={1000}
+            height={925}
             alt="Logo"
             style={{
               ...styles.image,
@@ -196,7 +196,7 @@ const Otp = () => {
               <p style={{ whiteSpace: "pre-line" }}>
                 Salary calculation made easy, track your
                 <br />
-                staff overtime, leave day, late day, and
+                staffs overtime, leave day, late day, and
                 <br />
                 live daily wages interactive reports.
                 <br />
@@ -230,53 +230,38 @@ const Otp = () => {
                 {/* Loading indicator */}
                 {loading && <p>Loading...</p>}
 
-                {/* Single OTP input box with underline effect */}
-
-                <TextField
-                  inputProps={{
-                    maxLength: 4,
-                    pattern: "[0-9]*",
-                  }}
-                  style={{
-                    width: "240px",
-                    fontSize: "32px",
-                    textAlign: "center",
-                    color: "#3e3e3e",
-
-                    border: "0px solid #3e3e3e",
-                    borderRadius: "4px",
-                    letterSpacing: "44px",
-                    fontFamily: "sans-serif",
-                  }}
-                />
-                <SvgIcon
-                  viewBox="0 0 240 1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={{
-                    position: "relative",
-                    display: "block",
-                    width: "220px",
-                    height: "2px",
-                    margin: "2 auto",
-                  }}
+                {/* OTP input boxes */}
+                <div
+                  className="flex space-x-2"
+                  sx={{ gap: "20px", marginTop: "1rem", marginBottom: "1rem" }}
                 >
-                  <line
-                    x1="0"
-                    y1="0"
-                    x2="240"
-                    y2="0"
-                    stroke="#3e3e3e"
-                    strokeWidth="2"
-                    strokeDasharray="44,22"
-                  />
-                </SvgIcon>
-              </div>
-              <br />
+                  {otp.map((digit, index) => (
+                    <TextField
+                      key={index}
+                      id={`otp-input-${index}`}
+                      type="text"
+                      inputProps={{ maxLength: 1 }}
+                      value={digit}
+                      onChange={(e) => handleInputChange(index, e.target.value)}
+                      variant="outlined"
+                      size="large"
+                      sx={{
+                        width: "80px", // Adjust the width as needed
+                        height: "80px", // Adjust the height as needed
+                        textAlign: "center",
+                        marginRight: "20px", // Add marginRight to create a gap between input boxes
+                      }}
+                    />
+                  ))}
+                </div>
 
-              {/* Verify button */}
-              <Button type="submit" variant="contained" color="primary">
-                Verify
-              </Button>
+                <br />
+
+                {/* Verify button */}
+                <Button type="submit" variant="contained" color="primary">
+                  Verify
+                </Button>
+              </div>
             </Box>
 
             <div
