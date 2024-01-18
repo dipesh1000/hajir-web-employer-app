@@ -15,14 +15,21 @@ const Header = ({ onMenuIconClick }) => (
     <Toolbar>
       <div style={{ display: "flex", alignItems: "center" }}>
         <Image src="/hajir-logo.png" width={140} height={50} alt="Hajir Logo" />
-        {/* Add margin or gap here */}
-        <div style={{ marginLeft: "20px" }} />
       </div>
 
       <div
-        style={{ display: "flex", alignItems: "center", marginLeft: "auto" }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginLeft: "56px",
+          gap: "100px",
+          flexGrow: 1,
+
+          justifyContent: "space-between",
+        }}
       >
         <Search />
+
         <HeaderMenu />
       </div>
     </Toolbar>

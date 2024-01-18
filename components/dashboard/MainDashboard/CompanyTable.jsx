@@ -157,13 +157,11 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
                 <TableCell>{company.employee}</TableCell>
                 <TableCell>{company.approver}</TableCell>
                 <TableCell>
-                  {/* color issue fix with figma color code */}
                   <span
                     style={{
                       background:
                         company.status === "active" ? "#00800033" : "#FF505033",
-                      color:
-                        company.status === "inactive" ? "#FF505033" : "#FF5050",
+                      color: company.status === "inactive" ? "red" : "green",
                       padding: "7px",
                       borderRadius: "4px",
                     }}
