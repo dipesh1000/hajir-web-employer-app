@@ -17,6 +17,7 @@ import { addCompany } from "@/redux/companySlice";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CheckCircleOutline } from "@mui/icons-material";
+import CustomRadioGroup from "@/components/company/createcompany/RadioButton";
 const CreateCompany = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -184,26 +185,31 @@ const CreateCompany = () => {
                   {formik.errors.staffCode}
                 </Typography>
               )} */}
-
-              <Typography variant="body1" sx={{ marginBottom: "8px" }}>
+              {/* <Typography variant="body1" sx={{ marginBottom: "8px" }}>
                 Staff Code
-              </Typography>
-              <RadioGroup
+              </Typography> */}
+              {/* <RadioGroup
                 row
                 name="staffCode"
                 value={formik.values.staffCode}
                 onChange={formik.handleChange}
-              >
-                <Box
+              > */}
+              {/* Auto Option */}
+              {/* <Box
                   sx={{
                     border: "1px solid #ccc",
                     borderRadius: "4px",
-                    padding: "8px",
+                    padding: "16px", // Increased padding
                     display: "flex",
                     alignItems: "center",
+                    paddingRight: "50px", // Adjusted to remove right padding
+                    paddingLeft: "50px",
+                    marginRight: "38px", // Increased margin right for more gap
                     cursor: "pointer",
                     flexDirection: "column", // Adjusted to make text below the box
                     transition: "background 0.3s, border 0.3s", // Added transition for smoother effect
+                    // width: "90%",
+                    // marginBottom: "16px", // Increased margin bottom for more gap
                     "&:hover": {
                       background: "#f5f5f5",
                     },
@@ -212,8 +218,8 @@ const CreateCompany = () => {
                       : {}),
                   }}
                   onClick={() => formik.setFieldValue("staffCode", "auto")}
-                >
-                  <FormControlLabel
+                > */}
+              {/* <FormControlLabel
                     value="auto"
                     control={
                       <Radio sx={{ width: "50%", color: "transparent" }} />
@@ -243,15 +249,19 @@ const CreateCompany = () => {
                     e.g.: Something
                   </Typography>
                   {/* Additional text below the box */}
-                </Box>
-                <Box
+              {/* </Box> */}
+
+              {/* Custom Option */}
+              {/* <Box
                   sx={{
                     border: "1px solid #ccc",
                     borderRadius: "4px",
-                    padding: "8px",
+                    padding: "16px", // Increased padding
+                    paddingRight: "50px", // Adjusted to remove right padding
+                    paddingLeft: "50px", // Adjusted to remove left padding
                     display: "flex",
                     alignItems: "center",
-                    marginLeft: "8px",
+                    marginLeft: "16px", // Increased margin left for more gap
                     cursor: "pointer",
                     flexDirection: "column", // Adjusted to make text below the box
                     transition: "background 0.3s, border 0.3s", // Added transition for smoother effect
@@ -263,8 +273,8 @@ const CreateCompany = () => {
                       : {}),
                   }}
                   onClick={() => formik.setFieldValue("staffCode", "custom")}
-                >
-                  <FormControlLabel
+                > */}
+              {/* <FormControlLabel
                     value="custom"
                     control={
                       <Radio sx={{ width: "50%", color: "transparent" }} />
@@ -283,8 +293,8 @@ const CreateCompany = () => {
                         Custom
                       </Box>
                     }
-                  />
-                  <Typography
+                  /> */}
+              {/* <Typography
                     variant="caption"
                     sx={{
                       marginLeft: "8px",
@@ -293,17 +303,76 @@ const CreateCompany = () => {
                   >
                     e.g.: Something
                   </Typography>
-                  {/* Additional text below the box */}
-                </Box>
-              </RadioGroup>
+                  {/* Additional text below the box
+                </Box> */}
+              {/* </RadioGroup>
+              {formik.touched.staffCode && Boolean(formik.errors.staffCode) && (
+                <Typography sx={{ color: "red", marginTop: "4px" }}>
+                  {formik.errors.staffCode}
+                </Typography>
+              )} */}
+
+              {/* New Staff Code Selection  */}
+
+              <Typography variant="body1" sx={{ marginBottom: "8px" }}>
+                testing
+              </Typography>
+              <CustomRadioGroup
+                name="staffCode"
+                value={formik.values.staffCode}
+                onChange={(value) => formik.setFieldValue("staffCode", value)}
+                options={[
+                  {
+                    value: "auto",
+                    label: "Auto",
+                    description: "e.g.: Something",
+                  },
+                  {
+                    value: "custom",
+                    label: "Custom",
+                    description: "e.g.: Something",
+                  },
+                  // Add more options as needed
+                ]}
+              />
               {formik.touched.staffCode && Boolean(formik.errors.staffCode) && (
                 <Typography sx={{ color: "red", marginTop: "4px" }}>
                   {formik.errors.staffCode}
                 </Typography>
               )}
 
+              {/* New Date Selection  */}
+
+              <Typography variant="body1" sx={{ marginBottom: "8px" }}>
+                Date Selection
+              </Typography>
+              <CustomRadioGroup
+                name="dateSelect"
+                value={formik.values.dateSelect}
+                onChange={(value) => formik.setFieldValue("dateSelect", value)}
+                options={[
+                  {
+                    value: "English",
+                    label: "English",
+                    description: "e.g.: Something",
+                  },
+                  {
+                    value: "Nepali",
+                    label: "Nepali",
+                    description: "e.g.: Something",
+                  },
+                  // Add more options as needed
+                ]}
+              />
+              {formik.touched.dateSelect &&
+                Boolean(formik.errors.dateSelect) && (
+                  <Typography sx={{ color: "red", marginTop: "4px" }}>
+                    {formik.errors.dateSelect}
+                  </Typography>
+                )}
+
               {/* Date selection */}
-              <Typography variant="body1">Date Selection</Typography>
+              {/* <Typography variant="body1">Date Selection</Typography>
               <RadioGroup
                 row
                 name="dateSelect"
@@ -326,7 +395,7 @@ const CreateCompany = () => {
                   <Typography sx={{ color: "red" }}>
                     {formik.errors.dateSelect}
                   </Typography>
-                )}
+                )} */}
             </Box>
           </Grid>
 
@@ -340,8 +409,37 @@ const CreateCompany = () => {
                 mt: 2,
               }}
             >
+              {/* New Holiday Selection  */}
+
+              <Typography variant="body1" sx={{ marginBottom: "8px" }}>
+                Holidays
+              </Typography>
+              <CustomRadioGroup
+                name="holidays"
+                value={formik.values.holidays}
+                onChange={(value) => formik.setFieldValue("holidays", value)}
+                options={[
+                  {
+                    value: "Default Government Holidays",
+                    label: "Custom Holidays",
+                    description: "e.g.: Something",
+                  },
+                  {
+                    value: "Default Government Holidays",
+                    label: "Custom Holidays",
+                    description: "e.g.: Something",
+                  },
+                  // Add more options as needed
+                ]}
+              />
+              {formik.touched.holidays && Boolean(formik.errors.holidays) && (
+                <Typography sx={{ color: "red", marginTop: "4px" }}>
+                  {formik.errors.holidays}
+                </Typography>
+              )}
+
               {/* Holidays */}
-              <Typography variant="body1">Holidays</Typography>
+              {/* <Typography variant="body1">Holidays</Typography>
               <RadioGroup
                 row
                 name="holidays"
@@ -363,7 +461,7 @@ const CreateCompany = () => {
                 <Typography sx={{ color: "red" }}>
                   {formik.errors.holidays}
                 </Typography>
-              )}
+              )} */}
             </Box>
           </Grid>
         </Grid>
