@@ -38,11 +38,11 @@ export default function DashboardFirstComponent() {
             >
               Welcome to Hajir 👋
             </Typography>
-            <Typography variant="body2" fontWeight="bold" color="textSecondary">
+            <Typography variant="subtitle1" color="textSecondary">
               {todayDate}
             </Typography>
             <br />
-            <Typography variant="body2" fontWeight="bold" color="textSecondary">
+            <Typography variant="body1" color="textSecondary">
               Manage your company and employees with the best management system.
               Good luck!
             </Typography>

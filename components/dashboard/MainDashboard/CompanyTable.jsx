@@ -160,10 +160,10 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
                   <span
                     style={{
                       background:
-                        company.status === "active" ? "#0070f3" : "#ff0000",
-                      color: "#ffffff", // Set text color to white
-                      padding: "8px", // Adjust padding as needed
-                      borderRadius: "4px", // Optional: Add rounded corners
+                        company.status === "active" ? "#00800033" : "#FF505033",
+                      color: company.status === "inactive" ? "red" : "green",
+                      padding: "7px",
+                      borderRadius: "4px",
                     }}
                   >
                     {company.status}

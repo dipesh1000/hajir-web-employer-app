@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Button, Typography, Container, Paper } from "@mui/material";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+import React from 'react';
+import { Button, Typography, Container, Paper } from '@mui/material';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const TermsOfService = () => {
   const router = useRouter();
 
   return (
     <Container maxWidth="md">
-      <Paper elevation={3} style={{ padding: "20px", textAlign: "center" }}>
+      <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
         <Image alt="logo" width={100} height={50} src="/hajir-logo.png" />
         <Typography variant="h4">Hajir App Terms of Service</Typography>
         <Typography variant="body1">
@@ -41,7 +41,7 @@ const TermsOfService = () => {
           These Terms are governed by and construed in accordance with the laws
           of 2062.
         </Typography>
-        <Button variant="contained" onClick={() => router.push("/otp")}>
+        <Button variant="contained" onClick={() => router.push('/otp')}>
           OKay
         </Button>
       </Paper>

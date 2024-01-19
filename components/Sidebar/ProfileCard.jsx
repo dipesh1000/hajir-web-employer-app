@@ -24,21 +24,22 @@ const ProfileContainer = styled(Button)({
   // },
 });
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
-  },
-  "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
-}));
+// const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+//   "& .MuiDialogContent-root": {
+//     // padding: theme.spacing(2),
+//   },
+//   "& .MuiDialogActions-root": {
+//     padding: theme.spacing(1),
+//   },
+// }));
+const NewBootstrapDialog = styled(Dialog)(() => ({}));
 
 export default function ProfileCard() {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [editMode, setEditMode] = React.useState(false);
   const [userData, setUserData] = React.useState({
-    name: "Biraj Karki",
-    email: "birajkarki9@gmail.com",
+    name: "Nitesh Shrestha",
+    email: "nitesh@gmail.com",
   });
 
   const handleOpenDialog = () => {
@@ -68,9 +69,9 @@ export default function ProfileCard() {
 
   return (
     <>
-      <ProfileContainer onClick={handleOpenDialog}>
+      <ProfileContainer sx={{}} onClick={handleOpenDialog}>
         <Avatar
-          src="/avatar.png"
+          src="/avatar.svg"
           sx={{
             width: 100,
             height: 100,
@@ -80,16 +81,25 @@ export default function ProfileCard() {
         <Typography
           variant="h6"
           align="center"
-          sx={{ fontWeight: "bold", mt: 1 }}
+          sx={{
+            fontWeight: "semi-bold",
+            mt: 1,
+            color: "black",
+            textTransform: "none",
+          }}
         >
           {userData.name}
         </Typography>
-        <Typography align="center" color="textSecondary">
+        <Typography
+          align="center"
+          color="textSecondary"
+          sx={{ textTransform: "none" }}
+        >
           {userData.email}
         </Typography>
       </ProfileContainer>
 
-      <BootstrapDialog
+      <NewBootstrapDialog
         onClose={handleCloseDialog}
         aria-labelledby="customized-dialog-title"
         open={openDialog}
@@ -113,7 +123,7 @@ export default function ProfileCard() {
           {editMode ? (
             <>
               <Avatar
-                src="/avatar.png"
+                src="/avatar.svg"
                 sx={{
                   width: 80,
                   height: 80,
@@ -128,7 +138,7 @@ export default function ProfileCard() {
             </>
           ) : (
             <Avatar
-              src="/avatar.png"
+              src="/avatar.svg"
               sx={{
                 width: 100,
                 height: 100,
@@ -164,10 +174,21 @@ export default function ProfileCard() {
               <Button onClick={handleCancelEdit}>Cancel</Button>
             </>
           ) : (
-            <Button onClick={handleEditProfile}>Edit Profile</Button>
+            <Button
+              sx={{
+                backgroundColor: "#f9f9f9",
+                color: "#000",
+                "&:hover": {
+                  backgroundColor: "#f9f9f9",
+                },
+              }}
+              onClick={handleEditProfile}
+            >
+              Edit Profile
+            </Button>
           )}
         </DialogActions>
-      </BootstrapDialog>
+      </NewBootstrapDialog>
     </>
   );
 }

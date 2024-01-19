@@ -11,18 +11,25 @@ import HeaderMenu from "./HeaderMenu";
 import Image from "next/image";
 
 const Header = ({ onMenuIconClick }) => (
-  <AppBar position="fixed" elevation={1} sx={{ background: "white" }}>
+  <AppBar position="fixed" elevation={1} color="transparent">
     <Toolbar>
       <div style={{ display: "flex", alignItems: "center" }}>
         <Image src="/hajir-logo.png" width={140} height={50} alt="Hajir Logo" />
-        {/* Add margin or gap here */}
-        <div style={{ marginLeft: "20px" }} />
       </div>
 
       <div
-        style={{ display: "flex", alignItems: "center", marginLeft: "auto" }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginLeft: "56px",
+          gap: "100px",
+          flexGrow: 1,
+
+          justifyContent: "space-between",
+        }}
       >
         <Search />
+
         <HeaderMenu />
       </div>
     </Toolbar>

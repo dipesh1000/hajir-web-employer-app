@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 'use client';
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
@@ -11,7 +12,42 @@ import { TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import ScrollDialog from '@/components/Auth/ScrollDialog';
+=======
+"use client";
+import React, { useState } from "react";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
+import Image from "next/image";
+import Button from "@mui/material/Button";
+import * as yup from "yup";
+import { TextField } from "@mui/material";
+import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
+import ScrollDialog from "@/components/Auth/ScrollDialog";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
+// Styles for components
+const styles = {
+  container: {
+    flexGrow: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  image: {
+    display: "block",
+    maxWidth: "100%",
+    // Hide the image on screens smaller than 600px
+    "@media (max-width: 600px)": {
+      display: "none",
+    },
+  },
+};
+>>>>>>> 2999aa121b81eca7bcf70cbd1e9df5ae8cef604f
+
+// Styled components
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -32,6 +68,7 @@ const LogoContainer = styled('div')({
   marginBottom: '16px',
 });
 
+// Validation schema
 const validationSchema = yup.object({
   phone: yup
     .string()
@@ -42,6 +79,7 @@ const validationSchema = yup.object({
     ),
 });
 
+// Main component
 export default function Signin() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -54,6 +92,9 @@ export default function Signin() {
   const handleOpen = () => {
     setOpen(true);
   };
+
+  // Use media query hook
+  const isScreenSmall = useMediaQuery("(max-width:900px)");
 
   const formik = useFormik({
     initialValues: {
@@ -98,6 +139,7 @@ export default function Signin() {
   });
 
   return (
+<<<<<<< HEAD
     <Box
       sx={{
         flexGrow: 1,
@@ -106,11 +148,24 @@ export default function Signin() {
         justifyContent: 'center',
       }}
     >
+=======
+    <Box sx={styles.container}>
+>>>>>>> 2999aa121b81eca7bcf70cbd1e9df5ae8cef604f
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Image src="/auth/login.png" width={950} height={1000} alt="Logo" />
+        <Grid item xs={12} md={6}>
+          {/* Apply styles to the image */}
+          <Image
+            src="/auth/login.png"
+            width={950}
+            height={1000}
+            alt="Logo"
+            style={{
+              ...styles.image,
+              display: isScreenSmall ? "none" : "block",
+            }}
+          />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Item>
             <LogoContainer>
               <Image src="/hajir-logo.png" width={140} height={50} alt="Logo" />

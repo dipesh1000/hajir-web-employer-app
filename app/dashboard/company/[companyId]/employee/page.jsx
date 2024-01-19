@@ -11,17 +11,5 @@ export default function CompanyDashboard() {
   // const companies = useSelector((state) => state.company.companies) || [];
   // const hasCompanies = companies.length > 0;
 
-  return (
-    <div
-      sx={
-        {
-          // width: "100vw",
-          // height: "100vh",
-        }
-      }
-    >
-      {/* {hasCompanies ? <CompanyFormFirst /> : <FirstPageCompany />} */}
-      <FirstPageEmployee />
-    </div>
-  );
+  return <div>{/* <FirstPageEmployee /> */}</div>;
 }

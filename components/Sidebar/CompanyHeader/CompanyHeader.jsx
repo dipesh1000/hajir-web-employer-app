@@ -6,34 +6,53 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/system";
 import Link from "next/link";
-
+import AddIcon from "@mui/icons-material/Add";
+import { useRouter } from "next/navigation";
 // const StyledAppBar = styled(AppBar)({
 //   backgroundColor: "#f0f0f0", // set your desired background color
 // });
 
 const StyledButton = styled(Button)({
-  flexGrow: 1,
-  width: "100%",
-  color: "blue",
-  "&:not(:last-child)": {
-    marginRight: "8px", // Set the desired space between buttons
+  marginTop: "40px",
+  backgroundColor: "#3f51b5",
+  color: "#fff",
+  "&:hover": {
+    backgroundColor: "#2d3b55",
   },
 });
 
-const CompanyName = styled(Typography)({
-  color: "black",
-});
-
 const CompanyHeader = ({ companyId }) => {
+  const router = useRouter();
+
   return (
     // <StyledAppBar position="static">
     <Toolbar>
-      <CompanyName variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
         this is coming from company header
-      </CompanyName>
+      </Typography>
+
+      <StyledButton
+        variant="contained"
+        onClick={() =>
+          router.push(`/dashboard/company/${companyId}/employee/createemployee`)
+        }
+        startIcon={<AddIcon />}
+      >
+        Create Employee
+      </StyledButton>
     </Toolbar>
     // </StyledAppBar>
   );
 };
 
 export default CompanyHeader;
+
+<StyledButton
+  variant="contained"
+  onClick={() =>
+    router.push(`/dashboard/company/${companyId}/employee/createemployee`)
+  }
+  startIcon={<AddIcon />}
+>
+  Create Employee
+</StyledButton>;

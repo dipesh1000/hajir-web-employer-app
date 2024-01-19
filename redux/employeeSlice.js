@@ -8,7 +8,7 @@ const initialState = {
     currentPage: 1,
     rowsPerPage: 5,
   },
-  employeeIdToEdit: null, // Change companyIdToEdit to employeeIdToEdit
+  employeeIdToEdit: null,
 };
 
 const employeeSlice = createSlice({
@@ -20,25 +20,23 @@ const employeeSlice = createSlice({
         id: nanoid(),
         ...action.payload,
       };
-      state.employees.push(newEmployee); // Change newCompany to newEmployee
+      state.employees.push(newEmployee);
     },
     toggleActiveState: (state, action) => {
-      const employeeId = action.payload; // Change companyId to employeeId
-      const employee = state.employees.find((e) => e.id === employeeId); // Change company to employee
+      const employeeId = action.payload;
+      const employee = state.employees.find((e) => e.id === employeeId);
 
       if (employee) {
         employee.status = employee.status === "active" ? "inactive" : "active";
       }
     },
     deleteEmployee: (state, action) => {
-      // Change deleteCompany to deleteEmployee
       const employeeId = action.payload;
-      state.employees = state.employees.filter((e) => e.id !== employeeId); // Change company to employee
+      state.employees = state.employees.filter((e) => e.id !== employeeId);
     },
     editEmployee: (state, action) => {
-      // Change editCompany to editEmployee
-      const { id, updatedEmployee } = action.payload; // Change id and updatedCompany to id and updatedEmployee
-      const index = state.employees.findIndex((e) => e.id === id); // Change company to employee
+      const { id, updatedEmployee } = action.payload;
+      const index = state.employees.findIndex((e) => e.id === id);
 
       if (index !== -1) {
         state.employees[index] = {
@@ -61,7 +59,6 @@ const employeeSlice = createSlice({
       state.pagination.currentPage = 1;
     },
     setEmployeeIdToEdit: (state, action) => {
-      // Change setCompanyIdToEdit to setEmployeeIdToEdit
       state.employeeIdToEdit = action.payload;
     },
   },

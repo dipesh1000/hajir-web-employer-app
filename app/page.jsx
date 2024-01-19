@@ -7,7 +7,24 @@ import Grid from "@mui/material/Grid";
 import Image from "next/image";
 import Button from "@mui/material/Button";
 import Link from "next/link";
-
+import { useMediaQuery } from "@mui/material";
+// Styles for components
+const styles = {
+  container: {
+    flexGrow: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  image: {
+    display: "block",
+    maxWidth: "100%",
+    // Hide the image on screens smaller than 600px
+    "@media (max-width: 600px)": {
+      display: "none",
+    },
+  },
+};
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -28,6 +45,8 @@ const LogoContainer = styled("div")({
 });
 
 export default function BasicGrid() {
+  const isScreenSmall = useMediaQuery("(max-width:900px)");
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container>
@@ -37,12 +56,16 @@ export default function BasicGrid() {
             height={925}
             alt="login image"
             src="/auth/login-image-default.png"
+            style={{
+              ...styles.image,
+              display: isScreenSmall ? "none" : "block",
+            }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <Item>
             <LogoContainer>
-              <Image src="/hajir-logo.png" width={140} height={50} alt="Logo" />
+              <Image src="/hajir-logo.png" width={140} height={60} alt="Logo" />
             </LogoContainer>
             <div>
               <h2>Login Here</h2>
