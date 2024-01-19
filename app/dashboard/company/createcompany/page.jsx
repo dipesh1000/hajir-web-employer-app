@@ -180,12 +180,12 @@ const CreateCompany = () => {
                   {
                     value: "auto",
                     label: "Auto",
-                    description: "e.g.: Something",
+                    description: "E.g.: R001, R002, ROO3 ",
                   },
                   {
                     value: "custom",
                     label: "Custom",
-                    description: "e.g.: Something",
+                    description: "E.g.: 021, 022 or 0100, 0101 ",
                   },
                   // Add more options as needed
                 ]}

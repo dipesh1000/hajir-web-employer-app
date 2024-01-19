@@ -65,12 +65,7 @@ export default function BasicGrid() {
         <Grid item xs={12} md={6}>
           <Item>
             <LogoContainer>
-              <Image
-                src="/hajir-logo.png"
-                width={140}
-                height={100}
-                alt="Logo"
-              />
+              <Image src="/hajir-logo.png" width={140} height={60} alt="Logo" />
             </LogoContainer>
             <div>
               <h2>Login Here</h2>
