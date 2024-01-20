@@ -18,14 +18,25 @@ import Link from "next/link";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import Collapse from "@mui/material/Collapse";
+import { useParams } from "next/navigation";
 
 const CompanySidebar = ({ onLogoutClick }) => {
   const [openSettings, setOpenSettings] = useState(false);
+  const { companyId } = useParams();
 
   const LINKS = [
-    { text: "Home", href: "/dashboard/company/", icon: HomeIcon },
+    {
+      text: "Home",
+      href: "/dashboard/company/",
+
+      icon: HomeIcon,
+    },
     { text: "Employee", href: "/dashboard/employee/", icon: HomeIcon },
-    { text: "Attendance", href: "/dashboard/attendance/", icon: HomeIcon },
+    {
+      text: "Attendance",
+      href: `/dashboard/company/${companyId}/attendance/`,
+      icon: HomeIcon,
+    },
     { text: "Report", href: "/dashboard/report/", icon: HomeIcon },
     {
       text: "Setting",
