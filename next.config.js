@@ -6,6 +6,8 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "source.unsplash.com",
+        hostname: "https://via.placeholder.com",
+
         port: "",
         pathname: "/random",
       },
