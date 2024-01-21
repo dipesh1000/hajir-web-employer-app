@@ -1,3 +1,4 @@
+// page.js
 import React from "react";
 import AttendanceTableMockData from "@/components/mockData/AttendanceTableMockData";
 import CommonActivityReportTable from "@/components/report/activityreport/CommonActivityReportTable";
@@ -18,8 +19,8 @@ const page = () => {
         }}
       >
         <div>
-          <h2>Attendee</h2>
-          <h4>Attendee</h4>
+          <h2>Absent</h2>
+          <h4>Absent Report</h4>
         </div>
         {/* Today's date at the extreme right */}
         <div>
@@ -32,8 +33,8 @@ const page = () => {
         <CommonActivityReportTable
           data={mockData.filter(
             (activity) =>
-              activity.types.includes("attendance") &&
-              !activity.types.includes("absent")
+              activity.types.includes("absent") &&
+              !activity.types.includes("attendance")
           )}
           departments={["Software", "Management", "Manager"]}
         />

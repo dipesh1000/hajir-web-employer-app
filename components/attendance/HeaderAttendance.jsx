@@ -26,25 +26,25 @@ const HeaderAttendance = () => {
       sx={{ width: "100%" }}
       spacing={{ xs: 1, sm: 2, md: 12 }}
     >
-      <Item sx={{ backgroundColor: "#90EE90 " }}>
-        <Typography sx={{ color: "#FF0000" }} variant="h5">
+      <Item sx={{ backgroundColor: "#0080000D " }}>
+        <Typography sx={{ color: "#FF5050" }} variant="h6">
           75
         </Typography>
-        <Typography variant="h6">Attended</Typography>
+        <Typography variant="body1">Attended</Typography>
       </Item>
 
-      <Item sx={{ backgroundColor: "#FFC0CB " }}>
-        <Typography sx={{ color: "#FF0000" }} variant="h5">
+      <Item sx={{ backgroundColor: "#FF00000D " }}>
+        <Typography sx={{ color: "#FF5050" }} variant="h6">
           5
         </Typography>
-        <Typography variant="h6">Absent</Typography>
+        <Typography variant="body1">Absent</Typography>
       </Item>
 
-      <Item sx={{ backgroundColor: "#FFFFE0 " }}>
-        <Typography sx={{ color: "#FF0000" }} variant="h5">
+      <Item sx={{ backgroundColor: "#FFA5000D " }}>
+        <Typography sx={{ color: "#FF5050" }} variant="h6">
           10
         </Typography>
-        <Typography variant="h6">Late</Typography>
+        <Typography variant="body1">Late</Typography>
       </Item>
     </Stack>
   );

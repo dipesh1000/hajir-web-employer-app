@@ -16,6 +16,7 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Image from "next/image";
 import TablePagination from "@mui/material/TablePagination";
+import { Badge, Tab, Tabs } from "@mui/material";
 
 const mockData = [
   {
@@ -82,7 +83,6 @@ const mockData = [
     email: "michael.miller@example.com",
   },
 ];
-
 const departments = ["Software", "Management", "Manager"];
 
 export default function AttendanceTableLayout() {
@@ -91,27 +91,50 @@ export default function AttendanceTableLayout() {
   const [selectedDepartment, setSelectedDepartment] = React.useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [selectedTab, setSelectedTab] = React.useState(0);
 
   const handleSearchTextChange = (event) => {
     const text = event.target.value.toLowerCase();
     setSearchText(text);
-    filterData(text, selectedDepartment);
+    filterData(text, selectedDepartment, selectedTab);
   };
 
   const handleDepartmentChange = (event) => {
     const department = event.target.value;
     setSelectedDepartment(department);
     setPage(0); // Reset page when changing the department
-    filterData(searchText, department);
+    filterData(searchText, department, selectedTab);
   };
 
-  const filterData = (searchText, department) => {
+  const handleTabChange = (event, newValue) => {
+    setSelectedTab(newValue);
+    filterData(searchText, selectedDepartment, newValue);
+  };
+
+  const filterData = (searchText, department, tabValue) => {
     const filtered = mockData.filter(
       (person) =>
         person.name.toLowerCase().includes(searchText) &&
-        (department === "" || person.department === department)
+        (department === "" || person.department === department) &&
+        (tabValue === 0 ||
+          person.attendanceStatus.toLowerCase() === getTabLabel(tabValue))
     );
     setFilteredData(filtered);
+  };
+
+  const getTabLabel = (index) => {
+    switch (index) {
+      case 0:
+        return "";
+      case 1:
+        return "present";
+      case 2:
+        return "absent";
+      case 3:
+        return "leave";
+      default:
+        return "";
+    }
   };
 
   const handleChangePage = (event, newPage) => {
@@ -123,9 +146,107 @@ export default function AttendanceTableLayout() {
     setPage(0);
   };
 
+  const notificationsCount = {
+    all: 10,
+    present: 5,
+    absent: 3,
+    leave: 2,
+  };
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: 500 }}>
       <Box sx={{ mb: 2 }}>
+        <Tabs
+          value={selectedTab}
+          onChange={handleTabChange}
+          indicatorColor="primary"
+          textColor="primary"
+        >
+          <Tab
+            label={
+              <div>
+                All
+                <span
+                  style={{
+                    backgroundColor: "#22408B",
+                    color: "white",
+                    padding: "2px 8px",
+                    borderRadius: "4px",
+                    fontSize: "1rem",
+                    marginBottom: "4px",
+                    marginRight: "6px",
+                    marginLeft: "6px",
+                  }}
+                >
+                  {notificationsCount.all}
+                </span>
+              </div>
+            }
+          />
+          <Tab
+            label={
+              <div>
+                Present
+                <span
+                  style={{
+                    backgroundColor: "#00800033",
+                    color: "#008000",
+                    padding: "2px 8px",
+                    borderRadius: "4px",
+                    fontSize: "1rem",
+                    marginBottom: "4px",
+                    marginRight: "6px",
+                    marginLeft: "6px",
+                  }}
+                >
+                  {notificationsCount.present}
+                </span>
+              </div>
+            }
+          />
+          <Tab
+            label={
+              <div>
+                Absent
+                <span
+                  style={{
+                    backgroundColor: "#FF505033",
+                    color: "#FF5050",
+                    padding: "2px 8px",
+                    borderRadius: "4px",
+                    fontSize: "1rem",
+                    marginBottom: "4px",
+                    marginRight: "6px",
+                    marginLeft: "6px",
+                  }}
+                >
+                  {notificationsCount.absent}
+                </span>
+              </div>
+            }
+          />
+          <Tab
+            label={
+              <div>
+                Leave
+                <span
+                  style={{
+                    backgroundColor: "#FFA50033",
+                    color: "#FFA500",
+                    padding: "2px 8px",
+                    borderRadius: "4px",
+                    fontSize: "1rem",
+                    marginBottom: "4px",
+                    marginRight: "6px",
+                    marginLeft: "6px",
+                  }}
+                >
+                  {notificationsCount.leave}
+                </span>
+              </div>
+            }
+          />
+        </Tabs>
         <TextField
           label="Search by Employee Name"
           variant="outlined"

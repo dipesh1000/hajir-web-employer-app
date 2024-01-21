@@ -62,25 +62,40 @@ const AttendanceOverview = () => {
       borderColor: "#388E3C",
       href: `/dashboard/company/${companyId}/activityreport/attendance/`,
     },
-    { label: "Absent", value: 10, color: "#FF5252", borderColor: "#D32F2F" },
+    {
+      label: "Absent",
+      value: 10,
+      color: "#FF5252",
+      borderColor: "#D32F2F",
+      href: `/dashboard/company/${companyId}/activityreport/absent/`,
+    },
     {
       label: "Late Clock In",
       value: 5,
       color: "#FFC107",
       borderColor: "#FFA000",
+      href: `/dashboard/company/${companyId}/activityreport/lateclockin/`,
     },
-    { label: "Okay", value: 20, color: "#2196F3", borderColor: "#1565C0" },
+    {
+      label: "Early clock in",
+      value: 20,
+      color: "#2196F3",
+      borderColor: "#1565C0",
+      href: `/dashboard/company/${companyId}/activityreport/earlyclockin/`,
+    },
     {
       label: "Leave Taken",
       value: 10,
       color: "#FFC107",
       borderColor: "#FFA000",
+      href: `/dashboard/company/${companyId}/activityreport/leavetaken/`,
     },
     {
       label: "Extra Taken",
       value: 5,
       color: "#FF5252",
       borderColor: "#D32F2F",
+      href: `/dashboard/company/${companyId}/activityreport/extrabreaktaken/`,
     },
   ];
 
@@ -140,7 +155,7 @@ const AttendanceOverview = () => {
           >
             <CircularProgress
               variant="determinate"
-              value={90}
+              value={50}
               color="success"
               size={175}
               thickness={5}
@@ -157,7 +172,7 @@ const AttendanceOverview = () => {
                 height: "100%",
               }}
             >
-              90%
+              50%
             </Typography>
           </Box>
 
@@ -244,11 +259,7 @@ const AttendanceOverview = () => {
             }}
           >
             <Typography sx={{ color: "white" }} variant="h6" mb={1}>
-              <Link
-                href={`/dashboard/company/${companyId}/activityreport/attendance/`}
-              >
-                {value}
-              </Link>
+              <Link href={href}>{value}</Link>
             </Typography>
             <Typography sx={{ color: "black" }} variant="subtitle1">
               {label}
