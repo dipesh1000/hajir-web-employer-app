@@ -39,7 +39,7 @@ const mockData = [
   },
   {
     id: 3,
-    name: "Bob Smith",
+    name: "Pooja Smith",
     clockIn: "10:15 AM",
     clockOut: "07:45 PM",
     department: "Software",
@@ -247,6 +247,9 @@ export default function AttendanceTableLayout() {
             }
           />
         </Tabs>
+
+        <br />
+
         <TextField
           label="Search by Employee Name"
           variant="outlined"

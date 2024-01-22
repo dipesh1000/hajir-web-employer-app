@@ -116,7 +116,7 @@ const CommonActivityReportTable = ({ data, departments }) => {
                         marginLeft: "6px",
                       }}
                     >
-                      {activity.types}
+                      {renderAttendanceStatus(activity.types)}
                     </span>
                   </TableCell>
                 </TableRow>
@@ -137,41 +137,57 @@ const CommonActivityReportTable = ({ data, departments }) => {
   );
 };
 
-const getColorForStatus = (status) => {
-  switch (status) {
-    case "Present":
-      return "green";
-    case "Absent":
-      return "red";
-    case "LateClockin":
-      return "orange";
-    case "EarlyClockin":
-      return "blue";
-    case "LeaveTaken":
-      return "purple";
-    case "ExtraTaken":
-      return "pink";
-    default:
-      return "black";
+const getColorForStatus = (types) => {
+  if (types.includes("attendance")) {
+    return "green";
+  } else if (types.includes("absent")) {
+    return "red";
+  } else if (types.includes("LateClockin")) {
+    return "orange";
+  } else if (types.includes("earlyClockIn")) {
+    return "blue";
+  } else if (types.includes("LeaveTaken")) {
+    return "purple";
+  } else if (types.includes("ExtraTaken")) {
+    return "pink";
+  } else {
+    return "black";
   }
 };
 
-const getBackgroundColorForStatus = (status) => {
-  switch (status) {
-    case "Present":
-      return "#00800033";
-    case "Absent":
-      return "#FF000033";
-    case "LateClockin":
-      return "#FFA50033";
-    case "EarlyClockin":
-      return "#0000FF33";
-    case "LeaveTaken":
-      return "#80008033";
-    case "ExtraTaken":
-      return "#FFC0CB33";
-    default:
-      return "transparent";
+const getBackgroundColorForStatus = (types) => {
+  // Check each individual type and prioritize them
+  if (types.includes("attendance")) {
+    return "#00800033"; // Green background for "attendance"
+  } else if (types.includes("absent")) {
+    return "#FF000033"; // Red background for "absent"
+  } else if (types.includes("LateClockin")) {
+    return "#FFA50033"; // Orange background for "LateClockin"
+  } else if (types.includes("earlyClockIn")) {
+    return "#0000FF33"; // Blue background for "EarlyClockin"
+  } else if (types.includes("LeaveTaken")) {
+    return "#80008033"; // Purple background for "LeaveTaken"
+  } else if (types.includes("ExtraTaken")) {
+    return "#FFC0CB33"; // Pink background for "ExtraTaken"
+  } else {
+    return "transparent";
+  }
+};
+const renderAttendanceStatus = (types) => {
+  if (types.includes("attendance")) {
+    return "Attendance";
+  } else if (types.includes("absent")) {
+    return "Absent";
+  } else if (types.includes("LateClockin")) {
+    return "Late Clock In";
+  } else if (types.includes("earlyClockIn")) {
+    return "Early Clock In";
+  } else if (types.includes("LeaveTaken")) {
+    return "Leave Taken";
+  } else if (types.includes("ExtraTaken")) {
+    return "Extra Break Taken";
+  } else {
+    return "Unknown";
   }
 };
 

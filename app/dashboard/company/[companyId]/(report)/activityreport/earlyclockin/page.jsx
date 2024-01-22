@@ -1,4 +1,3 @@
-// page.js
 import React from "react";
 import AttendanceTableMockData from "@/components/mockData/AttendanceTableMockData";
 import CommonActivityReportTable from "@/components/report/activityreport/CommonActivityReportTable";
@@ -6,6 +5,11 @@ import CommonActivityReportTable from "@/components/report/activityreport/Common
 const page = () => {
   const mockData = AttendanceTableMockData(); // Get the mock data
   const currentDate = new Date().toLocaleDateString();
+
+  // Filter mockData to include only activities with "EarlyClockin" type
+  const earlyClockInData = mockData.filter((activity) =>
+    activity.types.includes("earlyClockIn")
+  );
 
   return (
     <>
@@ -19,8 +23,8 @@ const page = () => {
         }}
       >
         <div>
-          <h2>Absent</h2>
-          <h4>Absent Report</h4>
+          <h2>Early Clock In</h2>
+          <h4>Early Clock In Report</h4>
         </div>
         {/* Today's date at the extreme right */}
         <div>
@@ -31,11 +35,7 @@ const page = () => {
       <div>
         {/* Your CommonActivityReportTable goes here */}
         <CommonActivityReportTable
-          data={mockData.filter(
-            (activity) =>
-              activity.types.includes("earlyclockin") &&
-              !activity.types.includes("attendance")
-          )}
+          data={earlyClockInData}
           departments={["Software", "Management", "Manager"]}
         />
       </div>

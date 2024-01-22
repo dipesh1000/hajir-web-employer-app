@@ -1,11 +1,16 @@
-// page.js
+"use client";
+
 import React from "react";
 import AttendanceTableMockData from "@/components/mockData/AttendanceTableMockData";
 import CommonActivityReportTable from "@/components/report/activityreport/CommonActivityReportTable";
+import { useParams } from "next/navigation";
+import { format } from "date-fns";
 
-const page = () => {
+const Page = () => {
   const mockData = AttendanceTableMockData(); // Get the mock data
-  const currentDate = new Date().toLocaleDateString();
+  const currentDate = format(new Date(), "MMMM dd, yyyy"); // Format the date
+  const params = useParams();
+  console.log(params);
 
   return (
     <>
@@ -43,4 +48,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

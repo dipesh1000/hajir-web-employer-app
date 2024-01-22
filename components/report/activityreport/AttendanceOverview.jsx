@@ -57,44 +57,45 @@ const AttendanceOverview = () => {
   const data = [
     {
       label: "Attendance",
-      value: 50,
-      color: "lightgreen",
-      borderColor: "#388E3C",
+      value: 90,
+      color: "#0080000D",
+      borderColor: "#008000",
       href: `/dashboard/company/${companyId}/activityreport/attendance/`,
     },
     {
       label: "Absent",
       value: 10,
-      color: "#FF5252",
-      borderColor: "#D32F2F",
+      color: "#FF50500D",
+      borderColor: "#FF5050",
+      // backgroundColor: "white",
       href: `/dashboard/company/${companyId}/activityreport/absent/`,
     },
     {
       label: "Late Clock In",
       value: 5,
-      color: "#FFC107",
-      borderColor: "#FFA000",
+      color: "#22408B0D",
+      borderColor: "#22408B",
       href: `/dashboard/company/${companyId}/activityreport/lateclockin/`,
     },
     {
       label: "Early clock in",
       value: 20,
-      color: "#2196F3",
-      borderColor: "#1565C0",
+      color: "#8000800D",
+      borderColor: "#800080",
       href: `/dashboard/company/${companyId}/activityreport/earlyclockin/`,
     },
     {
       label: "Leave Taken",
       value: 10,
-      color: "#FFC107",
-      borderColor: "#FFA000",
+      color: "#FFA5000D",
+      borderColor: "#FFA500",
       href: `/dashboard/company/${companyId}/activityreport/leavetaken/`,
     },
     {
       label: "Extra Taken",
       value: 5,
-      color: "#FF5252",
-      borderColor: "#D32F2F",
+      color: "#EA00E10D",
+      borderColor: "#EA00E1",
       href: `/dashboard/company/${companyId}/activityreport/extrabreaktaken/`,
     },
   ];
@@ -158,7 +159,7 @@ const AttendanceOverview = () => {
               value={50}
               color="success"
               size={175}
-              thickness={5}
+              thickness={4}
             />
             <Typography
               variant="h4"
@@ -250,20 +251,21 @@ const AttendanceOverview = () => {
               flex: "0 0 30%", // Set to 30% width for three boxes in one line
               backgroundColor: color,
               padding: 2,
+              textDecoration: "none",
               borderRadius: 3,
               textAlign: "center",
               border: `1px solid ${borderColor}`,
-              // color: "white",
+              color: ` ${borderColor} `,
               marginBottom: 2,
               height: "100px",
             }}
           >
-            <Typography sx={{ color: "white" }} variant="h6" mb={1}>
-              <Link href={href}>{value}</Link>
+            <Typography variant="h6" mb={1}>
+              <Link sx={{ decoration: "none" }} href={href}>
+                {value}
+              </Link>
             </Typography>
-            <Typography sx={{ color: "black" }} variant="subtitle1">
-              {label}
-            </Typography>
+            <Typography variant="subtitle1">{label}</Typography>
           </Box>
         ))}
       </Box>

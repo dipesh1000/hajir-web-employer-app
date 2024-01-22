@@ -6,6 +6,11 @@ const page = () => {
   const mockData = AttendanceTableMockData(); // Get the mock data
   const currentDate = new Date().toLocaleDateString();
 
+  // Filter mockData to include only activities with "attendance" type
+  const attendanceData = mockData.filter((activity) =>
+    activity.types.includes("attendance")
+  );
+
   return (
     <>
       <div
@@ -28,13 +33,9 @@ const page = () => {
       </div>
 
       <div>
-        {/* Your CommonActivityReportTable goes here */}
+        {/* Pass the filtered attendanceData to CommonActivityReportTable */}
         <CommonActivityReportTable
-          data={mockData.filter(
-            (activity) =>
-              activity.types.includes("attendance") &&
-              !activity.types.includes("absent")
-          )}
+          data={attendanceData}
           departments={["Software", "Management", "Manager"]}
         />
       </div>

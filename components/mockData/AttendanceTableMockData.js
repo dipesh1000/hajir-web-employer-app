@@ -1,5 +1,3 @@
-import React from "react";
-
 const AttendanceTableMockData = () => {
   const mockData = [
     {
@@ -10,7 +8,8 @@ const AttendanceTableMockData = () => {
       department: "Software",
       attendanceStatus: "Present",
       email: "john.doe@example.com",
-      types: ["attendance", "earlyClockIn", "extraBreak"],
+
+      types: ["attendance", "earlyClockIn", "extraBreakTaken"],
     },
     {
       id: 2,
@@ -20,7 +19,7 @@ const AttendanceTableMockData = () => {
       department: "Management",
       attendanceStatus: "Present",
       email: "biraj.doe@example.com",
-      types: ["attendance", "extraBreak"],
+      types: ["attendance", "extraBreakTaken"],
     },
     {
       id: 3,
@@ -50,7 +49,7 @@ const AttendanceTableMockData = () => {
       department: "Manager",
       attendanceStatus: "Present",
       email: "david.brown@example.com",
-      types: "LateClockin",
+      types: ["late"],
     },
     {
       id: 6,
@@ -60,7 +59,7 @@ const AttendanceTableMockData = () => {
       department: "Software",
       attendanceStatus: "Present",
       email: "laura.white@example.com",
-      types: ["attendance", "extraBreak"],
+      types: ["attendance", "extraBreakTaken"],
     },
     {
       id: 7,
@@ -70,7 +69,7 @@ const AttendanceTableMockData = () => {
       department: "Management",
       attendanceStatus: "Present",
       email: "michael.miller@example.com",
-      types: ["attendance", "extraBreak"],
+      types: ["attendance", "extraBreakTaken"],
     },
     {
       id: 8,
@@ -80,7 +79,7 @@ const AttendanceTableMockData = () => {
       department: "Software",
       attendanceStatus: "Absent",
       email: "eva.lee@example.com",
-      types: ["leave"],
+      types: ["leaveTaken"],
     },
     {
       id: 9,
@@ -90,7 +89,7 @@ const AttendanceTableMockData = () => {
       department: "Management",
       attendanceStatus: "Present",
       email: "mark.wilson@example.com",
-      types: ["attendance", "leave"],
+      types: ["absent"],
     },
     {
       id: 10,
@@ -100,8 +99,9 @@ const AttendanceTableMockData = () => {
       department: "Manager",
       attendanceStatus: "Absent",
       email: "sophia.taylor@example.com",
-      types: ["earlyClockIn"],
+      types: ["earlyClockIn", "attendance"],
     },
+
     {
       id: 11,
       name: "Chris Anderson",
@@ -120,7 +120,7 @@ const AttendanceTableMockData = () => {
       department: "Management",
       attendanceStatus: "Absent",
       email: "emma.davis@example.com",
-      types: ["extraBreak"],
+      types: ["extraBreakTaken"],
     },
     {
       id: 13,
@@ -130,7 +130,7 @@ const AttendanceTableMockData = () => {
       department: "Software",
       attendanceStatus: "Present",
       email: "aaron.white@example.com",
-      types: ["extraBreak", "attendance"],
+      types: ["attendance"],
     },
     {
       id: 14,
@@ -140,7 +140,7 @@ const AttendanceTableMockData = () => {
       department: "Management",
       attendanceStatus: "Present",
       email: "olivia.brown@example.com",
-      types: ["extraBreak", "attendance"],
+      types: ["attendance"],
     },
     {
       id: 15,
@@ -150,9 +150,10 @@ const AttendanceTableMockData = () => {
       department: "Manager",
       attendanceStatus: "Absent",
       email: "daniel.smith@example.com",
-      types: ["extraBreak"],
+      types: ["leaveTaken"],
     },
   ];
+
   return mockData;
 };
 
