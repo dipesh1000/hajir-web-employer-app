@@ -104,9 +104,9 @@ const CommonActivityReportTable = ({ data, departments }) => {
                   <TableCell>
                     <span
                       style={{
-                        color: getColorForStatus(activity.attendanceStatus),
+                        color: getColorForStatus(activity.types),
                         backgroundColor: getBackgroundColorForStatus(
-                          activity.attendanceStatus
+                          activity.types
                         ),
                         padding: "2px 8px",
                         borderRadius: "4px",
@@ -116,7 +116,7 @@ const CommonActivityReportTable = ({ data, departments }) => {
                         marginLeft: "6px",
                       }}
                     >
-                      {activity.attendanceStatus}
+                      {activity.types}
                     </span>
                   </TableCell>
                 </TableRow>
@@ -143,13 +143,13 @@ const getColorForStatus = (status) => {
       return "green";
     case "Absent":
       return "red";
-    case "Late Clock In":
+    case "LateClockin":
       return "orange";
-    case "Okay":
+    case "EarlyClockin":
       return "blue";
-    case "Leave Taken":
+    case "LeaveTaken":
       return "purple";
-    case "Extra Taken":
+    case "ExtraTaken":
       return "pink";
     default:
       return "black";
@@ -162,13 +162,13 @@ const getBackgroundColorForStatus = (status) => {
       return "#00800033";
     case "Absent":
       return "#FF000033";
-    case "Late Clock In":
+    case "LateClockin":
       return "#FFA50033";
-    case "Okay":
+    case "EarlyClockin":
       return "#0000FF33";
-    case "Leave Taken":
+    case "LeaveTaken":
       return "#80008033";
-    case "Extra Taken":
+    case "ExtraTaken":
       return "#FFC0CB33";
     default:
       return "transparent";
