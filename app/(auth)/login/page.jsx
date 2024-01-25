@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 'use client';
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
@@ -8,44 +7,10 @@ import Grid from '@mui/material/Grid';
 import Image from 'next/image';
 import Button from '@mui/material/Button';
 import * as yup from 'yup';
-import { TextField } from '@mui/material';
+import { TextField, useMediaQuery } from '@mui/material';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import ScrollDialog from '@/components/Auth/ScrollDialog';
-=======
-"use client";
-import React, { useState } from "react";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import Image from "next/image";
-import Button from "@mui/material/Button";
-import * as yup from "yup";
-import { TextField } from "@mui/material";
-import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
-import ScrollDialog from "@/components/Auth/ScrollDialog";
-import useMediaQuery from "@mui/material/useMediaQuery";
-
-// Styles for components
-const styles = {
-  container: {
-    flexGrow: 1,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    display: "block",
-    maxWidth: "100%",
-    // Hide the image on screens smaller than 600px
-    "@media (max-width: 600px)": {
-      display: "none",
-    },
-  },
-};
->>>>>>> 2999aa121b81eca7bcf70cbd1e9df5ae8cef604f
 
 // Styled components
 const Item = styled(Paper)(({ theme }) => ({
@@ -94,7 +59,7 @@ export default function Signin() {
   };
 
   // Use media query hook
-  const isScreenSmall = useMediaQuery("(max-width:900px)");
+  const isScreenSmall = useMediaQuery('(max-width:900px)');
 
   const formik = useFormik({
     initialValues: {
@@ -139,7 +104,6 @@ export default function Signin() {
   });
 
   return (
-<<<<<<< HEAD
     <Box
       sx={{
         flexGrow: 1,
@@ -148,9 +112,6 @@ export default function Signin() {
         justifyContent: 'center',
       }}
     >
-=======
-    <Box sx={styles.container}>
->>>>>>> 2999aa121b81eca7bcf70cbd1e9df5ae8cef604f
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           {/* Apply styles to the image */}
@@ -160,8 +121,8 @@ export default function Signin() {
             height={1000}
             alt="Logo"
             style={{
-              ...styles.image,
-              display: isScreenSmall ? "none" : "block",
+              // ...styles.image,
+              display: isScreenSmall ? 'none' : 'block',
             }}
           />
         </Grid>
