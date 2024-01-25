@@ -21,11 +21,12 @@ export default function TabsActiveInactive({
         textColor="inherit"
         variant="fullWidth"
         aria-label="full width tabs example"
+        centered
       >
         <Tab
           label={
-            <Badge color="primary">
-              {/* <Badge badgeContent={notificationsCount.all} color="primary"> */}
+            // <Badge color="primary">
+            <Badge badgeContent={notificationsCount.all} color="primary">
               <div
                 style={{
                   fontSize: "1rem",
@@ -35,7 +36,7 @@ export default function TabsActiveInactive({
               >
                 All
               </div>
-              <InboxIcon />
+              {/* <InboxIcon /> */}
             </Badge>
           }
           {...a11yProps(0)}

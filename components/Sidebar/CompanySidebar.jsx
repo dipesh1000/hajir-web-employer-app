@@ -18,15 +18,40 @@ import Link from "next/link";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import Collapse from "@mui/material/Collapse";
+import { useParams } from "next/navigation";
 
 const CompanySidebar = ({ onLogoutClick }) => {
   const [openSettings, setOpenSettings] = useState(false);
-
+  const [openReport, setOpenReport] = useState(false); // Add this line
+  const { companyId } = useParams();
   const LINKS = [
-    { text: "Home", href: "/dashboard/company/", icon: HomeIcon },
+    {
+      text: "Home",
+      href: "/dashboard/company/",
+      icon: HomeIcon,
+    },
     { text: "Employee", href: "/dashboard/employee/", icon: HomeIcon },
-    { text: "Attendance", href: "/dashboard/attendance/", icon: HomeIcon },
-    { text: "Report", href: "/dashboard/report/", icon: HomeIcon },
+    {
+      text: "Attendance",
+      href: `/dashboard/company/${companyId}/attendance/`,
+      icon: HomeIcon,
+    },
+    {
+      text: "Report",
+      icon: HomeIcon,
+      sublinks: [
+        {
+          text: "Activity Report",
+          href: `/dashboard/company/${companyId}/activityreport/`,
+          icon: BusinessIcon,
+        },
+        {
+          text: "Payments Reports",
+          href: `/dashboard/company/${companyId}/paymentreport/`,
+          icon: StarIcon,
+        },
+      ],
+    },
     {
       text: "Setting",
       icon: SettingsIcon,
@@ -36,11 +61,11 @@ const CompanySidebar = ({ onLogoutClick }) => {
           href: "/dashboard/company/messenger",
           icon: BusinessIcon,
         },
-        {
-          text: "Payments Reports",
-          href: "/dashboard/company/paymentsreports",
-          icon: StarIcon,
-        },
+        // {
+        //   text: "Payments Reports",
+        //   href: "/dashboard/company/paymentsreports",
+        //   icon: StarIcon,
+        // },
         {
           text: "Missing Attendance",
           href: "/dashboard/company/missingattendance",
@@ -69,6 +94,10 @@ const CompanySidebar = ({ onLogoutClick }) => {
     setOpenSettings(!openSettings);
   };
 
+  const handleReportClick = () => {
+    setOpenReport(!openReport);
+  };
+
   return (
     <Drawer
       variant="permanent"
@@ -94,17 +123,38 @@ const CompanySidebar = ({ onLogoutClick }) => {
               <ListItemButton
                 component={href ? Link : undefined}
                 href={href}
-                onClick={sublinks ? handleSettingsClick : undefined}
+                onClick={
+                  sublinks
+                    ? text === "Report"
+                      ? handleReportClick
+                      : handleSettingsClick
+                    : undefined
+                }
               >
                 <ListItemIcon>
                   <Icon />
                 </ListItemIcon>
                 <ListItemText primary={text} />
-                {sublinks && (openSettings ? <ExpandLess /> : <ExpandMore />)}
+                {sublinks &&
+                  (text === "Report" ? (
+                    openReport ? (
+                      <ExpandLess />
+                    ) : (
+                      <ExpandMore />
+                    )
+                  ) : openSettings ? (
+                    <ExpandLess />
+                  ) : (
+                    <ExpandMore />
+                  ))}
               </ListItemButton>
             </ListItem>
             {sublinks && sublinks.length > 0 && (
-              <Collapse in={openSettings} timeout="auto" unmountOnExit>
+              <Collapse
+                in={text === "Report" ? openReport : openSettings}
+                timeout="auto"
+                unmountOnExit
+              >
                 {sublinks.map(({ text, href, icon: SubIcon }) => (
                   <ListItem key={href || text} disablePadding>
                     <ListItemButton

@@ -15,7 +15,7 @@ export default function CompanyLayout({ children }) {
   return (
     <>
       <Header />
-      <HeaderCompany />
+      {/* <HeaderCompany /> */}
       <CompanySidebar />
       {/* <Box
         component="main"

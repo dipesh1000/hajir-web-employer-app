@@ -1,12 +1,18 @@
-import CompanyHeader from "@/components/Sidebar/CompanyHeader/CompanyHeader";
+"use client";
+import AttendaceTableLayout from "@/components/attendance/AttendaceTableLayout";
+import HeaderAttendance from "@/components/attendance/HeaderAttendance";
 import React from "react";
 
-const page = () => {
+const Page = () => {
   return (
     <>
-      <h2>h</h2>
+      <HeaderAttendance />
+      <br />
+      <br />
+      <br />
+      <AttendaceTableLayout />
     </>
   );
 };
 
-export default page;
+export default Page;
