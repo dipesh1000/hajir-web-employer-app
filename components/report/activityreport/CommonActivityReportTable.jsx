@@ -148,7 +148,7 @@ const getColorForStatus = (types) => {
     return "blue";
   } else if (types.includes("LeaveTaken")) {
     return "purple";
-  } else if (types.includes("ExtraTaken")) {
+  } else if (types.includes("extraBreakTaken")) {
     return "pink";
   } else {
     return "black";
@@ -167,7 +167,7 @@ const getBackgroundColorForStatus = (types) => {
     return "#0000FF33"; // Blue background for "EarlyClockin"
   } else if (types.includes("LeaveTaken")) {
     return "#80008033"; // Purple background for "LeaveTaken"
-  } else if (types.includes("ExtraTaken")) {
+  } else if (types.includes("extraBreakTaken")) {
     return "#FFC0CB33"; // Pink background for "ExtraTaken"
   } else {
     return "transparent";
@@ -184,7 +184,7 @@ const renderAttendanceStatus = (types) => {
     return "Early Clock In";
   } else if (types.includes("LeaveTaken")) {
     return "Leave Taken";
-  } else if (types.includes("ExtraTaken")) {
+  } else if (types.includes("extraBreakTaken")) {
     return "Extra Break Taken";
   } else {
     return "Unknown";

@@ -1,12 +1,19 @@
-// page.js
+"use client";
+
 import React from "react";
 import AttendanceTableMockData from "@/components/mockData/AttendanceTableMockData";
 import CommonActivityReportTable from "@/components/report/activityreport/CommonActivityReportTable";
+import { useParams } from "next/navigation";
+import { format } from "date-fns";
 
-const page = () => {
+const Page = () => {
   const mockData = AttendanceTableMockData(); // Get the mock data
-  const currentDate = new Date().toLocaleDateString();
-
+  const currentDate = format(new Date(), "MMMM dd, yyyy"); // Format the date
+  const params = useParams();
+  console.log(params);
+  const extraBreakTakenData = mockData.filter((activity) =>
+    activity.types.includes("extraBreakTaken")
+  );
   return (
     <>
       <div
@@ -19,28 +26,25 @@ const page = () => {
         }}
       >
         <div>
-          <h2>Absent</h2>
-          <h4>Absent Report</h4>
+          <h2>Extra Break Taken</h2>
+          <h4> Extra Break Taken Report</h4>
         </div>
-        {/* Today's date at the extreme right */}
         <div>
           <h4>{currentDate}</h4>
         </div>
       </div>
 
       <div>
-        {/* Your CommonActivityReportTable goes here */}
-        <CommonActivityReportTable
-          data={mockData.filter(
-            (activity) =>
-              activity.types.includes("extrabreaktaken") &&
-              !activity.types.includes("attendance")
-          )}
-          departments={["Software", "Management", "Manager"]}
-        />
+        <div>
+          {/*  CommonActivityReportTable goes here */}
+          <CommonActivityReportTable
+            data={extraBreakTakenData}
+            departments={["Software", "Management", "Manager"]}
+          />
+        </div>
       </div>
     </>
   );
 };
 
-export default page;
+export default Page;

@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
@@ -14,7 +15,9 @@ import { Paper } from "@mui/material";
 import { Stack } from "@mui/system";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 const AttendanceOverview = () => {
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().toLocaleString("default", { month: "long" });
@@ -42,7 +45,6 @@ const AttendanceOverview = () => {
   const handleMonthChange = (event) => {
     setSelectedMonth(event.target.value);
   };
-
   // Mock data for attendance performance (90%)
   const attendancePercentage = 90;
 
@@ -198,7 +200,7 @@ const AttendanceOverview = () => {
             Calendar View
           </Typography>
           {/* Full calendar view */}
-          <Box
+          {/* <Box
             sx={{
               display: "grid",
               gridTemplateColumns: "repeat(7, 1fr)",
@@ -230,7 +232,11 @@ const AttendanceOverview = () => {
                 {index + 1}
               </Box>
             ))}
-          </Box>
+          </Box> */}
+          {/* mui calender code need to add in new file */}
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateCalendar sx={{ width: "100%", height: "100%" }} />
+          </LocalizationProvider>
           <IconButton color="primary" aria-label="View Full Calendar">
             <EventIcon />
           </IconButton>

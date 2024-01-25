@@ -1,12 +1,20 @@
-// page.js
+"use client";
+
 import React from "react";
 import AttendanceTableMockData from "@/components/mockData/AttendanceTableMockData";
 import CommonActivityReportTable from "@/components/report/activityreport/CommonActivityReportTable";
+import { useParams } from "next/navigation";
+import { format } from "date-fns";
 
-const page = () => {
+const Page = () => {
   const mockData = AttendanceTableMockData(); // Get the mock data
-  const currentDate = new Date().toLocaleDateString();
-
+  const currentDate = format(new Date(), "MMMM dd, yyyy"); // Format the date
+  const params = useParams();
+  console.log(params);
+  // Filter mockData to include only activities with "EarlyClockin" type
+  const LateClockinData = mockData.filter((activity) =>
+    activity.types.includes("LateClockin")
+  );
   return (
     <>
       <div
@@ -20,7 +28,7 @@ const page = () => {
       >
         <div>
           <h2>Late Clock In</h2>
-          <h4>Late Clock In Report</h4>
+          <h4> Late CLock in Report</h4>
         </div>
         {/* Today's date at the extreme right */}
         <div>
@@ -30,15 +38,16 @@ const page = () => {
 
       <div>
         {/* Your CommonActivityReportTable goes here */}
-        <CommonActivityReportTable
-          data={mockData.filter((activity) =>
-            activity.types.includes("LateClockin")
-          )}
-          departments={["Software", "Management", "Manager"]}
-        />
+        <div>
+          {/* Your CommonActivityReportTable goes here */}
+          <CommonActivityReportTable
+            data={LateClockinData}
+            departments={["Software", "Management", "Manager"]}
+          />
+        </div>
       </div>
     </>
   );
 };
 
-export default page;
+export default Page;

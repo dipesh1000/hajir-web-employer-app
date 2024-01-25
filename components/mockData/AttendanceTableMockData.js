@@ -79,7 +79,7 @@ const AttendanceTableMockData = () => {
       department: "Software",
       attendanceStatus: "Absent",
       email: "eva.lee@example.com",
-      types: ["leaveTaken"],
+      types: ["leaveTaken", "LateClockin"],
     },
     {
       id: 9,
@@ -120,7 +120,7 @@ const AttendanceTableMockData = () => {
       department: "Management",
       attendanceStatus: "Absent",
       email: "emma.davis@example.com",
-      types: ["extraBreakTaken"],
+      types: ["extraBreakTaken", "LateClockin"],
     },
     {
       id: 13,
@@ -150,7 +150,7 @@ const AttendanceTableMockData = () => {
       department: "Manager",
       attendanceStatus: "Absent",
       email: "daniel.smith@example.com",
-      types: ["leaveTaken"],
+      types: ["leaveTaken", "LateClockin"],
     },
   ];
 
