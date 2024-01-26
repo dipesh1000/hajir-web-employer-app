@@ -1,72 +1,77 @@
 "use client";
 
 import React, { useState } from "react";
-import { Box, RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import { Box, Checkbox, Grid, Typography } from "@mui/material";
 
 const Step3Component = () => {
-  const day = "Sunday"; // Focus on styling and behavior for Sunday
-  const [selectedDay, setSelectedDay] = useState(null);
-  const [halfDaySelected, setHalfDaySelected] = useState(false);
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const [expandedDay, setExpandedDay] = useState(null);
+  const [halfDaySelected, setHalfDaySelected] = useState({});
 
   const handleDayClick = (day) => {
-    setSelectedDay(selectedDay === day ? null : day);
-    setHalfDaySelected(false);
+    setExpandedDay(day);
+    setHalfDaySelected((prevSelections) => ({
+      ...prevSelections,
+      [day]: prevSelections[day] || false,
+    }));
   };
 
-  const handleHalfDayClick = (e) => {
-    e.stopPropagation();
-    setHalfDaySelected(!halfDaySelected);
+  const handleHalfDayClick = (day) => {
+    setHalfDaySelected((prevSelections) => ({
+      ...prevSelections,
+      [day]: !prevSelections[day],
+    }));
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "start",
-
-        mt: 2,
-        border:
-          selectedDay === day ? "2px solid blue" : "2px solid transparent",
-        borderRadius: "4px",
-        padding: "8px",
-        cursor: "pointer",
-      }}
-      onClick={() => handleDayClick(day)}
-    >
-      {/* Content for Sunday */}
-      <RadioGroup
-        row
-        name={`day_${day}`}
-        value={halfDaySelected ? `halfDay_${day}` : `fullDay_${day}`}
-      >
-        <FormControlLabel
-          value={`fullDay_${day}`}
-          control={
-            <Radio sx={{ color: selectedDay === day ? "blue" : "black" }} />
-          }
-          label={day}
-        />
-        {selectedDay === day && (
+    <Grid container spacing={2}>
+      {days.map((day) => (
+        <Grid item xs={4} key={day}>
           <Box
             sx={{
-              ml: 1,
               display: "flex",
-              flexDirection: "column",
-              alignItems: "start",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "60%",
+              border: expandedDay === day ? "2px solid red" : "2px solid black",
+              borderRadius: "4px",
+              padding: "8px",
+              cursor: "pointer",
             }}
-            onClick={handleHalfDayClick}
+            onClick={() => handleDayClick(day)}
           >
-            <FormControlLabel
-              value={`halfDay_${day}`}
-              control={<Radio sx={{ color: "blue" }} />}
-              label="Half-day"
-              disabled={!selectedDay}
-            />
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Checkbox
+                checked={expandedDay === day}
+                sx={{
+                  color: expandedDay === day ? "red" : "black",
+                }}
+              />
+              <Typography variant="body2">{day}</Typography>
+            </Box>
+            {expandedDay === day && (
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Checkbox
+                  checked={halfDaySelected[day]}
+                  sx={{ color: "red" }}
+                  onChange={() => handleHalfDayClick(day)}
+                />
+                <Typography variant="body2">Half Day?</Typography>
+              </Box>
+            )}
           </Box>
-        )}
-      </RadioGroup>
-    </Box>
+        </Grid>
+      ))}
+    </Grid>
   );
 };
 

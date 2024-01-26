@@ -23,6 +23,10 @@ const stepComponents = [
 const HorizontalLinearStepper = () => {
   const [activeStep, setActiveStep] = useState(0);
 
+  const handleStepClick = (step) => {
+    setActiveStep(step);
+  };
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -42,11 +46,11 @@ const HorizontalLinearStepper = () => {
         activeStep={activeStep}
         sx={{
           fontSize: "5rem", // Adjust the font size as needed
-          padding: "40px", // Adjust the padding as needed
+          padding: "50px", // Adjust the padding as needed
         }}
       >
         {steps.map((label, index) => (
-          <Step key={label}>
+          <Step key={label} onClick={() => handleStepClick(index)}>
             <StepLabel>{label}</StepLabel>
           </Step>
         ))}
