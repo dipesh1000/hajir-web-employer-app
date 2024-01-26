@@ -1,110 +1,88 @@
 "use client";
-import * as React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import { useParams } from "next/navigation"; // Correct import
-import { Button, TextField, Typography } from "@mui/material";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { addEmployeeToCompany } from "@/redux/companySlice"; // Correct import
-import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Step1Component from "@/components/employee/employeeSteps/Step1Component";
+import Step2Component from "@/components/employee/employeeSteps/Step2Component";
+import Step3Component from "@/components/employee/employeeSteps/Step3Component";
+import Step4Component from "@/components/employee/employeeSteps/Step4Component";
+import HeaderEmployeeSteps from "@/components/employee/employeeSteps/HeaderEmployeeSteps";
 
-export default function CreateEmployee() {
-  const dispatch = useDispatch();
-  const router = useRouter();
+const steps = ["Step 1", "Step 2", "Step 3", "Step 4"];
+const stepComponents = [
+  <Step1Component key="step1" />,
+  <Step2Component key="step2" />,
+  <Step3Component key="step3" />,
+  <Step4Component key="step4" />,
+];
 
-  const { companyId } = useParams();
+const HorizontalLinearStepper = () => {
+  const [activeStep, setActiveStep] = useState(0);
 
-  // const employeeId = useSelector((state) => {
-  //   const employees = state.employee.employees;
-  //   const foundEmployee =
-  //     employees && employees.length
-  //       ? employees.find((employee) => employee.id === String(companyId))
-  //       : undefined;
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
 
-  //   return foundEmployee;
-  //   console.log("foundEmployee:", foundEmployee); // Log the found company
-  // });
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
-  const validationSchema = yup.object({
-    fullName: yup.string().required("Full name is required"),
-    salaryAmount: yup.string().required("Enter your salary amount"),
-  });
-  const formik = useFormik({
-    initialValues: {
-      fullName: "",
-      salaryAmount: "",
-    },
-    validationSchema: validationSchema,
-    // onSubmit:  (values, { resetForm }) => {
-    //   const { fullName, salaryAmount } = values;
-    //   const employee = {
-    //     fullName,
-    //     salaryAmount,
-    //   };
-    //   await dispatch(addEmployeeToCompany({ companyId, employee }));
-
-    onSubmit: (values, { resetForm }) => {
-      dispatch(addEmployeeToCompany({ companyId, employee: values }));
-      alert("Employee added successfully!");
-      resetForm();
-      router.push(`/dashboard/company/${companyId}`);
-    },
-  });
+  const handleReset = () => {
+    setActiveStep(0);
+  };
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "start",
-      }}
-    >
-      <Typography variant="h5">Add New Employee</Typography>
-      <form onSubmit={formik.handleSubmit}>
-        {/* Enter the full name */}
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <Typography variant="body1">Full Name</Typography>
-          <Typography variant="body1" color="red" ml={1}>
-            *
+    <Box sx={{ width: "100%" }}>
+      <HeaderEmployeeSteps />
+      <Stepper
+        activeStep={activeStep}
+        sx={{
+          fontSize: "5rem", // Adjust the font size as needed
+          padding: "40px", // Adjust the padding as needed
+        }}
+      >
+        {steps.map((label, index) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+      {activeStep === steps.length ? (
+        <>
+          <Typography sx={{ mt: 2, mb: 1 }}>
+            All steps completed - you&apos;re finished
           </Typography>
-        </Box>
-        <TextField
-          label="Enter your name"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          {...formik.getFieldProps("fullName")}
-          error={formik.touched.fullName && Boolean(formik.errors.fullName)}
-          helperText={formik.touched.fullName && formik.errors.fullName}
-        />
-
-        {/* salary section  */}
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <Typography variant="body1">salaryAmount</Typography>
-          <Typography variant="body1" color="red" ml={1}>
-            *
-          </Typography>
-        </Box>
-        <TextField
-          label="Enter your salaryAmount"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          {...formik.getFieldProps("salaryAmount")}
-          error={
-            formik.touched.salaryAmount && Boolean(formik.errors.salaryAmount)
-          }
-          helperText={formik.touched.salaryAmount && formik.errors.salaryAmount}
-        />
-
-        {/* Submit Button */}
-        <Button type="submit" variant="contained" color="primary" mt={2}>
-          Submit
-        </Button>
-      </form>
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Box sx={{ flex: "1 1 auto" }} />
+            <Button onClick={handleReset}>Reset</Button>
+          </Box>
+        </>
+      ) : (
+        <>
+          <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+          <Box sx={{ mt: 2, mb: 2 }}>{stepComponents[activeStep]}</Box>
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              Back
+            </Button>
+            <Box sx={{ flex: "1 1 auto" }} />
+            <Button onClick={handleNext}>
+              {activeStep === steps.length - 1 ? "Finish" : "Next"}
+            </Button>
+          </Box>
+        </>
+      )}
     </Box>
   );
-}
+};
+
+export default HorizontalLinearStepper;
