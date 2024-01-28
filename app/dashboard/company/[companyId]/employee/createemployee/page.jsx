@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
@@ -40,13 +41,21 @@ const HorizontalLinearStepper = () => {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box
+      sx={{
+        width: "100%",
+        minHeight: "87vh",
+        display: "flex",
+        flexDirection: "column",
+        position: "relative",
+      }}
+    >
       <HeaderEmployeeSteps />
       <Stepper
         activeStep={activeStep}
         sx={{
-          fontSize: "5rem", // Adjust the font size as needed
-          padding: "50px", // Adjust the padding as needed
+          fontSize: "5rem",
+          padding: "50px",
         }}
       >
         {steps.map((label, index) => (
@@ -55,36 +64,58 @@ const HorizontalLinearStepper = () => {
           </Step>
         ))}
       </Stepper>
-      {activeStep === steps.length ? (
-        <>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleReset}>Reset</Button>
-          </Box>
-        </>
-      ) : (
-        <>
-          <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-          <Box sx={{ mt: 2, mb: 2 }}>{stepComponents[activeStep]}</Box>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? "Finish" : "Next"}
-            </Button>
-          </Box>
-        </>
-      )}
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          position: "relative",
+        }}
+      >
+        {activeStep === steps.length ? (
+          <>
+            <Typography sx={{ mt: 2, mb: 1 }}>
+              All steps completed - you&apos;re finished
+            </Typography>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button onClick={handleReset}>Reset</Button>
+            </Box>
+          </>
+        ) : (
+          <>
+            <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+            <Box sx={{ mt: 2, mb: 2, flex: 1 }}>
+              {stepComponents[activeStep]}
+            </Box>
+          </>
+        )}
+      </Box>
+      <Box
+        sx={{
+          position: "sticky",
+          bottom: 0,
+          left: 0,
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          p: 2,
+          bg: "background.paper",
+          justifyContent: "space-between",
+        }}
+      >
+        <Button
+          color="inherit"
+          disabled={activeStep === 0}
+          onClick={handleBack}
+          sx={{ marginRight: 1 }}
+        >
+          Back
+        </Button>
+        <Button onClick={handleNext}>
+          {activeStep === steps.length - 1 ? "Finish" : "Next"}
+        </Button>
+      </Box>
     </Box>
   );
 };

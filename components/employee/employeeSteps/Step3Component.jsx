@@ -41,7 +41,7 @@ const Step3Component = () => {
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              width: "60%",
+              width: "90%",
               border: expandedDay === day ? "2px solid red" : "2px solid black",
               borderRadius: "4px",
               padding: "8px",
