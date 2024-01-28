@@ -16,74 +16,23 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Image from "next/image";
 import TablePagination from "@mui/material/TablePagination";
-import { Badge, Tab, Tabs } from "@mui/material";
+import { Tab, Tabs } from "@mui/material";
 
 const mockData = [
   {
     id: 1,
     name: "John Doe",
-    clockIn: "08:00 AM",
-    clockOut: "05:00 PM",
-    department: "Software",
-    attendanceStatus: "Present",
-    email: "john.doe@example.com",
+    PaymentStatus: "Paid",
+    PaymentAmount: "30,000",
   },
   {
     id: 2,
-    name: "BIraj Doe",
-    clockIn: "09:30 AM",
-    clockOut: "06:30 PM",
-    department: "Management",
-    attendanceStatus: "Present",
-    email: "jane.doe@example.com",
+    name: "Biraj Doe",
+    PaymentStatus: "Unpaid",
+    PaymentAmount: "40,000",
   },
-  {
-    id: 3,
-    name: "Pooja Smith",
-    clockIn: "10:15 AM",
-    clockOut: "07:45 PM",
-    department: "Software",
-    attendanceStatus: "Absent",
-    email: "bob.smith@example.com",
-  },
-  {
-    id: 4,
-    name: "Alice Johnson",
-    clockIn: "08:45 AM",
-    clockOut: "05:15 PM",
-    department: "Management",
-    attendanceStatus: "Present",
-    email: "alice.johnson@example.com",
-  },
-  {
-    id: 5,
-    name: "David Brown",
-    clockIn: "09:00 AM",
-    clockOut: "06:00 PM",
-    department: "Manager",
-    attendanceStatus: "Absent",
-    email: "david.brown@example.com",
-  },
-  {
-    id: 6,
-    name: "Laura White",
-    clockIn: "10:30 AM",
-    clockOut: "07:30 PM",
-    department: "Software",
-    attendanceStatus: "Present",
-    email: "laura.white@example.com",
-  },
-  {
-    id: 7,
-    name: "Michael Miller",
-    clockIn: "08:15 AM",
-    clockOut: "05:45 PM",
-    department: "Management",
-    attendanceStatus: "Present",
-    email: "michael.miller@example.com",
-  },
+  // Add more data objects as needed
 ];
-const departments = ["Software", "Management", "Manager"];
 
 export default function TableLayoutPaymentReport() {
   const [filteredData, setFilteredData] = React.useState(mockData);
@@ -117,7 +66,7 @@ export default function TableLayoutPaymentReport() {
         person.name.toLowerCase().includes(searchText) &&
         (department === "" || person.department === department) &&
         (tabValue === 0 ||
-          person.attendanceStatus.toLowerCase() === getTabLabel(tabValue))
+          person.PaymentStatus.toLowerCase() === getTabLabel(tabValue))
     );
     setFilteredData(filtered);
   };
@@ -129,8 +78,7 @@ export default function TableLayoutPaymentReport() {
       case 1:
         return "Paid";
       case 2:
-        return "UnPaid";
-
+        return "Unpaid";
       default:
         return "";
     }
@@ -146,10 +94,10 @@ export default function TableLayoutPaymentReport() {
   };
 
   const notificationsCount = {
-    all: 10,
-    present: 5,
-    absent: 3,
-    leave: 2,
+    all: mockData.length,
+    paid: mockData.filter((person) => person.PaymentStatus === "Paid").length,
+    unpaid: mockData.filter((person) => person.PaymentStatus === "Unpaid")
+      .length,
   };
 
   return (
@@ -198,7 +146,7 @@ export default function TableLayoutPaymentReport() {
                     marginLeft: "6px",
                   }}
                 >
-                  {notificationsCount.present}
+                  {notificationsCount.paid}
                 </span>
               </div>
             }
@@ -206,7 +154,7 @@ export default function TableLayoutPaymentReport() {
           <Tab
             label={
               <div>
-                UnPaid
+                Unpaid
                 <span
                   style={{
                     backgroundColor: "#FF505033",
@@ -219,7 +167,7 @@ export default function TableLayoutPaymentReport() {
                     marginLeft: "6px",
                   }}
                 >
-                  {notificationsCount.absent}
+                  {notificationsCount.unpaid}
                 </span>
               </div>
             }
@@ -244,11 +192,7 @@ export default function TableLayoutPaymentReport() {
             autoWidth={false}
           >
             <MenuItem value="">All Departments</MenuItem>
-            {departments.map((dept) => (
-              <MenuItem key={dept} value={dept}>
-                {dept}
-              </MenuItem>
-            ))}
+            {/* No need to iterate over departments since it's not present in mockData */}
           </Select>
         </FormControl>
       </Box>
@@ -258,9 +202,8 @@ export default function TableLayoutPaymentReport() {
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Employee Name</TableCell>
-              <TableCell>Clock In</TableCell>
-              <TableCell>Clock Out</TableCell>
-              <TableCell>Attendance Status</TableCell>
+              <TableCell>Payment Status</TableCell>
+              <TableCell>Payment Amount</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -271,7 +214,6 @@ export default function TableLayoutPaymentReport() {
                   <TableCell>{person.id}</TableCell>
                   <TableCell>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
-                      {/* Add your image component here */}
                       <Image
                         src="/hajir-logo.png"
                         alt="Employee"
@@ -286,35 +228,12 @@ export default function TableLayoutPaymentReport() {
                       />
                       <Box>
                         <div>{person.name}</div>
-                        <div style={{ fontSize: "0.8em", color: "gray" }}>
-                          {person.email}
-                        </div>
+                        {/* No email field in mockData */}
                       </Box>
                     </Box>
                   </TableCell>
-                  <TableCell>{person.clockIn}</TableCell>
-                  <TableCell>{person.clockOut}</TableCell>
-                  <TableCell>
-                    <Box>
-                      <span
-                        sx={{
-                          color:
-                            person.attendanceStatus === "Present"
-                              ? "green"
-                              : "red",
-                          backgroundColor:
-                            person.attendanceStatus === "Present"
-                              ? "#e5f7e9"
-                              : "#fde5e5",
-                          padding: "6px 12px",
-                          borderRadius: "4px",
-                        }}
-                      >
-                        {" "}
-                        {person.attendanceStatus}
-                      </span>
-                    </Box>
-                  </TableCell>
+                  <TableCell>{person.PaymentStatus}</TableCell>
+                  <TableCell>{person.PaymentAmount}</TableCell>
                 </TableRow>
               ))}
           </TableBody>
