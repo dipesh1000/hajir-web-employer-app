@@ -11,6 +11,7 @@ import { TextField, useMediaQuery } from '@mui/material';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import ScrollDialog from '@/components/Auth/ScrollDialog';
+import { postRequest } from '@/services/ApiRequestService';
 
 // Styled components
 const Item = styled(Paper)(({ theme }) => ({
@@ -73,17 +74,7 @@ export default function Signin() {
         }
 
         setButtonClicked(true);
-
-        const apiResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/employer/register`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(values),
-          }
-        );
+        const apiResponse = await postRequest(`/employer/register`, values);
 
         if (!apiResponse.ok) {
           throw new Error('Network response was not ok');
