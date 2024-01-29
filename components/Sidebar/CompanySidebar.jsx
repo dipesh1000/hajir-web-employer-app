@@ -30,7 +30,11 @@ const CompanySidebar = ({ onLogoutClick }) => {
       href: "/dashboard/company/",
       icon: HomeIcon,
     },
-    { text: "Employee", href: "/dashboard/employee/", icon: HomeIcon },
+    {
+      text: "Employee",
+      href: `/dashboard/company/${companyId}/createemployee`,
+      icon: HomeIcon,
+    },
     {
       text: "Attendance",
       href: `/dashboard/company/${companyId}/attendance/`,

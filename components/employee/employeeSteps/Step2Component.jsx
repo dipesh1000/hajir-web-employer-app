@@ -164,6 +164,7 @@ const Step2Component = () => {
           <div style={{ display: "flex", alignItems: "center" }}>
             <Button
               variant="outlined"
+              sx={{ marginRight: 2 }}
               onClick={() => handleWorkingHoursChange(false)}
             >
               -
@@ -178,6 +179,7 @@ const Step2Component = () => {
             />
             <Button
               variant="outlined"
+              sx={{ marginLeft: 2 }}
               onClick={() => handleWorkingHoursChange(true)}
             >
               +
@@ -190,6 +192,7 @@ const Step2Component = () => {
           <div style={{ display: "flex", alignItems: "center" }}>
             <Button
               variant="outlined"
+              sx={{ marginRight: 2 }}
               onClick={() => handleBreakTimeChange(false)}
             >
               -
@@ -204,6 +207,7 @@ const Step2Component = () => {
             />
             <Button
               variant="outlined"
+              sx={{ marginLeft: 2 }}
               onClick={() => handleBreakTimeChange(true)}
             >
               +

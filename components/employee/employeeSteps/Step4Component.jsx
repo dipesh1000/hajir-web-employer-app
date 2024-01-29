@@ -12,23 +12,24 @@ import {
 import DatePick from "./DatePick";
 
 const Step4Component = () => {
-  const [overtimeChecked, setOvertimeChecked] = useState(false);
-  const [sickLeaveChecked, setSickLeaveChecked] = useState(false);
-  const [casualLeaveChecked, setCasualLeaveChecked] = useState(false);
+  const [overtimeVisible, setOvertimeVisible] = useState(true);
+  const [sickLeaveVisible, setSickLeaveVisible] = useState(true);
+  const [casualLeaveVisible, setCasualLeaveVisible] = useState(true);
   const [workingHours, setWorkingHours] = useState("08:00");
-  const [allowLateAttendance, setAllowLateAttendance] = useState(false);
-  const [overTimeRatioChecked, setOverTimeRatioChecked] = useState(false);
+  const [allowLateAttendanceVisible, setAllowLateAttendanceVisible] =
+    useState(true);
+  const [overTimeRatioVisible, setOverTimeRatioVisible] = useState(true);
 
   const handleOvertimeChange = () => {
-    setOvertimeChecked(!overtimeChecked);
+    setOvertimeVisible(!overtimeVisible);
   };
 
   const handleSickLeaveChange = () => {
-    setSickLeaveChecked(!sickLeaveChecked);
+    setSickLeaveVisible(!sickLeaveVisible);
   };
 
   const handleCasualLeaveChange = () => {
-    setCasualLeaveChecked(!casualLeaveChecked);
+    setCasualLeaveVisible(!casualLeaveVisible);
   };
 
   const handleWorkingHoursChange = (increase) => {
@@ -43,11 +44,26 @@ const Step4Component = () => {
   };
 
   const handleAllowLateAttendanceChange = () => {
-    setAllowLateAttendance(!allowLateAttendance);
+    setAllowLateAttendanceVisible(!allowLateAttendanceVisible);
   };
 
   const handleOverTimeRatioChange = () => {
-    setOverTimeRatioChecked(!overTimeRatioChecked);
+    setOverTimeRatioVisible(!overTimeRatioVisible);
+  };
+
+  const handleSubmit = () => {
+    // Form submission logic here, use checkbox states when needed.
+    const formData = {
+      overtimeChecked: overtimeVisible ? 1 : 0,
+      sickLeaveChecked: sickLeaveVisible ? 1 : 0,
+      casualLeaveChecked: casualLeaveVisible ? 1 : 0,
+      workingHours,
+      allowLateAttendanceChecked: allowLateAttendanceVisible ? 1 : 0,
+      overTimeRatioChecked: overTimeRatioVisible ? 1 : 0,
+    };
+
+    // Do something with formData, like submitting to a server or updating state.
+    console.log(formData);
   };
 
   return (
@@ -65,10 +81,14 @@ const Step4Component = () => {
           <Typography variant="body1">
             Joining Date <span sx={{ color: "red" }}> *</span>
           </Typography>
-          <DatePick />
+          <DatePick style={{}} />
+
           {/* Overtime Checkbox Container */}
           <Typography variant="body1">
-            Overtime Hours <span sx={{ color: "red" }}> *</span>
+            Overtime Hours{" "}
+            <span sx={{ color: "red" }}>
+              {overtimeVisible ? " (Optional)" : " *"}
+            </span>
           </Typography>
           <Box
             sx={{
@@ -80,12 +100,12 @@ const Step4Component = () => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={overtimeChecked}
+                  checked={overtimeVisible}
                   onChange={handleOvertimeChange}
                 />
               }
             />
-            {overtimeChecked && (
+            {overtimeVisible && (
               <TextField fullWidth label="eg : 2 ,4 ,5 , 6" sx={{ ml: 2 }} />
             )}
           </Box>
@@ -117,12 +137,12 @@ const Step4Component = () => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={sickLeaveChecked}
+                      checked={sickLeaveVisible}
                       onChange={handleSickLeaveChange}
                     />
                   }
                 />
-                {sickLeaveChecked && (
+                {sickLeaveVisible && (
                   <TextField
                     fullWidth
                     label="eg : 2 ,4 ,5 , 6"
@@ -152,12 +172,12 @@ const Step4Component = () => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={casualLeaveChecked}
+                      checked={casualLeaveVisible}
                       onChange={handleCasualLeaveChange}
                     />
                   }
                 />
-                {casualLeaveChecked && (
+                {casualLeaveVisible && (
                   <TextField
                     fullWidth
                     label="eg : 2 ,4 ,5 , 6"
@@ -181,7 +201,10 @@ const Step4Component = () => {
           }}
         >
           <Typography variant="body1">
-            Allow Late Attendance <span sx={{ color: "red" }}> *</span>
+            Allow Late Attendance{" "}
+            <span sx={{ color: "red" }}>
+              {allowLateAttendanceVisible ? " (Optional)" : " *"}
+            </span>
           </Typography>
           <Box
             sx={{
@@ -193,14 +216,15 @@ const Step4Component = () => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={allowLateAttendance}
+                  checked={allowLateAttendanceVisible}
                   onChange={handleAllowLateAttendanceChange}
                 />
               }
             />
-            {allowLateAttendance && (
+            {allowLateAttendanceVisible && (
               <div style={{ display: "flex", alignItems: "center" }}>
                 <Button
+                  sx={{ marginRight: 2 }}
                   variant="outlined"
                   onClick={() => handleWorkingHoursChange(false)}
                 >
@@ -215,6 +239,7 @@ const Step4Component = () => {
                   disabled
                 />
                 <Button
+                  sx={{ marginLeft: 2 }}
                   variant="outlined"
                   onClick={() => handleWorkingHoursChange(true)}
                 >
@@ -223,8 +248,12 @@ const Step4Component = () => {
               </div>
             )}
           </Box>
+
           <Typography variant="body1">
-            Over Time Ratio <span sx={{ color: "red" }}> *</span>
+            Over Time Ratio{" "}
+            <span sx={{ color: "red" }}>
+              {overTimeRatioVisible ? " (Optional)" : " *"}
+            </span>
           </Typography>
           <Box
             sx={{
@@ -236,12 +265,12 @@ const Step4Component = () => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={overTimeRatioChecked}
+                  checked={overTimeRatioVisible}
                   onChange={handleOverTimeRatioChange}
                 />
               }
             />
-            {overTimeRatioChecked && (
+            {overTimeRatioVisible && (
               <TextField
                 fullWidth
                 label="eg ratio : 2, 4, 5, 6"
@@ -249,6 +278,10 @@ const Step4Component = () => {
               />
             )}
           </Box>
+
+          <Button onClick={handleSubmit} variant="contained" color="primary">
+            Submit
+          </Button>
         </Box>
       </Grid>
     </Grid>

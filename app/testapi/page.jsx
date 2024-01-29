@@ -4,13 +4,13 @@ import axios from "axios";
 
 const Page = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    code: "",
-    address: "",
-    phone: "",
-    date_type: "",
-    holiday_type: "",
-    custom_holiday_file: null, // Assuming this is a file input
+    name: "sdsdsdsdsdsdsdsds",
+    code: "2",
+    address: "tinkune",
+    phone: "985632573",
+    date_type: "English",
+    holiday_type: "Custom",
+    // custom_holiday_file: null,
   });
 
   const handleInputChange = (e) => {
@@ -21,19 +21,18 @@ const Page = () => {
   const handleFileChange = (e) => {
     setFormData({ ...formData, custom_holiday_file: e.target.files[0] });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const apiUrl =
       "https://hajirappv2.an4soft.com/api/v2/employer/company/store";
+
     const token =
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZjhlYjE2ODhjNzM1Mzk1MWU5NzE5MzU1OTgxMGQ5NDNiZTgyMTZkODYyMzdkNDlkYzgxOTY4MDU2YmUyYTc5YmU1YjcxMmRiMDc0NWFhYzQiLCJpYXQiOjE3MDYyOTUwMjguMTM3ODE3LCJuYmYiOjE3MDYyOTUwMjguMTM3ODI0LCJleHAiOjE3Mzc5MTc0MjguMTM1NjQ0LCJzdWIiOiI5Iiwic2NvcGVzIjpbXX0.G6hAps94po_4TSsQPubMpYmXGpUgrsqKmnWfLn2zDgIAMhrkpODqqJKnr1tQWCTLpus2sw_0l27qY_oLuiebZLjNYTiH2CJmB7PdJVHlYf4GDCjrcCRQJAr2h0qOftlpFYSHZNqCbVfcx4LbCrM9nXgKrN4-BINLdt7gt-5PfWZftjmYYQADzghR8_M3HdsF6RPZmw0ab4j3rsv4ZESEQ3YPdZvi-i_NCZSeXaAD5ODP1PIzlrnrnxO_nrm0DZvrSqfryH9UvqKXlN6s0qOVWjOYkYIvzHYQNz186Zu8GfUFW6AVl3cy6tJk4Q_-CbTvLoC_yqiiSfj30r9XmKzXlIHLR-tc9MN2r8iXJa8naptc6B7g-3iSmo5BLZ871RFU5JXt90ZMGybBE2PjJRyE1XhHj7UHMSP5W6VQiv8zjF6wxEIP71n4QAYkp5tc3xVcRAu16ZsgkOOZJfDMD6HJL2nFTpfcSjlYOBWjA14qR6IkDC247E2YeIDJ-XkNCskqZw8ED_C6NF8YWFzcYZZ8iRiwVDgjkK8eyj0lF9Q2TO9aObzPamcMgYWX_psaKB78PAiXzelD2cITQKHl1ongq6-NR1YTkrFvfPkybwHMANzKdNF0h8pvGYlNCx_CW7T_T6R3ZU8VU-wqPVXaC8XCIZe4UcLkW5yI5aHbSiRkBS0"; // Your token
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiNDVmMGVkODAxNzAwNjBjNWYyZTBmOWI0NDkwYWU2Njg0NTIzYzczZThkNjliMDg4ZGMwNzc3Zjc4MzQwN2NhZDQ0MDUxMjA3N2EyMGIzNWUiLCJpYXQiOjE3MDY0MTQ0MDkuMDY2NzgsIm5iZiI6MTcwNjQxNDQwOS4wNjY3ODYsImV4cCI6MTczODAzNjgwOS4wNjQ3NzEsInN1YiI6IjIiLCJzY29wZXMiOltdfQ.f3PwHyWvQN0KJJpwquATJwn4LkGOl30Z5UBvCy0Zn4qooWJjIEiDCBIDNApwUO6eURuHd8v3FV7h8zQONPFEmjDiRW100kyNMC2KadS2YMr4-RLK3Tp3lG94XFzY3nq0v3ISvgBMvzmh2h0KOWo5VmVN4nHkU75nzTDBRzS4PH_08KLA_VXiSy3OBNx3OxDxiSMh1sNCshc0FHeBqrx_r5wIvg0q7TAim064fmOgPQBP1jlbL36aSQSCl3YqKxxR0ra4Udr5oMioo7pfKYgGte_QHXZ-HHYT_7LeYTi9jddWr3mPo1qfmZ_etRFi3t7NhahRFs2p6h-oeawqHIeajHU__k0iQwTcfrMdD2Xs09u9XE9MQaeBSjRO17oKJhm5E3-i7ZklpF2KGFYvdBnG56j3LuFPjhUNf5TbIGvIl-rCgWUb-_KrRpIFqnbWYXipYKIq_Dq54eZrJ0GyzcXU1oz6YD_T1FVgBHmM5quV5ScgCBtFzahL6sdugellBvTDHQyRwEEToKaii_f0h1q9DYxgklgEVqd29p07oClKFlLHLzYw1G4LtL3rJ_oirYstQnv3AjilT8dj2iEf6NnYqwvIPL_RpjD8LQIEbAqBv57dN5ftnqFfHKMGu5T9P2USu2uS7UPYDfGDWmsdWtt6_tFu2OiAGRcUkh0ZwH6WWnY";
 
     const myHeaders = {
       Accept: "application/json",
       Authorization: token,
-      // Add other headers as needed
     };
 
     const formdata = new FormData();
@@ -46,8 +45,6 @@ const Page = () => {
         headers: myHeaders,
       });
       console.log(response.data);
-
-      // You can handle the response as needed, e.g., show a success message, redirect, etc.
     } catch (error) {
       console.error("Error during Axios request:", error.message);
     }
@@ -114,6 +111,8 @@ const Page = () => {
 
         <button type="submit">Submit</button>
       </form>
+
+      {/* create new section where i can get data from backen */}
     </div>
   );
 };
