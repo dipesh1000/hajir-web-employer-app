@@ -2,21 +2,35 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import {
-  Button,
   FormControl,
-  FormControlLabel,
   Grid,
   InputLabel,
   MenuItem,
-  Radio,
-  RadioGroup,
   Select,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import Link from "next/link";
+import * as yup from "yup";
+import { useFormik } from "formik";
 
 const Step1Component = () => {
+  const validationSchema = yup.object({
+    staffCode: yup
+      .string()
+      .required("Staff Code is required")
+      .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field"),
+    title: yup.string().required("Title is required"),
+    mobileNumber: yup.string().required("Mobile Number is required"),
+    designation: yup.string().required("Designation is required"),
+    marriageStatus: yup.string().required("Marriage Status is required"),
+    fullName: yup.string().required("Full Name is required"),
+    confirmPhoneNumber: yup
+      .string()
+      .required("Confirm Phone Number is required")
+      .oneOf([yup.ref("mobileNumber"), null], "Phone Numbers must match"),
+    department: yup.string().required("Department is required"),
+  });
+
   const [title, setTitle] = useState("Mr");
   const [marriageStatus, setMarriageStatus] = useState("Married");
   const [department, setDepartment] = useState("");
@@ -28,9 +42,28 @@ const Step1Component = () => {
   const handleChangeMarriageStatus = (event) => {
     setMarriageStatus(event.target.value);
   };
+
   const handleChangeDepartment = (event) => {
     setDepartment(event.target.value);
   };
+
+  const formik = useFormik({
+    initialValues: {
+      staffCode: "",
+      title: "Mr",
+      mobileNumber: "",
+      designation: "",
+      marriageStatus: "Married",
+      fullName: "",
+      confirmPhoneNumber: "",
+      department: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      // Handle form submission
+      console.log(values);
+    },
+  });
 
   return (
     <Grid container spacing={2}>
@@ -49,41 +82,64 @@ const Step1Component = () => {
             Staff Code <span sx={{ color: "red" }}> *</span>
           </Typography>
           <TextField
-            label="Staff Code "
+            label="Staff Code"
             variant="outlined"
             fullWidth
             margin="normal"
-            // Add any props as needed
+            name="staffCode"
+            {...formik.getFieldProps("staffCode")}
+            error={formik.touched.staffCode && Boolean(formik.errors.staffCode)}
+            helperText={formik.touched.staffCode && formik.errors.staffCode}
           />
+
           <br />
 
           {/* Candidate Title mr and mrs  */}
-
           <FormControl fullWidth>
             <InputLabel
               htmlFor="demo-simple-select-label"
-              sx={{ marginBottom: 0 }}
+              // sx={{ marginBottom: 0 }}
             >
               Title <span sx={{ color: "red" }}> *</span>
             </InputLabel>{" "}
-            <Select value={title} label="Title" onChange={handleChangeTitle}>
+            <Select
+              value={formik.values.title}
+              label="Title"
+              onChange={formik.handleChange}
+              name="title"
+            >
               <MenuItem value="Mr">Mr</MenuItem>
               <MenuItem value="Mrs">Mrs</MenuItem>
             </Select>
           </FormControl>
+          <br />
           <TextField
             label="Mobile Number "
             variant="outlined"
             fullWidth
             margin="normal"
-            // Add any props as needed
+            name="mobileNumber"
+            {...formik.getFieldProps("mobileNumber")}
+            error={
+              formik.touched.mobileNumber && Boolean(formik.errors.mobileNumber)
+            }
+            helperText={
+              formik.touched.mobileNumber && formik.errors.mobileNumber
+            }
           />
+          <br />
+
           <TextField
             label="Designation "
             variant="outlined"
             fullWidth
             margin="normal"
-            // Add any props as needed
+            name="designation"
+            {...formik.getFieldProps("designation")}
+            error={
+              formik.touched.designation && Boolean(formik.errors.designation)
+            }
+            helperText={formik.touched.designation && formik.errors.designation}
           />
           <br />
           <FormControl fullWidth>
@@ -94,9 +150,10 @@ const Step1Component = () => {
               Marriage Status <span sx={{ color: "red" }}> *</span>
             </InputLabel>{" "}
             <Select
-              value={marriageStatus}
+              value={formik.values.marriageStatus}
               label="Marriage Status"
-              onChange={handleChangeMarriageStatus}
+              onChange={formik.handleChange}
+              name="marriageStatus"
             >
               <MenuItem value="Married">Married</MenuItem>
               <MenuItem value="Unmarried">Unmarried</MenuItem>
@@ -115,19 +172,33 @@ const Step1Component = () => {
             mt: 16,
           }}
         >
+          {/* Full Name */}
           <TextField
             label="Full Name "
             variant="outlined"
             fullWidth
             margin="normal"
-            // Add any props as needed
+            name="fullName"
+            {...formik.getFieldProps("fullName")}
+            error={formik.touched.fullName && Boolean(formik.errors.fullName)}
+            helperText={formik.touched.fullName && formik.errors.fullName}
           />
+          {/* Confirm Phone Number */}
           <TextField
             label="Confirm Phone Number "
             variant="outlined"
             fullWidth
             margin="normal"
-            // Add any props as needed
+            name="confirmPhoneNumber"
+            {...formik.getFieldProps("confirmPhoneNumber")}
+            error={
+              formik.touched.confirmPhoneNumber &&
+              Boolean(formik.errors.confirmPhoneNumber)
+            }
+            helperText={
+              formik.touched.confirmPhoneNumber &&
+              formik.errors.confirmPhoneNumber
+            }
           />
           <FormControl fullWidth>
             <InputLabel
@@ -137,9 +208,10 @@ const Step1Component = () => {
               Department <span sx={{ color: "red" }}> *</span>
             </InputLabel>{" "}
             <Select
-              value={department}
+              value={formik.values.department}
               label="Department"
-              onChange={handleChangeDepartment}
+              onChange={formik.handleChange}
+              name="department"
             >
               <MenuItem value="IT Department">IT Department</MenuItem>
               <MenuItem value="Finance Department">Finance Department</MenuItem>
