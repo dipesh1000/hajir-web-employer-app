@@ -1,65 +1,47 @@
-"use client";
-import React, { useState } from "react";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import Image from "next/image";
-import Button from "@mui/material/Button";
-import * as yup from "yup";
-import { TextField } from "@mui/material";
-import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
-import ScrollDialog from "@/components/Auth/ScrollDialog";
-import useMediaQuery from "@mui/material/useMediaQuery";
-
-// Styles for components
-const styles = {
-  container: {
-    flexGrow: 1,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    display: "block",
-    maxWidth: "100%",
-    // Hide the image on screens smaller than 600px
-    "@media (max-width: 600px)": {
-      display: "none",
-    },
-  },
-};
+'use client';
+import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import Image from 'next/image';
+import Button from '@mui/material/Button';
+import * as yup from 'yup';
+import { TextField, useMediaQuery } from '@mui/material';
+import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
+import ScrollDialog from '@/components/Auth/ScrollDialog';
+import { postRequest } from '@/services/ApiRequestService';
 
 // Styled components
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
   padding: theme.spacing(1),
-  textAlign: "center",
+  textAlign: 'center',
   color: theme.palette.text.secondary,
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "100%",
-  boxShadow: "none",
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100%',
+  boxShadow: 'none',
   elevation: 0,
-  background: "transparent",
+  background: 'transparent',
 }));
 
-const LogoContainer = styled("div")({
-  marginBottom: "16px",
+const LogoContainer = styled('div')({
+  marginBottom: '16px',
 });
 
 // Validation schema
 const validationSchema = yup.object({
   phone: yup
     .string()
-    .required("Phone number is required")
+    .required('Phone number is required')
     .matches(
       /^\+?\d{10,}$/,
-      "Invalid phone number. Must be at least 10 digits"
+      'Invalid phone number. Must be at least 10 digits'
     ),
 });
 
@@ -78,11 +60,11 @@ export default function Signin() {
   };
 
   // Use media query hook
-  const isScreenSmall = useMediaQuery("(max-width:900px)");
+  const isScreenSmall = useMediaQuery('(max-width:900px)');
 
   const formik = useFormik({
     initialValues: {
-      phone: "9808426215",
+      phone: '9808426215',
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -92,40 +74,35 @@ export default function Signin() {
         }
 
         setButtonClicked(true);
-
-        const apiResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/employer/register`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(values),
-          }
-        );
+        const apiResponse = await postRequest(`/employer/register`, values);
 
         if (!apiResponse.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error('Network response was not ok');
         }
 
         const data = await apiResponse.json();
 
-        if (data.status === "success") {
+        if (data.status === 'success') {
           alert(`Successfully Registered.  \n Your OTP is: ${data.data.otp}`);
-          console.log("OTP:values", data.data.otp);
-          console.log("OTP:values", data.data.token);
           router.push(`/otp?phone=${values.phone}&otp=${data.data.otp}`);
         } else {
-          console.error("Registration failed. Message:", data.message);
+          console.error('Registration failed. Message:', data.message);
         }
       } catch (error) {
-        console.error("Error during API request:", error.message);
+        console.error('Error during API request:', error.message);
       }
     },
   });
 
   return (
-    <Box sx={styles.container}>
+    <Box
+      sx={{
+        flexGrow: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           {/* Apply styles to the image */}
@@ -135,8 +112,8 @@ export default function Signin() {
             height={1000}
             alt="Logo"
             style={{
-              ...styles.image,
-              display: isScreenSmall ? "none" : "block",
+              // ...styles.image,
+              display: isScreenSmall ? 'none' : 'block',
             }}
           />
         </Grid>
@@ -147,12 +124,12 @@ export default function Signin() {
             </LogoContainer>
             <div>
               <h2>Authentication</h2>
-              <p style={{ whiteSpace: "pre-line" }}>
+              <p style={{ whiteSpace: 'pre-line' }}>
                 Salary calculation made easy, track your
                 <br />
                 staffs overtime, leave day, late day, and
                 <br />
-                live daily wages interactive reports.
+                live daily wages interactive reportss.
               </p>
               <Image
                 src="/auth/login-min.png"
@@ -165,10 +142,10 @@ export default function Signin() {
             <Box
               component="form"
               sx={{
-                "& > :not(style)": { m: 1 },
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                '& > :not(style)': { m: 1 },
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
               }}
               noValidate
               autoComplete="off"
@@ -196,14 +173,14 @@ export default function Signin() {
               </Button>
             </Box>
 
-            <p style={{ whiteSpace: "pre-line", marginTop: "8px" }}>
+            <p style={{ whiteSpace: 'pre-line', marginTop: '8px' }}>
               We will send you a one-time password on this mobile number
             </p>
 
-            <p style={{ whiteSpace: "pre-line" }}>
-              I have read and agree to the{" "}
+            <p style={{ whiteSpace: 'pre-line' }}>
+              I have read and agree to the{' '}
               <span
-                style={{ textDecoration: "underline", cursor: "pointer" }}
+                style={{ textDecoration: 'underline', cursor: 'pointer' }}
                 onClick={handleOpen}
               >
                 Terms & Services

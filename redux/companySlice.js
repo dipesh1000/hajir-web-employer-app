@@ -1,7 +1,7 @@
 // companySlice.js
-import { createSlice } from "@reduxjs/toolkit";
-import { nanoid } from "nanoid";
-import { addEmployee } from "./employeeSlice";
+import { createSlice } from '@reduxjs/toolkit';
+import { nanoid } from 'nanoid';
+import { addEmployee } from './employeeSlice';
 
 const initialState = {
   companies: [],
@@ -13,7 +13,7 @@ const initialState = {
 };
 
 const companySlice = createSlice({
-  name: "company",
+  name: 'company',
   initialState,
   reducers: {
     addCompany: (state, action) => {
@@ -29,7 +29,7 @@ const companySlice = createSlice({
       const company = state.companies.find((c) => c.id === companyId);
 
       if (company) {
-        company.status = company.status === "active" ? "inactive" : "active";
+        company.status = company.status === 'active' ? 'inactive' : 'active';
       }
     },
     deleteCompany: (state, action) => {
@@ -60,7 +60,7 @@ const companySlice = createSlice({
 
       if (company) {
         const employeeId = nanoid(); // Generate employeeId
-        console.log("New employeeId:", employeeId); // Log employeeId
+        console.log('New employeeId:', employeeId); // Log employeeId
 
         const updatedEmployee = {
           id: employeeId,
@@ -68,7 +68,7 @@ const companySlice = createSlice({
         };
 
         // Log the updated employee object
-        console.log("Updated Employee:", updatedEmployee);
+        console.log('Updated Employee:', updatedEmployee);
 
         // Add the employee to the company
         company.employees.push(updatedEmployee);
@@ -102,6 +102,12 @@ const companySlice = createSlice({
     });
   },
 });
+
+// export const storeCompany = (payload) => async (dispatch) => {
+//   const { data } = await myApi.post('/auth/v1/login/', payload);
+//   localStorage.setItem('user-Info', JSON.stringify(data.data));
+//   dispatch(slice.actions.login(data.data));
+// };
 
 export const {
   addCompany,
