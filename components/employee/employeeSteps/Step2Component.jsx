@@ -154,7 +154,6 @@ const Step2Component = () => {
             </RadioGroup>
           </FormControl>
 
-          {/* Conditional rendering based on the selected salary type */}
           {formik.values.salaryType === "fixed" ? (
             <TextField
               label="Salary Amount"
@@ -280,9 +279,7 @@ const Step2Component = () => {
             <Button
               variant="outlined"
               onClick={() => handleBreakTimeChange(false)}
-            >
-              -
-            </Button>
+            ></Button>
             <TextField
               label="Break Time"
               variant="outlined"
