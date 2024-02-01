@@ -74,17 +74,17 @@ const Step1Component = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "start",
-            mt: 2,
+            mt: 1,
           }}
         >
           {/* Staff code  */}
-          <Typography variant="body1">
+          <div>
             Staff Code <span sx={{ color: "red" }}> *</span>
-          </Typography>
+          </div>
           <TextField
             label="Staff Code"
             variant="outlined"
-            fullWidth
+            sx={{ width: "700px" }}
             margin="normal"
             name="staffCode"
             {...formik.getFieldProps("staffCode")}
@@ -94,29 +94,39 @@ const Step1Component = () => {
 
           <br />
 
-          {/* Candidate Title mr and mrs  */}
-          <FormControl fullWidth>
-            <InputLabel
-              htmlFor="demo-simple-select-label"
-              // sx={{ marginBottom: 0 }}
-            >
-              Title <span sx={{ color: "red" }}> *</span>
-            </InputLabel>{" "}
-            <Select
-              value={formik.values.title}
-              label="Title"
-              onChange={formik.handleChange}
-              name="title"
-            >
-              <MenuItem value="Mr">Mr</MenuItem>
-              <MenuItem value="Mrs">Mrs</MenuItem>
-            </Select>
-          </FormControl>
+          <div style={{ display: "flex", alignItems: "baseline" }}>
+            <FormControl>
+              <InputLabel htmlFor="demo-simple-select-label">
+                Title <span style={{ color: "red" }}> *</span>
+              </InputLabel>{" "}
+              <Select
+                value={formik.values.title}
+                label="Title"
+                onChange={formik.handleChange}
+                name="title"
+              >
+                <MenuItem value="Mr">Mr</MenuItem>
+                <MenuItem value="Mrs">Mrs</MenuItem>
+              </Select>
+            </FormControl>
+
+            <TextField
+              label="Full Name"
+              variant="outlined"
+              sx={{ marginLeft: 3, width: "610px", marginTop: 0.1 }}
+              margin="normal"
+              name="fullName"
+              {...formik.getFieldProps("fullName")}
+              error={formik.touched.fullName && Boolean(formik.errors.fullName)}
+              helperText={formik.touched.fullName && formik.errors.fullName}
+            />
+          </div>
+
           <br />
           <TextField
-            label="Mobile Number "
+            label="Phone Number "
             variant="outlined"
-            fullWidth
+            sx={{ width: "700px", marginTop: 0.1 }}
             margin="normal"
             name="mobileNumber"
             {...formik.getFieldProps("mobileNumber")}
@@ -132,7 +142,7 @@ const Step1Component = () => {
           <TextField
             label="Designation "
             variant="outlined"
-            fullWidth
+            sx={{ width: "700px", marginTop: 0.1 }}
             margin="normal"
             name="designation"
             {...formik.getFieldProps("designation")}
@@ -142,7 +152,7 @@ const Step1Component = () => {
             helperText={formik.touched.designation && formik.errors.designation}
           />
           <br />
-          <FormControl fullWidth>
+          <FormControl sx={{ width: "700px", marginTop: 0.1 }}>
             <InputLabel
               htmlFor="demo-simple-select-label"
               sx={{ marginBottom: 0 }}
@@ -169,25 +179,17 @@ const Step1Component = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "start",
-            mt: 16,
+            mt: 20,
           }}
         >
           {/* Full Name */}
-          <TextField
-            label="Full Name "
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            name="fullName"
-            {...formik.getFieldProps("fullName")}
-            error={formik.touched.fullName && Boolean(formik.errors.fullName)}
-            helperText={formik.touched.fullName && formik.errors.fullName}
-          />
+
           {/* Confirm Phone Number */}
           <TextField
             label="Confirm Phone Number "
             variant="outlined"
-            fullWidth
+            FormControl
+            sx={{ width: "700px", marginTop: 8.4 }}
             margin="normal"
             name="confirmPhoneNumber"
             {...formik.getFieldProps("confirmPhoneNumber")}
@@ -200,7 +202,7 @@ const Step1Component = () => {
               formik.errors.confirmPhoneNumber
             }
           />
-          <FormControl fullWidth>
+          <FormControl sx={{ width: "700px", marginTop: 2.8 }}>
             <InputLabel
               htmlFor="demo-simple-select-label"
               sx={{ marginBottom: 0 }}

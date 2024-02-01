@@ -101,22 +101,29 @@ const Step2Component = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "start",
-            mt: 2,
+            mt: 1,
           }}
         >
           <Typography variant="body1">
             Salary Type <span sx={{ color: "red" }}> *</span>
           </Typography>
 
-          <FormControl sx={{ width: "500px", mt: 1 }}>
+          <FormControl sx={{ width: "700px", marginTop: 2 }}>
+            <InputLabel
+              htmlFor="salary-type"
+              sx={{ color: "black", marginBottom: 0 }}
+            >
+              Salary Type
+            </InputLabel>
             <Select
               value={formik.values.salaryType}
               label="Salary Type"
+              name="salaryType"
               onChange={(e) => {
                 formik.handleChange(e);
                 handleSalaryTypeChange(e);
               }}
-              name="salaryType"
+              id="salary-type"
             >
               <MenuItem value="Daily">Daily</MenuItem>
               <MenuItem value="Weekly">Weekly</MenuItem>
@@ -124,9 +131,7 @@ const Step2Component = () => {
               <MenuItem value="Yearly">Yearly</MenuItem>
             </Select>
           </FormControl>
-          <br />
-
-          <Typography variant="body1">
+          <Typography sx={{ marginTop: 2 }} variant="body1">
             Salary <span sx={{ color: "red" }}> *</span>
           </Typography>
           {/* Radio buttons for "fixed" and "breakdown" */}
@@ -134,6 +139,7 @@ const Step2Component = () => {
             <RadioGroup
               row
               aria-label="salary-type"
+              sx={{ width: "700px", marginTop: 1 }}
               name="salaryType"
               value={formik.values.salaryType}
               onChange={(e) => {
@@ -159,7 +165,7 @@ const Step2Component = () => {
               label="Salary Amount"
               variant="outlined"
               margin="normal"
-              sx={{ width: "500px" }}
+              sx={{ width: "700px" }}
               name="basicSalary"
               {...formik.getFieldProps("salaryAmount")}
               error={
@@ -175,7 +181,7 @@ const Step2Component = () => {
               <TextField
                 label="Basic Salary"
                 variant="outlined"
-                sx={{ width: "500px" }}
+                sx={{ width: "700px" }}
                 margin="normal"
                 name="basicSalary"
                 {...formik.getFieldProps("basicSalary")}
@@ -190,7 +196,7 @@ const Step2Component = () => {
               <TextField
                 label="Allowance"
                 variant="outlined"
-                sx={{ width: "500px" }}
+                sx={{ width: "700px" }}
                 margin="normal"
                 name="allowance"
                 {...formik.getFieldProps("allowance")}
@@ -211,13 +217,13 @@ const Step2Component = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "start",
-            mt: 2,
+            mt: 1,
           }}
         >
           <Typography variant="body1">
             Working Hours <span sx={{ color: "red" }}> *</span>
           </Typography>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Button
               variant="outlined"
               onClick={() => handleWorkingHoursChange(false)}
@@ -228,10 +234,8 @@ const Step2Component = () => {
               label="Working Hours"
               variant="outlined"
               sx={{
-                width: "250px",
-                marginRight: 2,
-                marginLeft: 2,
-                // textAlign: "center",
+                width: "333px",
+                textAlign: "center",
               }}
               margin="normal"
               name="workingHours"
@@ -249,24 +253,27 @@ const Step2Component = () => {
           <Typography variant="body1">
             Duty Time <span sx={{ color: "red" }}> *</span>
           </Typography>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <TextField
               label="Duty Time"
               variant="outlined"
               margin="normal"
               name="dutyTime"
               {...formik.getFieldProps("dutyTime")}
-              error={formik.touched.dutyTime && Boolean(formik.errors.dutyTime)}
-              helperText={formik.touched.dutyTime && formik.errors.dutyTime}
+              sx={{
+                width: "375px",
+                textAlign: "center",
+              }}
             />
-            <FormControl>
-              <InputLabel htmlFor="ampm">AM/PM</InputLabel>
+            <FormControl sx={{ width: "95px", marginTop: 1 }}>
+              <InputLabel htmlFor="am">AM/PM</InputLabel>
               <Select
                 value={formik.values.ampm}
+                label="AM/PM<"
                 onChange={(e) => formik.handleChange(e)}
                 name="ampm"
               >
-                <MenuItem value="Am">Am</MenuItem>
+                <MenuItem value="am">Am</MenuItem>
                 <MenuItem value="Pm">Pm</MenuItem>
               </Select>
             </FormControl>
@@ -275,24 +282,24 @@ const Step2Component = () => {
           <Typography variant="body1">
             Break Time <span sx={{ color: "red" }}> *</span>
           </Typography>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Button
               variant="outlined"
               onClick={() => handleBreakTimeChange(false)}
-            ></Button>
+            >
+              -
+            </Button>
             <TextField
               label="Break Time"
               variant="outlined"
-              fullWidth
+              sx={{
+                width: "333px",
+                textAlign: "center",
+              }}
               margin="normal"
               name="breakTime"
-              value={formik.values.breakTime}
-              onChange={formik.handleChange}
-              error={
-                formik.touched.breakTime && Boolean(formik.errors.breakTime)
-              }
-              helperText={formik.touched.breakTime && formik.errors.breakTime}
-              disabled
+              inputProps={{ style: { textAlign: "center" } }}
+              {...formik.getFieldProps("breakTime")}
             />
             <Button
               variant="outlined"
@@ -306,7 +313,7 @@ const Step2Component = () => {
             Probation Period <span sx={{ color: "red" }}> *</span>
           </Typography>
 
-          <FormControl fullWidth>
+          <FormControl sx={{ width: "482px" }}>
             <Select
               value={formik.values.probationPeriod}
               label="Probation Period "

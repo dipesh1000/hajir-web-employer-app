@@ -28,13 +28,13 @@ export default function DatePick() {
           width: "100%",
           height: "100%",
           display: "flex",
-          justifyContent: "center",
+          // justifyContent: "center",
           position: "relative",
         }}
       >
-        <DemoItem label="DatePicker">
+        <DemoItem>
           <DatePicker
-            sx={{ width: 260 }}
+            sx={{ width: 605 }}
             slotProps={{
               field: { clearable: true, onClear: () => setCleared(true) },
             }}

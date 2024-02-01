@@ -6,6 +6,8 @@ import {
   Checkbox,
   FormControlLabel,
   Grid,
+  Radio,
+  RadioGroup,
   TextField,
   Typography,
 } from "@mui/material";
@@ -13,12 +15,21 @@ import DatePick from "./DatePick";
 
 const Step4Component = () => {
   const [workingHours, setWorkingHours] = useState("08:00");
+  const [overtimeRatio, setOvertimeRatio] = useState(""); // Add this line
+  const [allowAccessNetwork, setAllowAccessNetwork] = useState("all"); // Add this line
+  const handleAccessNetworkChange = (event) => {
+    setAllowAccessNetwork(event.target.value);
+  };
+  const handleOvertimeRatioChange = (event) => {
+    setOvertimeRatio(event.target.value);
+  };
 
   const handleWorkingHoursChange = (increase) => {
     const [hours, minutes] = workingHours.split(":").map(Number);
     const newMinutes = increase ? minutes + 30 : minutes - 30;
     const newHours = newMinutes < 0 ? hours - 1 : hours + 1;
     const formattedHours = String(newHours).padStart(2, "0");
+
     const formattedMinutes = String(
       newMinutes < 0 ? 60 + newMinutes : newMinutes
     ).padStart(2, "0");
@@ -49,16 +60,16 @@ const Step4Component = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "start",
-            mt: 2,
+            mt: 1,
           }}
         >
           <Typography variant="body1">
             Joining Date <span sx={{ color: "red" }}> *</span>
           </Typography>
-          <DatePick style={{}} />
+          <DatePick style={{ marginLeft: "23px" }} />
 
           {/* Overtime Checkbox Container */}
-          <Typography variant="body1">
+          <Typography sx={{ marginTop: 2 }} variant="body1">
             Overtime Hours <span sx={{ color: "red" }}>(Optional)</span>
           </Typography>
           <Box
@@ -69,7 +80,10 @@ const Step4Component = () => {
             }}
           >
             <FormControlLabel control={<Checkbox checked={true} />} />
-            <TextField fullWidth label="eg : 2 ,4 ,5 , 6" sx={{ ml: 2 }} />
+            <TextField
+              sx={{ width: "540px", ml: 2 }}
+              label="eg : 2 ,4 ,5 , 6"
+            />
           </Box>
 
           {/* Sick Leave and Casual Leave Container */}
@@ -77,7 +91,8 @@ const Step4Component = () => {
             sx={{
               display: "flex",
               flexDirection: "row",
-              width: "100%", // Full width
+              marginTop: 2,
+              width: "605px", // Full width
             }}
           >
             {/* Sick Leave Container */}
@@ -133,7 +148,7 @@ const Step4Component = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "start",
-            mt: 2,
+            mt: 1,
           }}
         >
           <Typography variant="body1">
@@ -144,10 +159,11 @@ const Step4Component = () => {
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
+              gap: "10px",
             }}
           >
             <FormControlLabel control={<Checkbox checked={true} />} />
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <Button
                 sx={{ marginRight: 2 }}
                 variant="outlined"
@@ -173,22 +189,53 @@ const Step4Component = () => {
             </div>
           </Box>
           <Typography variant="body1">
-            Over Time Ratio <span sx={{ color: "red" }}>*</span>
+            Over Time Ratio <span style={{ color: "red" }}>*</span>
+          </Typography>
+          <Box>
+            <TextField
+              label="eg ratio: 2, 4, 5, 6"
+              value={overtimeRatio}
+              onChange={handleOvertimeRatioChange}
+              sx={{ mt: 2, mb: 2 }}
+            />
+          </Box>
+          <Typography variant="body1">
+            Allow access Network <span style={{ color: "red" }}>*</span>
           </Typography>
           <Box
             sx={{
               display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
+              justifyContent: "space-between",
+              width: "470px",
+              gap: "10px",
+              marginTop: 2,
             }}
           >
-            <FormControlLabel control={<Checkbox checked={true} />} />
-            <TextField fullWidth label="eg ratio : 2, 4, 5, 6" sx={{ ml: 2 }} />
+            <Box
+              sx={{
+                border: "1px solid #ccc", // Border style
+                borderRadius: "5px", // Border radius
+                padding: "10px", // Padding
+                width: "50%", // 48% width to accommodate the border width
+              }}
+            >
+              <FormControlLabel value="all" control={<Radio />} label="All" />
+            </Box>
+            <Box
+              sx={{
+                border: "1px solid #ccc", // Border style
+                borderRadius: "5px", // Border radius
+                padding: "10px", // Padding
+                width: "50%", // 48% width to accommodate the border width
+              }}
+            >
+              <FormControlLabel
+                value="orCode"
+                control={<Radio />}
+                label="OR Code"
+              />
+            </Box>
           </Box>
-
-          <Button onClick={handleSubmit} variant="contained" color="primary">
-            Submit
-          </Button>
         </Box>
       </Grid>
     </Grid>
