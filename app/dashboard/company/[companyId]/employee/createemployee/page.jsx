@@ -48,6 +48,7 @@ const HorizontalLinearStepper = () => {
         display: "flex",
         flexDirection: "column",
         position: "relative",
+        // backgroundColor: "#F7F7F9",
       }}
     >
       <HeaderEmployeeSteps />

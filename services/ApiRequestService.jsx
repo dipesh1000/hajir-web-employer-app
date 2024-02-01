@@ -1,7 +1,6 @@
 const myHeaders = {
   Accept: 'application/json',
   // Authorization: token,
-  // Add other headers as needed
 };
 
 const getToken = () => {
@@ -20,7 +19,7 @@ export const postRequest = (url, body) => {
       'Content-Type': 'application/json',
       Authorization: getToken(),
     },
-    body: JSON.stringify(body),
+    body: body,
   });
 };
 

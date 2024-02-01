@@ -31,6 +31,7 @@ const CustomRadioGroup = ({
             borderRadius: "4px",
             padding: "16px",
             display: "flex",
+            width: "330px",
             alignItems: "center",
             paddingRight: "50px",
             paddingLeft: "50px",
