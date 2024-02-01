@@ -14,7 +14,6 @@ import {
   Radio,
   Grid,
 } from '@mui/material';
-import { addCompany } from '@/redux/companySlice';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import CustomRadioGroup from '@/components/company/createcompany/RadioButton';
@@ -23,6 +22,7 @@ import InputField from '@/components/common/Fields/InputField';
 import RadioField from '@/components/common/Fields/RadioField';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
+import { storeCompany } from '@/redux/companySlice';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -79,7 +79,7 @@ const CreateCompany = () => {
       formdata.append('date_type', values.date_type);
       formdata.append('holiday_type', values.holiday_type);
       formdata.append('custom_holiday_file', values.custom_holiday_file);
-      dispatch(addCompany(formdata));
+      dispatch(storeCompany(formdata));
       // alert('Company added successfully!');
       // resetForm();
       // router.push('/dashboard/company');
@@ -115,7 +115,7 @@ const CreateCompany = () => {
       <form
         onSubmit={formik.handleSubmit}
         style={{ marginTop: '20px' }}
-        enctype="multipart/form-data"
+        encType="multipart/form-data"
       >
         <Grid container spacing={2}>
           {/* Left Column */}

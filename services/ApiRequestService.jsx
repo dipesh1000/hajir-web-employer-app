@@ -4,11 +4,21 @@ const myHeaders = {
   // Add other headers as needed
 };
 
+const getToken = () => {
+  let token = JSON.parse(localStorage.getItem('token'));
+  if (token) {
+    return `Bearer ${token}`;
+  } else {
+    return null;
+  }
+};
+
 export const postRequest = (url, body) => {
   return fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: getToken(),
     },
     body: JSON.stringify(body),
   });

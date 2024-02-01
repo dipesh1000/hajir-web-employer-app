@@ -2,6 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
 import { addEmployee } from './employeeSlice';
+import { postRequest } from '@/services/ApiRequestService';
 
 const initialState = {
   companies: [],
@@ -103,14 +104,15 @@ const companySlice = createSlice({
   },
 });
 
-// export const storeCompany = (payload) => async (dispatch) => {
-//   const { data } = await myApi.post('/auth/v1/login/', payload);
-//   localStorage.setItem('user-Info', JSON.stringify(data.data));
-//   dispatch(slice.actions.login(data.data));
-// };
+export const { reducer } = companySlice;
+
+export const storeCompany = (payload) => async (dispatch) => {
+  console.log(payload, 'from paylaod in line 110');
+  const { data } = await postRequest('/employer/company/store/', payload);
+  dispatch(slice.actions.addCompany(data.data));
+};
 
 export const {
-  addCompany,
   toggleActiveState,
   deleteCompany,
   editCompany,
