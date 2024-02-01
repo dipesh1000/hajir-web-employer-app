@@ -19,7 +19,8 @@ export default function MainDashboard() {
         }
       }
     >
-      {hasCompanies ? <CompanyFormFirst /> : <FirstPageCompany />}
+      <CompanyFormFirst />
+      {/* {hasCompanies ? <CompanyFormFirst /> : <FirstPageCompany />} */}
     </div>
   );
 }

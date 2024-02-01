@@ -64,9 +64,7 @@ const CreateCompany = () => {
   const formik = useFormik({
     initialValues: {
       name: "asa",
-      code: "1",
-      address: "tinkune",
-      phone: "985632573",
+      code: "0",
       date_type: "English",
       holiday_type: "Custom",
       custom_holiday_file: null,
@@ -76,8 +74,6 @@ const CreateCompany = () => {
       const formdata = new FormData();
       formdata.append("name", values.name);
       formdata.append("code", values.code);
-      formdata.append("address", values.address);
-      formdata.append("phone", values.phone);
       formdata.append("date_type", values.date_type);
       formdata.append("holiday_type", values.holiday_type);
       formdata.append("custom_holiday_file", values.custom_holiday_file);
@@ -90,6 +86,7 @@ const CreateCompany = () => {
         );
 
         console.log("Response Status:", response.status);
+        console.log("form data:", formdata);
 
         if (response.ok) {
           const responseData = await response.json();
@@ -158,12 +155,9 @@ const CreateCompany = () => {
                 name="name"
                 margin="normal"
                 {...formik.getFieldProps("name")}
-                // error={
-                //   (formik.touched.name && Boolean(formik.errors.name)) ||
-                //   "Add Company Name"
-                // }
                 helperText={formik.touched.name && formik.errors.name}
               />
+
               <Typography
                 variant="body1"
                 sx={{ marginTop: 1.6, marginBottom: 2 }}
@@ -177,12 +171,12 @@ const CreateCompany = () => {
                 // onChange={(value) => formik.setFieldValue("code", value)}
                 options={[
                   {
-                    value: "auto",
+                    value: "0",
                     label: "Auto",
                     description: "E.g.: R001, R002, ROO3 ",
                   },
                   {
-                    value: "custom",
+                    value: "1",
                     label: "Custom",
                     description: "E.g.: 021, 022 or 0100, 0101 ",
                   },
