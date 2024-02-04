@@ -1,6 +1,6 @@
+// Import the necessary dependencies
 "use client";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
   Table,
   TableBody,
@@ -9,42 +9,53 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   IconButton,
   Box,
-  Tooltip,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import CheckIcon from "@mui/icons-material/Check";
-import BlockIcon from "@mui/icons-material/Block";
-import Link from "next/link";
-import { toggleActiveState, deleteCompany } from "@/redux/companySlice";
-import EditCompanyForm from "@/components/company/EditCompanyForm";
-import { useRouter } from "next/navigation";
 import {
-  useGetEmployerCompaniesQuery,
   useGetActiveCompanyQuery,
+  useGetEmployerCompaniesQuery,
   useGetInactiveCompanyQuery,
 } from "@/services/api";
 
-const CompanyTable = ({ companies, statusFilter = {} }) => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+const CompanyTable = ({ statusFilter }) => {
+  // Use the custom hooks to fetch data
   const { data: companiesData, isLoading } = useGetEmployerCompaniesQuery();
+  const { data: activeCompaniesData, isLoading: activeLoading } =
+    useGetActiveCompanyQuery();
+  const { data: inactiveCompaniesData, isLoading: inactiveLoading } =
+    useGetInactiveCompanyQuery();
 
-  const activeCompanies = companiesData?.data?.active_companies || [];
-  const inactiveCompanies = companiesData?.data?.inactive_companies || [];
-  const allCompanies = [...activeCompanies, ...inactiveCompanies];
-  console.log(allCompanies);
-  console.log(statusFilter);
-  console.log(activeCompanies);
-  console.log(inactiveCompanies);
+  // Assuming companiesData is an array of companies, modify the structure accordingly
+  const allCompanies = companiesData?.data || [];
+
+  // Assuming activeCompaniesData and inactiveCompaniesData are arrays of companies, modify the structure accordingly
+  // const activeCompanies = activeCompaniesData?.data?.active_companies || [];
+  // const inactiveCompanies =
+  //   inactiveCompaniesData?.data?.inactive_companies || [];
+
+  // Define filteredCompanies here
+  // let filteredCompanies = [];
+
+  // if (statusFilter === "active") {
+  //   filteredCompanies = activeCompanies;
+  // } else if (statusFilter === "inactive") {
+  //   filteredCompanies = inactiveCompanies;
+  // } else {
+  //   // "All" companies
+  //   filteredCompanies = allCompanies;
+  // }
+
+  // Ensure filteredCompanies is always an array
+  // filteredCompanies = Array.isArray(filteredCompanies)
+  //   ? filteredCompanies
+  //   : [filteredCompanies];
+
+  console.log("All Companies:", allCompanies);
+  console.log("Status Filter:", statusFilter);
+  console.log("Filtered Companies:", filteredCompanies);
+  console.log("from api endpoint", activeCompaniesData);
+  console.log("from api endpoint", activeCompaniesData);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -60,18 +71,33 @@ const CompanyTable = ({ companies, statusFilter = {} }) => {
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
-          {/* <TableBody>
-            {filteredCompanies.map((companies) => (
-            <TableRow>
-              <TableRow key={companies.id}>
-
-              <TableCell>{allCompanies.id}</TableCell>
-              <TableCell>{companies.approver}</TableCell>
-
-
-            </TableRow>
+          <TableBody>
+            {filteredCompanies.map((company) => (
+              <TableRow key={company.id}>
+                <TableCell>{company.name}</TableCell>
+                <TableCell>{company.employee_count}</TableCell>
+                <TableCell>{company.id}</TableCell>
+                <TableCell>
+                  <span
+                    style={{
+                      background:
+                        company.status === "active" ? "#00800033" : "#FF505033",
+                      color: company.status === "inactive" ? "red" : "green",
+                      padding: "7px",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    {company.status}
+                  </span>
+                </TableCell>
+                <TableCell>{company.qr_path}</TableCell>
+                <TableCell>
+                  <IconButton>{/* Your EditIcon */}</IconButton>
+                  <IconButton>{/* Your DeleteIcon */}</IconButton>
+                </TableCell>
+              </TableRow>
             ))}
-          </TableBody> */}
+          </TableBody>
         </Table>
       </TableContainer>
     </Box>

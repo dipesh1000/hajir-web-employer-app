@@ -11,9 +11,9 @@ export default function TabsActiveInactive({
   activeCount,
   inactiveCount,
 }) {
-  console.log("TabsActiveInactive - Total Count:", totalCount);
-  console.log("TabsActiveInactive - Active Count:", activeCount);
-  console.log("TabsActiveInactive - Inactive Count:", inactiveCount);
+  // console.log("TabsActiveInactive - Total Count:", totalCount);
+  // console.log("TabsActiveInactive - Active Count:", activeCount);
+  // console.log("TabsActiveInactive - Inactive Count:", inactiveCount);
 
   return (
     <Box sx={{ width: "100%" }}>

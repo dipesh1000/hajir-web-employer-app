@@ -1,5 +1,4 @@
-// Import necessary dependencies
-import * as React from "react";
+import React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -7,11 +6,10 @@ import TabsActiveInactive from "@/components/dashboard/MainDashboard/TabsActiveI
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useGetEmployerCompaniesQuery } from "@/services/api";
 import CompanyTable from "../dashboard/MainDashboard/CompanyTable";
 
-// Styled Button
 const StyledButton = styled(Button)({
   marginTop: "40px",
   alignSelf: "center",
@@ -22,26 +20,21 @@ const StyledButton = styled(Button)({
   },
 });
 
-// CompanyList Component
 const CompanyList = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { data: companiesData, isLoading } = useGetEmployerCompaniesQuery();
 
-  // State for selected tab
   const [selectedTab, setSelectedTab] = React.useState(0);
 
-  // Change tab handler
   const handleChangeTab = (event, newValue) => {
     setSelectedTab(newValue);
   };
 
-  // Assuming allCompanies, activeCompanies, and inactiveCompanies are arrays from companiesData
   const activeCompanies = companiesData?.data?.active_companies || [];
   const inactiveCompanies = companiesData?.data?.inactive_companies || [];
   const allCompanies = [...activeCompanies, ...inactiveCompanies];
 
-  // Calculate counts for Badge components
   const totalCount = allCompanies.length;
   const activeCount = activeCompanies.length;
   const inactiveCount = inactiveCompanies.length;
@@ -95,7 +88,7 @@ const CompanyList = () => {
                   height: "100%",
                 }}
               >
-                <CompanyTable companies={allCompanies} />
+                <CompanyTable companies={allCompanies} statusFilter="all" />
               </Box>
               <Box
                 sx={{
@@ -103,7 +96,10 @@ const CompanyList = () => {
                   height: "100%",
                 }}
               >
-                <CompanyTable companies={activeCompanies} />
+                <CompanyTable
+                  companies={activeCompanies}
+                  statusFilter="active"
+                />
               </Box>
               <Box
                 sx={{
@@ -111,7 +107,10 @@ const CompanyList = () => {
                   height: "100%",
                 }}
               >
-                <CompanyTable companies={inactiveCompanies} />
+                <CompanyTable
+                  companies={inactiveCompanies}
+                  statusFilter="inactive"
+                />
               </Box>
             </Box>
           </Grid>

@@ -42,9 +42,9 @@ const CompanyTable = ({ companies, statusFilter = "all" }) => {
             {activeCompanies.map((company) => (
               <TableRow key={company.id}>
                 <TableCell>{company.name}</TableCell>
-                <TableCell>{company.employee}</TableCell>
-                <TableCell>{company.approver}</TableCell>
-                <TableCell>{company.status}</TableCell>
+                <TableCell>{company.company_code}</TableCell>
+                <TableCell>{company.date_type}</TableCell>
+                <TableCell>{company.holiday_type}</TableCell>
                 <TableCell>{company.qr_path}</TableCell>
                 <TableCell>
                   {/* Include your action buttons here */}
