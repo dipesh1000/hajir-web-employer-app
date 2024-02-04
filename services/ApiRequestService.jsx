@@ -1,5 +1,5 @@
 const myHeaders = {
-  Accept: "application/json",
+  Accept: 'application/json',
   // Authorization: token,
 };
 
@@ -7,20 +7,20 @@ const myHeaders = {
 
 export const postRequest = async (url, body, token) => {
   return fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "multipart/form-data",
+      'Content-Type': 'application/json',
       Authorization: token,
     },
-    body: body,
+    body: JSON.stringify(body),
   });
 };
 
 const getRequest = (url, params) => {
   return fetchClient(url, {
-    method: "GET",
+    method: 'GET',
     params: { ...params },
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     headers: myHeaders,
   });
 };
