@@ -17,7 +17,7 @@ const StyledButton = styled(Button)({
   },
 });
 
-export default function FirstPageCompany() {
+export default function CreateCompanyCard() {
   const router = useRouter();
 
   return (

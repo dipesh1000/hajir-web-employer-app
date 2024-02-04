@@ -4,11 +4,13 @@ import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import TabsActiveInactive from "@/components/dashboard/MainDashboard/TabsActiveInactive";
-import CompanyTable from "@/components/dashboard/MainDashboard/CompanyTable";
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
+import Badge from "@mui/material/Badge";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
+import { useGetEmployerCompaniesQuery } from "@/services/api";
+import CompanyTable from "../dashboard/MainDashboard/CompanyTable";
 
 const StyledButton = styled(Button)({
   marginTop: "40px",
@@ -20,33 +22,34 @@ const StyledButton = styled(Button)({
   },
 });
 
-const CompanyFormFirst = () => {
+const CompanyList = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const companies = useSelector((state) => state.company.companies) || [];
+  const { data: companiesData, isLoading } = useGetEmployerCompaniesQuery();
+
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   const handleChangeTab = (event, newValue) => {
     setSelectedTab(newValue);
   };
 
+  // Assuming allCompanies, activeCompanies, and inactiveCompanies are arrays from companiesData
+  const activeCompanies = companiesData?.data?.active_companies || [];
+  const inactiveCompanies = companiesData?.data?.inactive_companies || [];
+
+  // Calculate counts for Badge components
+  const totalCount = activeCompanies.length + inactiveCompanies.length;
+  const activeCount = activeCompanies.length;
+  const inactiveCount = inactiveCompanies.length;
+
+  console.log(companiesData, isLoading);
+  console.log(totalCount);
+  console.log(activeCount);
+  console.log(inactiveCount);
+
   return (
     <>
-      <Box
-        sx={
-          {
-            //   flexGrow: 3,
-            //   width: "100vw",
-            //   height: "100vh",
-            //   display: "flex",
-            //   flexDirection: "column",
-            //   justifyContent: "start",
-            //   margin: 0,
-            //   padding: 0,
-            //   marginBottom: "1rem", // Add margin bottom for better spacing
-          }
-        }
-      >
+      <Box>
         <Grid
           container
           spacing={5}
@@ -83,8 +86,9 @@ const CompanyFormFirst = () => {
               <TabsActiveInactive
                 value={selectedTab}
                 handleChange={handleChangeTab}
-                sx={{ gap: 50 }}
-                notificationsCount={{ all: 5, active: 2, inactive: 3 }}
+                totalCount={totalCount}
+                activeCount={activeCount}
+                inactiveCount={inactiveCount}
               />
               <Box
                 sx={{
@@ -100,7 +104,11 @@ const CompanyFormFirst = () => {
                   height: "100%",
                 }}
               >
-                <CompanyTable companies={companies} statusFilter="active" />
+                {" "}
+                <CompanyTable
+                  companies={activeCompanies}
+                  statusFilter="active"
+                />
               </Box>
               <Box
                 sx={{
@@ -108,6 +116,7 @@ const CompanyFormFirst = () => {
                   height: "100%",
                 }}
               >
+                {" "}
                 <CompanyTable companies={companies} statusFilter="inactive" />
               </Box>
             </Box>
@@ -119,4 +128,4 @@ const CompanyFormFirst = () => {
   );
 };
 
-export default CompanyFormFirst;
+export default CompanyList;

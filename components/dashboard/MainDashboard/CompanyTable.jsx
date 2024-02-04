@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Table,
@@ -24,136 +24,104 @@ import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
 import BlockIcon from "@mui/icons-material/Block";
 import Link from "next/link";
-import TablePagination from "@mui/material/TablePagination";
-import {
-  setPage,
-  setRowsPerPage,
-  toggleActiveState,
-  deleteCompany,
-  setCompanyIdToEdit,
-  changePage,
-} from "@/redux/companySlice";
+import { toggleActiveState, deleteCompany } from "@/redux/companySlice";
 import EditCompanyForm from "@/components/company/EditCompanyForm";
 import { useRouter } from "next/navigation";
-const apiUrl =
-  "https://hajirappv2.an4soft.com/api/v2/employer/company/employercompanies";
+import { useGetEmployerCompaniesQuery ,useGetActiveCompanyQuery,
+  useGetInactiveCompanyQuery,} from "@/services/api";
 
-const token =
-  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiNDVmMGVkODAxNzAwNjBjNWYyZTBmOWI0NDkwYWU2Njg0NTIzYzczZThkNjliMDg4ZGMwNzc3Zjc4MzQwN2NhZDQ0MDUxMjA3N2EyMGIzNWUiLCJpYXQiOjE3MDY0MTQ0MDkuMDY2NzgsIm5iZiI6MTcwNjQxNDQwOS4wNjY3ODYsImV4cCI6MTczODAzNjgwOS4wNjQ3NzEsInN1YiI6IjIiLCJzY29wZXMiOltdfQ.f3PwHyWvQN0KJJpwquATJwn4LkGOl30Z5UBvCy0Zn4qooWJjIEiDCBIDNApwUO6eURuHd8v3FV7h8zQONPFEmjDiRW100kyNMC2KadS2YMr4-RLK3Tp3lG94XFzY3nq0v3ISvgBMvzmh2h0KOWo5VmVN4nHkU75nzTDBRzS4PH_08KLA_VXiSy3OBNx3OxDxiSMh1sNCshc0FHeBqrx_r5wIvg0q7TAim064fmOgPQBP1jlbL36aSQSCl3YqKxxR0ra4Udr5oMioo7pfKYgGte_QHXZ-HHYT_7LeYTi9jddWr3mPo1qfmZ_etRFi3t7NhahRFs2p6h-oeawqHIeajHU__k0iQwTcfrMdD2Xs09u9XE9MQaeBSjRO17oKJhm5E3-i7ZklpF2KGFYvdBnG56j3LuFPjhUNf5TbIGvIl-rCgWUb-_KrRpIFqnbWYXipYKIq_Dq54eZrJ0GyzcXU1oz6YD_T1FVgBHmM5quV5ScgCBtFzahL6sdugellBvTDHQyRwEEToKaii_f0h1q9DYxgklgEVqd29p07oClKFlLHLzYw1G4LtL3rJ_oirYstQnv3AjilT8dj2iEf6NnYqwvIPL_RpjD8LQIEbAqBv57dN5ftnqFfHKMGu5T9P2USu2uS7UPYDfGDWmsdWtt6_tFu2OiAGRcUkh0ZwH6WWnY";
-
-const myHeaders = {
-  Accept: "application/json",
-  Authorization: token,
-};
-const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
+const CompanyTable = ({ companies, statusFilter = {} }) => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { data: companiesData, isLoading } = useGetEmployerCompaniesQuery();
+  const { , isLoading } = useGetActiveCompanyQuery();
+  const {  , isLoading } = useGetInactiveCompanyQuery();
 
-  const [selectedCompanyToEdit, setSelectedCompanyToEdit] = useState(null);
+  // const [selectedCompanyToEdit, setSelectedCompanyToEdit] = useState(null);
+  // const [selectedCompany, setSelectedCompany] = useState(null);
+  // const [companyIdToDelete, setCompanyIdToDelete] = useState(null);
+  // const [openEditConfirmationDialog, setOpenEditConfirmationDialog] =
+  //   useState(false);
+  // const [openEditModal, setOpenEditModal] = useState(false);
+  // const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  // const [openStatusChangeDialog, setOpenStatusChangeDialog] = useState(false);
 
-  const [selectedCompany, setSelectedCompany] = useState(null);
-  const [companyIdToDelete, setCompanyIdToDelete] = useState(null);
-  const [openEditConfirmationDialog, setOpenEditConfirmationDialog] =
-    useState(false);
-  const [openEditModal, setOpenEditModal] = useState(false);
+  // // New state for QR Code modal
+  // const [openQrCodeModal, setOpenQrCodeModal] = React.useState(false);
+  // const [qrCodeContent, setQrCodeContent] = React.useState("");
 
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [openStatusChangeDialog, setOpenStatusChangeDialog] = useState(false);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(2);
+  // const handleEdit = (company) => {
+  //   setSelectedCompanyToEdit(company.id);
+  //   setOpenEditConfirmationDialog(true);
+  // };
 
-  // New state for QR Code modal
-  const [openQrCodeModal, setOpenQrCodeModal] = React.useState(false);
-  const [qrCodeContent, setQrCodeContent] = React.useState("");
+  // const handleEditConfirmation = () => {
+  //   setOpenEditConfirmationDialog(false);
+  //   router.push(`/dashboard/company/editcompany/${selectedCompanyToEdit}`);
+  // };
 
-  const handleEdit = (company) => {
-    setSelectedCompanyToEdit(company.id);
-    setOpenEditConfirmationDialog(true);
-  };
+  // const handleEditCancel = () => {
+  //   setSelectedCompanyToEdit(null);
+  //   setOpenEditConfirmationDialog(false);
+  // };
 
-  const handleEditConfirmation = () => {
-    setOpenEditConfirmationDialog(false);
-    router.push(`/dashboard/company/editcompany/${selectedCompanyToEdit}`);
-  };
+  // const handleUpdate = (updatedCompany) => {
+  // Dispatch the action to update the company in the Redux store
+  // dispatch(updatedCompany(updatedCompany));
 
-  const handleEditCancel = () => {
-    setSelectedCompanyToEdit(null);
-    setOpenEditConfirmationDialog(false);
-  };
-
-  const handleUpdate = (updatedCompany) => {
-    // Dispatch the action to update the company in the Redux store
-    dispatch(updatedCompany(updatedCompany));
-
-    // Close the editing modal
-    setOpenEditModal(false);
-  };
+  // Close the editing modal
+  //   setOpenEditModal(false);
+  // };
 
   // Function to handle opening QR Code modal
-  const handleQrCodeClick = (content) => {
-    setQrCodeContent(content);
-    setOpenQrCodeModal(true);
-  };
-  const handleStatusChange = (company) => {
-    setSelectedCompany(company);
-    setOpenStatusChangeDialog(true);
-  };
+  // const handleQrCodeClick = (content) => {
+  //   setQrCodeContent(content);
+  //   setOpenQrCodeModal(true);
+  // };
+  // const handleStatusChange = (company) => {
+  //   setSelectedCompany(company);
+  //   setOpenStatusChangeDialog(true);
+  // };
 
-  const handleStatusConfirm = (newStatus) => {
-    if (selectedCompany) {
-      dispatch(toggleActiveState(selectedCompany.id));
-    }
-    setOpenStatusChangeDialog(false);
-  };
+  // const handleStatusConfirm = (newStatus) => {
+  //   if (selectedCompany) {
+  //     dispatch(toggleActiveState(selectedCompany.id));
+  //   }
+  //   setOpenStatusChangeDialog(false);
+  // };
 
-  const handleDelete = () => {
-    console.log("Deleting Company with ID:", companyIdToDelete);
-    dispatch(deleteCompany(companyIdToDelete));
-    setOpenDeleteDialog(false);
-  };
+  // const handleDelete = () => {
+  //   console.log("Deleting Company with ID:", companyIdToDelete);
+  //   dispatch(deleteCompany(companyIdToDelete));
+  //   setOpenDeleteDialog(false);
+  // };
+  const activeCompanies = companiesData?.data?.active_companies || [];
+  const inactiveCompanies = companiesData?.data?.inactive_companies || [];
+  const allCompanies = [...activeCompanies, ...inactiveCompanies];
+  console.log(allCompanies);
+  console.log(statusFilter);
+  console.log(activeCompanies);
+  console.log(inactiveCompanies);
 
-  const filteredCompanies = companies.filter((company) => {
-    if (statusFilter === "active") {
-      return company.status === "active";
-    } else if (statusFilter === "inactive") {
-      return company.status === "inactive";
-    } else {
-      return true; // "All" companies
-    }
-  });
+  // const handleChangePage = (event, newPage) => {
+  //   setPage(newPage);
+  //   dispatch(changePage(newPage));
+  // };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-    dispatch(changePage(newPage));
-  };
+  // const handleChangeRowsPerPage = (event) => {
+  //   dispatch(setRowsPerPage(parseInt(event.target.value, 10)));
+  // };
 
-  const handleChangeRowsPerPage = (event) => {
-    dispatch(setRowsPerPage(parseInt(event.target.value, 10)));
-  };
+  // let paginatedCompanies = [];
 
-  let paginatedCompanies = [];
+  // if (pagination && pagination.currentPage && pagination.rowsPerPage) {
+  //   const startIndex = (pagination.currentPage - 1) * pagination.rowsPerPage;
+  //   const endIndex = startIndex + pagination.rowsPerPage;
+  //   paginatedCompanies = companies.slice(startIndex, endIndex);
+  // } else {
+  //   console.error("Invalid pagination object:", pagination);
+  // }
 
-  if (pagination && pagination.currentPage && pagination.rowsPerPage) {
-    const startIndex = (pagination.currentPage - 1) * pagination.rowsPerPage;
-    const endIndex = startIndex + pagination.rowsPerPage;
-    paginatedCompanies = companies.slice(startIndex, endIndex);
-  } else {
-    console.error("Invalid pagination object:", pagination);
-  }
-  const [companyData, setCompanyData] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(apiUrl, { headers: myHeaders });
-        setCompanyData(response.data.data.active_companies);
-      } catch (error) {
-        console.error("Error fetching data:", error.message);
-      }
-    };
-
-    fetchData();
-  }, []);
   return (
     <Box sx={{ width: "100%" }}>
       <TableContainer component={Paper}>
@@ -169,16 +137,16 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredCompanies.map((company) => (
-              <TableRow key={company.id}>
-                <TableCell>
-                  <Link href={`/dashboard/company/${company.id}`} passHref>
-                    <Button color="primary">{company.name}</Button>
-                  </Link>
-                </TableCell>
-                <TableCell>{company.employee}</TableCell>
-                <TableCell>{company.approver}</TableCell>
-                <TableCell>
+            {/* {filteredCompanies.map((companies) => ( */}
+            {/* <TableRow key={companies.id}> */}
+              {/* <TableCell> */}
+                {/* <Link href={`/dashboard/company/${company.id}`} passHref> */}
+                {/* <Button color="primary">{companies.name}</Button> */}
+                {/* </Link> */}
+              {/* </TableCell> */}
+              <TableCell>{allCompanies.id}</TableCell>
+              <TableCell>{companies.approver}</TableCell>
+              {/* <TableCell>
                   <span
                     style={{
                       background:
@@ -190,12 +158,11 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
                   >
                     {company.status}
                   </span>
-                </TableCell>
-                <TableCell onClick={() => handleQrCodeClick(company.qrcode)}>
+                </TableCell> */}
+              {/* <TableCell onClick={() => handleQrCodeClick(company.qrcode)}>
                   {company.qrcode}
-                </TableCell>
-                <TableCell>
-                  {/* Conditionally render buttons based on company status */}
+                </TableCell> */}
+              {/* <TableCell>
                   {company.status === "active" ? (
                     <>
                       <IconButton onClick={() => handleEdit(company)}>
@@ -224,23 +191,14 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
                       </IconButton>
                     </>
                   )}
-                </TableCell>
-              </TableRow>
-            ))}
+                </TableCell> */}
+            </TableRow>
+            {/* ))} */}
           </TableBody>
         </Table>
       </TableContainer>
-      {console.log({ rowsPerPage }, { filteredCompanies }, { pagination })}
-      <TablePagination
-        rowsPerPageOptions={[2, 10, 25]}
-        component="div"
-        count={filteredCompanies.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={(e, newPage) => handleChangePage(e, newPage)}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-      <Dialog open={openEditConfirmationDialog} onClose={handleEditCancel}>
+
+      {/* <Dialog open={openEditConfirmationDialog} onClose={handleEditCancel}>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -251,11 +209,9 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
           <Button onClick={handleEditCancel}>Cancel</Button>
           <Button onClick={handleEditConfirmation}>Yes, Edit</Button>
         </DialogActions>
-      </Dialog>
-      {/* Edit Modal */}
-      {/* // Import the EditCompanyForm component at the top of your CompanyTable */}
-      {/* file // Inside the CompanyTable component, within the render method */}
-      <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)}>
+      </Dialog> */}
+
+      {/* <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)}>
         <DialogTitle>Edit Company</DialogTitle>
         <DialogContent>
           <EditCompanyForm
@@ -267,9 +223,9 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
         <DialogActions>
           <Button onClick={() => setOpenEditModal(false)}>Cancel</Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
 
-      <Dialog
+      {/* <Dialog
         open={openStatusChangeDialog}
         onClose={() => setOpenStatusChangeDialog(false)}
       >
@@ -295,8 +251,8 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
               : "Make Active"}
           </Button>
         </DialogActions>
-      </Dialog>
-      <Dialog
+      </Dialog> */}
+      {/* <Dialog
         open={openDeleteDialog}
         onClose={() => setOpenDeleteDialog(false)}
       >
@@ -310,9 +266,9 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
           <Button onClick={() => setOpenDeleteDialog(false)}>Cancel</Button>
           <Button onClick={handleDelete}>Delete</Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
       {/* QR Code modal */}
-      <Dialog open={openQrCodeModal} onClose={() => setOpenQrCodeModal(false)}>
+      {/* <Dialog open={openQrCodeModal} onClose={() => setOpenQrCodeModal(false)}>
         <DialogTitle>QR Code Content</DialogTitle>
         <DialogContent>
           <DialogContentText>{qrCodeContent}</DialogContentText>
@@ -320,7 +276,7 @@ const CompanyTable = ({ companies, statusFilter, pagination = {} }) => {
         <DialogActions>
           <Button onClick={() => setOpenQrCodeModal(false)}>Close</Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </Box>
   );
 };

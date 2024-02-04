@@ -1,4 +1,6 @@
 import { Poppins } from "next/font/google";
+// import { Roboto } from "next/font/google";
+
 import { createTheme } from "@mui/material/styles";
 import { enUS } from "@mui/material/locale";
 
@@ -7,6 +9,11 @@ const poppins = Poppins({
   subsets: ["devanagari"],
   display: "swap",
 });
+// const roboto = Roboto({
+//   weight: ["400", "500", "700"],
+//   subsets: ["latin"],
+//   display: "swap",
+// });
 
 const theme = createTheme(
   {
@@ -18,6 +25,7 @@ const theme = createTheme(
     },
     typography: {
       fontFamily: poppins.style.fontFamily,
+      // fontFamily: roboto.style.fontFamily,
     },
     components: {
       MuiAlert: {

@@ -1,46 +1,29 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
-// import AddIcon from "@mui/icons-material/Add";
-import { postRequest } from "@/services/ApiRequestService";
+import AddIcon from "@mui/icons-material/Add";
 import {
   Box,
   Typography,
   Button,
+  TextField,
+  RadioGroup,
+  FormControlLabel,
   Radio,
   Grid,
-  FormControlLabel,
-  RadioGroup,
 } from "@mui/material";
-// import { addCompany } from "@/redux/companySlice";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-// import RadioField from "@/components/common/Fields/RadioField";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { styled } from "@mui/material/styles";
-import Hamburger from "@/components/common/hamburger";
-import CustomRadioGroup from "@/components/company/createcompany/RadioButton";
-import InputField from "@/components/common/Fields/InputField";
 
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
+import CustomRadioGroup from "@/components/company/createcompany/RadioButton";
+import { useCreateCompanyMutation } from "@/services/api";
 
 const CreateCompany = () => {
-  const dispatch = useDispatch();
   const router = useRouter();
-
-  const [apiResponse, setApiResponse] = useState(null);
+  const dispatch = useDispatch();
+  const createCompanyMutation = useCreateCompanyMutation();
 
   const validationSchema = yup.object({
     name: yup
@@ -56,54 +39,52 @@ const CreateCompany = () => {
       ),
     code: yup.string().required("Please select a staff code"),
     date_type: yup.string().required("Please select a date"),
-    holiday_type: yup.string().required("Please enter holiday_type"),
+    // holidays: yup.string().required("Please enter holidays"),
   });
-  const token =
-    "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiNDVmMGVkODAxNzAwNjBjNWYyZTBmOWI0NDkwYWU2Njg0NTIzYzczZThkNjliMDg4ZGMwNzc3Zjc4MzQwN2NhZDQ0MDUxMjA3N2EyMGIzNWUiLCJpYXQiOjE3MDY0MTQ0MDkuMDY2NzgsIm5iZiI6MTcwNjQxNDQwOS4wNjY3ODYsImV4cCI6MTczODAzNjgwOS4wNjQ3NzEsInN1YiI6IjIiLCJzY29wZXMiOltdfQ.f3PwHyWvQN0KJJpwquATJwn4LkGOl30Z5UBvCy0Zn4qooWJjIEiDCBIDNApwUO6eURuHd8v3FV7h8zQONPFEmjDiRW100kyNMC2KadS2YMr4-RLK3Tp3lG94XFzY3nq0v3ISvgBMvzmh2h0KOWo5VmVN4nHkU75nzTDBRzS4PH_08KLA_VXiSy3OBNx3OxDxiSMh1sNCshc0FHeBqrx_r5wIvg0q7TAim064fmOgPQBP1jlbL36aSQSCl3YqKxxR0ra4Udr5oMioo7pfKYgGte_QHXZ-HHYT_7LeYTi9jddWr3mPo1qfmZ_etRFi3t7NhahRFs2p6h-oeawqHIeajHU__k0iQwTcfrMdD2Xs09u9XE9MQaeBSjRO17oKJhm5E3-i7ZklpF2KGFYvdBnG56j3LuFPjhUNf5TbIGvIl-rCgWUb-_KrRpIFqnbWYXipYKIq_Dq54eZrJ0GyzcXU1oz6YD_T1FVgBHmM5quV5ScgCBtFzahL6sdugellBvTDHQyRwEEToKaii_f0h1q9DYxgklgEVqd29p07oClKFlLHLzYw1G4LtL3rJ_oirYstQnv3AjilT8dj2iEf6NnYqwvIPL_RpjD8LQIEbAqBv57dN5ftnqFfHKMGu5T9P2USu2uS7UPYDfGDWmsdWtt6_tFu2OiAGRcUkh0ZwH6WWnY";
 
   const formik = useFormik({
     initialValues: {
-      name: "asa",
-      code: "0",
-      date_type: "English",
+      name: "",
+      code: "",
+      date_type: "",
       holiday_type: "Custom",
-      custom_holiday_file: null,
+      // staffCode: "",
+      // dateSelect: "",
+      // holidays: "",
+      // employee: "0",
+      // approver: "0",
+      // qrcode: "  qr code ",
+      // status: "active",
     },
     validationSchema: validationSchema,
+    // onSubmit function
     onSubmit: async (values, { resetForm }) => {
-      const formdata = new FormData();
-      formdata.append("name", values.name);
-      formdata.append("code", values.code);
-      formdata.append("date_type", values.date_type);
-      formdata.append("holiday_type", values.holiday_type);
-      formdata.append("custom_holiday_file", values.custom_holiday_file);
-
       try {
-        const response = await postRequest(
-          "/employer/company/store",
-          formdata,
-          token
-        );
+        console.log("Data being sent:", values);
 
-        console.log("Response Status:", response.status);
-        console.log("form data:", formdata);
+        // Destructure the elements of the array
+        const [mutateAsync] = createCompanyMutation;
 
-        if (response.ok) {
-          const responseData = await response.json();
-          console.log("API Response:", responseData);
-          alert("Company added successfully!");
-          resetForm();
-          // router.push("/dashboard/company");
-        } else {
-          console.error("Error during API request:", response.statusText);
-          const errorData = await response.json(); // You can log detailed error information
-          console.error("Detailed Error:", errorData);
-        }
+        // Make API request to create a new company using the mutation hook
+        await mutateAsync(values);
+
+        // Show success message
+        alert("Company added successfully!");
+
+        // Reset the form
+        resetForm();
+
+        // Navigate to the company dashboard or any other desired location
+        // router.push("/dashboard/");
       } catch (error) {
-        console.error("Error during API request:", error.message);
+        console.error("Error adding company:", error);
+
+        // Show a user-friendly error message
+        alert("Error adding company. Please try again.");
       }
     },
   });
+
   return (
     <Box
       sx={{
@@ -126,12 +107,58 @@ const CreateCompany = () => {
         Create New Company
       </Typography>
 
-      <Hamburger />
+      {/* breadcrumb area  */}
+      <div style={{ display: "flex", gap: "20px" }}>
+        <Link href="/dashboard" sx={{ textDecoration: "none" }}>
+          <Typography
+            sx={{
+              marginTop: "10px",
+              color: "#434345",
+              fontSize: "16px",
+              fontStyle: "normal",
+              fontWeight: "400",
+              lineHeight: "21px",
+              letterSpacing: "0.15px",
+            }}
+          >
+            Dashboard
+          </Typography>
+        </Link>
+        <Link href="/dashboard" sx={{ textDecoration: "none" }}>
+          <Typography
+            sx={{
+              marginTop: "10px",
+              color: "#434345",
+              fontSize: "16px",
+              fontStyle: "normal",
+              fontWeight: "400",
+              lineHeight: "21px",
+              letterSpacing: "0.15px",
+            }}
+          >
+            Company
+          </Typography>
+        </Link>
+        <Link href="/dashboard" sx={{ textDecoration: "none" }}>
+          <Typography
+            sx={{
+              marginTop: "10px",
+              color: "#434345",
+              fontSize: "16px",
+              fontStyle: "normal",
+              fontWeight: "400",
+              lineHeight: "21px",
+              letterSpacing: "0.15px",
+            }}
+          >
+            New Company
+          </Typography>
+        </Link>
+      </div>
 
       <form
         onSubmit={formik.handleSubmit}
-        style={{ marginTop: "20px" }}
-        encType="multipart/form-data"
+        style={{ marginTop: "20px", marginLeft: "30px" }}
       >
         <Grid container spacing={2}>
           {/* Left Column */}
@@ -148,35 +175,33 @@ const CreateCompany = () => {
               <Typography variant="body1">
                 Name of the Company <span sx={{ color: "red" }}> *</span>
               </Typography>
-              <InputField
+              <TextField
                 label="Enter Company Name"
                 variant="outlined"
-                sx={{ width: "700px" }}
-                name="name"
+                fullWidth
                 margin="normal"
                 {...formik.getFieldProps("name")}
+                error={formik.touched.name && Boolean(formik.errors.name)}
                 helperText={formik.touched.name && formik.errors.name}
               />
 
-              <Typography
-                variant="body1"
-                sx={{ marginTop: 1.6, marginBottom: 2 }}
-              >
-                Saff Code
+              {/* New Staff Code Selection  */}
+
+              <Typography variant="body1" sx={{ marginBottom: "8px" }}>
+                testing
               </Typography>
               <CustomRadioGroup
                 name="code"
-                style={{ width: "100%" }}
                 value={formik.values.code}
                 // onChange={(value) => formik.setFieldValue("code", value)}
                 options={[
                   {
-                    value: "0",
+                    value: "1",
                     label: "Auto",
                     description: "E.g.: R001, R002, ROO3 ",
                   },
                   {
-                    value: "1",
+                    value: "2",
                     label: "Custom",
                     description: "E.g.: 021, 022 or 0100, 0101 ",
                   },
@@ -192,25 +217,20 @@ const CreateCompany = () => {
 
               {/* New Date Selection  */}
 
-              <Typography
-                variant="body1"
-                sx={{ marginTop: 1.6, marginBottom: 2 }}
-              >
+              <Typography variant="body1" sx={{ marginBottom: "8px" }}>
                 Date Selection
               </Typography>
               <CustomRadioGroup
                 name="date_type"
                 value={formik.values.date_type}
-                // setFieldValue={formik.setFieldValue}
-                // onChange={(value) => formik.setFieldValue("date_type", value)}
                 options={[
                   {
-                    value: "0",
+                    value: "English",
                     label: "English",
                     description: "e.g.: Something",
                   },
                   {
-                    value: "1",
+                    value: "Nepali",
                     label: "Nepali",
                     description: "e.g.: Something",
                   },
@@ -225,7 +245,7 @@ const CreateCompany = () => {
             </Box>
           </Grid>
 
-          {/* -------------------------Right Column ---------------------------------------------------------------------------------------*/}
+          {/* Right Column */}
           <Grid item xs={6}>
             <Box
               sx={{
@@ -235,28 +255,26 @@ const CreateCompany = () => {
                 mt: 2,
               }}
             >
-              {/* New holiday_type Selection */}
-              <Typography variant="body1" sx={{ marginBottom: "16px" }}>
-                holiday_type
+              {/* New Holidays Selection */}
+              <Typography variant="body1" sx={{ marginBottom: "8px" }}>
+                Holidays
               </Typography>
 
-              {/* Default Government holiday_type Box */}
-              {/* Default Government holiday_type Box */}
+              {/* Default Government Holidays Box */}
               <Box
                 sx={{
                   border: "1px solid #ccc",
                   borderRadius: "4px",
                   padding: "16px",
-                  width: "700px",
+                  width: "100%",
                   display: "flex",
-                  // alignItems: "center",
-                  // flexDirection: "column", // Place items in a column
+
                   transition: "background 0.3s, border 0.3s",
                   "&:hover": {
                     background: "#f5f5f5",
                   },
                   ...(formik.values.holiday_type ===
-                  "Default Government holiday_type"
+                  "Default Government Holidays"
                     ? { background: "#f5f5f5", border: "1px solid #2196F3" }
                     : {}),
                 }}
@@ -268,14 +286,14 @@ const CreateCompany = () => {
                   onChange={formik.handleChange}
                 >
                   <FormControlLabel
-                    value="Default Government holiday_type"
+                    value="Custom"
                     control={<Radio />}
-                    label="Default Government holiday_type"
+                    label="Default Government Holidays"
                   />
                 </RadioGroup>
                 {formik.touched.holiday_type &&
                   formik.errors.holiday_type ===
-                    "Default Government holiday_type" && (
+                    "Default Government Holidays" && (
                     <Typography sx={{ color: "red", marginTop: "4px" }}>
                       {formik.errors.holiday_type}
                     </Typography>
@@ -292,44 +310,44 @@ const CreateCompany = () => {
                     alignItems: "center",
                   }}
                 >
-                  View holiday_type (.pdf)
+                  View Holidays (.pdf)
                 </Typography>
               </Link>
 
-              {/* Custom holiday_type Box */}
+              {/* Custom Holidays Box */}
               <Box
                 sx={{
                   border: "1px solid #ccc",
                   borderRadius: "4px",
                   padding: "16px",
-                  width: "700px",
+                  width: "100%",
                   display: "flex",
                   transition: "background 0.3s, border 0.3s",
                   "&:hover": {
                     background: "#f5f5f5",
                   },
-                  ...(formik.values.holiday_type === "Custom holiday_type"
+                  ...(formik.values.holidays === "Custom Holidays"
                     ? { background: "#f5f5f5", border: "1px solid #2196F3" }
                     : {}),
-                  marginTop: "16px", // Adjusted margin for separation
+                  marginTop: "16px",
                 }}
               >
                 <RadioGroup
                   row
-                  name="holiday_type"
-                  value={formik.values.holiday_type}
+                  name="holidays"
+                  value={formik.values.holidays}
                   onChange={formik.handleChange}
                 >
                   <FormControlLabel
-                    value="Custom holiday_type"
+                    value="Custom Holidays"
                     control={<Radio />}
-                    label="Custom holiday_type"
+                    label="Custom Holidays"
                   />
                 </RadioGroup>
-                {formik.touched.holiday_type &&
-                  formik.errors.holiday_type === "Custom holiday_type" && (
+                {formik.touched.holidays &&
+                  formik.errors.holidays === "Custom Holidays" && (
                     <Typography sx={{ color: "red", marginTop: "4px" }}>
-                      {formik.errors.holiday_type}
+                      {formik.errors.holidays}
                     </Typography>
                   )}
               </Box>
@@ -346,28 +364,20 @@ const CreateCompany = () => {
                   Click to download sample file (.xlsx)
                 </Typography>
               </Link>
-
-              {/* Upload Button with Icon */}
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "center",
-
                   flexDirection: "column",
-                  marginTop: "16px", // Adjusted margin for separation
+                  marginTop: "16px",
                 }}
               >
                 <Button
-                  component="label"
                   variant="contained"
-                  startIcon={<CloudUploadIcon />}
+                  color="primary"
+                  startIcon={<AddIcon />}
                 >
-                  Upload file
-                  <VisuallyHiddenInput
-                    type="file"
-                    name="custom_holiday_file"
-                    onChange={formik.handleChange}
-                  />
+                  Upload File
                 </Button>
               </Box>
             </Box>

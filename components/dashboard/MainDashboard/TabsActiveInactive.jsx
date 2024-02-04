@@ -1,17 +1,20 @@
-import * as React from "react";
+import React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import InboxIcon from "@mui/icons-material/Inbox";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import BlockIcon from "@mui/icons-material/Block";
 import Badge from "@mui/material/Badge";
 
 export default function TabsActiveInactive({
   value,
   handleChange,
-  notificationsCount,
+  totalCount,
+  activeCount,
+  inactiveCount,
 }) {
+  console.log("TabsActiveInactive - Total Count:", totalCount);
+  console.log("TabsActiveInactive - Active Count:", activeCount);
+  console.log("TabsActiveInactive - Inactive Count:", inactiveCount);
+
   return (
     <Box sx={{ width: "100%" }}>
       <Tabs
@@ -25,67 +28,85 @@ export default function TabsActiveInactive({
       >
         <Tab
           label={
-            // <Badge color="primary">
-            <Badge badgeContent={notificationsCount.all} color="primary">
-              <div
+            <div
+              style={{
+                fontSize: "1rem",
+                marginBottom: "4px",
+                marginRight: "6px",
+              }}
+            >
+              All
+              <span
                 style={{
-                  fontSize: "1rem",
-                  marginBottom: "4px",
-                  marginRight: "6px",
+                  color: "white",
+                  backgroundColor: "grey",
+                  padding: "7px",
+                  marginLeft: "5px",
+                  // borderRadius: "50%",
+                  // fontSize: "0.8rem",
+                  fontWeight: "bold",
                 }}
               >
-                All
-              </div>
-              {/* <InboxIcon /> */}
-            </Badge>
+                {totalCount}
+              </span>
+            </div>
           }
-          {...a11yProps(0)}
         />
         <Tab
           label={
-            <Badge color="secondary">
-              {/* <Badge badgeContent={notificationsCount.active} color="secondary"> */}
-              <div
+            <div
+              style={{
+                fontSize: "1rem",
+                marginBottom: "4px",
+                marginRight: "6px",
+              }}
+            >
+              Active{" "}
+              <span
                 style={{
-                  fontSize: "1rem",
-                  marginBottom: "4px",
-                  marginRight: "6px",
+                  color: "white",
+                  backgroundColor: "grey",
+                  padding: "7px",
+                  marginLeft: "5px",
+                  // borderRadius: "50%",
+                  // fontSize: "0.8rem",
+                  fontWeight: "bold",
                 }}
               >
-                Active
-              </div>
-              <InboxIcon />
-            </Badge>
+                {" "}
+                {activeCount}
+              </span>
+            </div>
           }
-          {...a11yProps(1)}
         />
         <Tab
           label={
-            <Badge color="info">
-              {/* <Badge badgeContent={notificationsCount.inactive} color="info"> */}
-              <div
+            <div
+              style={{
+                fontSize: "1rem",
+                marginBottom: "4px",
+                marginRight: "6px",
+              }}
+            >
+              Inactive{" "}
+              <span
                 style={{
-                  fontSize: "1rem",
-                  marginBottom: "4px",
-                  marginRight: "6px",
+                  color: "white",
+                  backgroundColor: "grey",
+                  padding: "7px",
+                  marginLeft: "5px",
+                  // borderRadius: "50%",
+                  // fontSize: "0.8rem",
+                  fontWeight: "bold",
                 }}
               >
-                Inactive
-              </div>
-              <InboxIcon />
-            </Badge>
+                {" "}
+                {inactiveCount}
+              </span>{" "}
+            </div>
           }
-          {...a11yProps(2)}
         />
       </Tabs>
-      {/* Your content here */}
     </Box>
   );
-}
-
-function a11yProps(index) {
-  return {
-    id: `full-width-tab-${index}`,
-    "aria-controls": `full-width-tabpanel-${index}`,
-  };
 }

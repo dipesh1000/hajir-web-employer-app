@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import FirstPageEmployee from "@/components/employee/FirstPageEmployee";
 import EmployeeTable from "@/components/employee/employeetable.jsx/EmployeeTable";
-import CompanyFormFirst from "@/components/company/CompanyFormFirst";
-import FirstPageCompany from "@/components/company/FirstPageCompany";
+import CompanyFormFirst from "@/components/company/CompanyList";
+import FirstPageCompany from "@/components/company/CreateCompanyCard";
 import EmployeeFormFirst from "@/components/employee/EmployeeFormFirst";
 
 export default function CompanyDashboard() {
