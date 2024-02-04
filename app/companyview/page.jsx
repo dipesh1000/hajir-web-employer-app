@@ -24,20 +24,6 @@ const CompanyTable = ({ companies, statusFilter = "all" }) => {
   const inactiveCompanies = companiesData?.data?.inactive_companies || [];
   const allCompanies = [...activeCompanies, ...inactiveCompanies];
 
-  // const filteredCompanies = companies.filter((company) => {
-  //   if (statusFilter === "active") {
-  //     return company.status === "active";
-  //   } else if (statusFilter === "inactive") {
-  //     return company.status === "inactive";
-  //   } else {
-  //     return true; // "All" companies
-  //   }
-  // });
-  // console.log(filteredCompanies);
-  console.log(activeCompanies);
-  console.log(inactiveCompanies);
-  console.log(allCompanies);
-
   return (
     <Box sx={{ width: "100%" }}>
       <TableContainer component={Paper}>
@@ -53,21 +39,21 @@ const CompanyTable = ({ companies, statusFilter = "all" }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {filteredCompanies.map((company) => ( */}
-            <TableRow key={activeCompanies.id}>
-              <TableCell>{activeCompanies.name}</TableCell>
-              <TableCell>{activeCompanies.employee}</TableCell>
-              <TableCell>{activeCompanies.approver}</TableCell>
-              <TableCell>{activeCompanies.status}</TableCell>
-              <TableCell>{activeCompanies.qrCode}</TableCell>
-              <TableCell>
-                {/* Include your action buttons here */}
-                {/* Example: */}
-                <IconButton>{/* Your EditIcon */}</IconButton>
-                <IconButton>{/* Your DeleteIcon */}</IconButton>
-              </TableCell>
-            </TableRow>
-            {/* ))} */}
+            {activeCompanies.map((company) => (
+              <TableRow key={company.id}>
+                <TableCell>{company.name}</TableCell>
+                <TableCell>{company.employee}</TableCell>
+                <TableCell>{company.approver}</TableCell>
+                <TableCell>{company.status}</TableCell>
+                <TableCell>{company.qr_path}</TableCell>
+                <TableCell>
+                  {/* Include your action buttons here */}
+                  {/* Example: */}
+                  <IconButton>{/* Your EditIcon */}</IconButton>
+                  <IconButton>{/* Your DeleteIcon */}</IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

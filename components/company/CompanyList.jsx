@@ -96,7 +96,8 @@ const CompanyList = () => {
                   height: "100%",
                 }}
               >
-                <CompanyTable companies={companies} />
+                <CompanyTable companies={companiesData} />
+                {/* <CompanyTable /> */}
               </Box>
               <Box
                 sx={{
@@ -117,7 +118,10 @@ const CompanyList = () => {
                 }}
               >
                 {" "}
-                <CompanyTable companies={companies} statusFilter="inactive" />
+                <CompanyTable
+                  companies={companiesData}
+                  statusFilter="inactive"
+                />
               </Box>
             </Box>
           </Grid>
