@@ -1,26 +1,33 @@
 const myHeaders = {
-  Accept: "application/json",
+  Accept: 'application/json',
   // Authorization: token,
 };
 
-// services/api.js
+const getToken = () => {
+  let token = JSON.parse(localStorage.getItem('token'));
+  if (token) {
+    return `Bearer ${token}`;
+  } else {
+    return null;
+  }
+};
 
-export const postRequest = async (url, body, token) => {
+export const postRequest = (url, body) => {
   return fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "multipart/form-data",
-      Authorization: token,
+      'Content-Type': 'application/json',
+      Authorization: getToken(),
     },
-    body: body,
+    body: JSON.stringify(body),
   });
 };
 
 const getRequest = (url, params) => {
   return fetchClient(url, {
-    method: "GET",
+    method: 'GET',
     params: { ...params },
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     headers: myHeaders,
   });
 };
