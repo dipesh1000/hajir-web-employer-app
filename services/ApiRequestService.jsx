@@ -3,9 +3,16 @@ const myHeaders = {
   // Authorization: token,
 };
 
-// services/api.js
+const getToken = () => {
+  let token = JSON.parse(localStorage.getItem('token'));
+  if (token) {
+    return `Bearer ${token}`;
+  } else {
+    return null;
+  }
+};
 
-export const postRequest = async (url, body, token) => {
+export const postRequest = (url, body) => {
   return fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
     method: 'POST',
     headers: {
