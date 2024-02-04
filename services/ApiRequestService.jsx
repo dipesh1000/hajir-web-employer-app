@@ -17,7 +17,7 @@ export const postRequest = (url, body) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: token,
+      Authorization: getToken(),
     },
     body: JSON.stringify(body),
   });
