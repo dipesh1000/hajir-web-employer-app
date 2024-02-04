@@ -1,6 +1,6 @@
-"use client";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+'use client';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Table,
   TableBody,
@@ -18,29 +18,25 @@ import {
   IconButton,
   Box,
   Tooltip,
-} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import CheckIcon from "@mui/icons-material/Check";
-import BlockIcon from "@mui/icons-material/Block";
-import Link from "next/link";
-import { toggleActiveState, deleteCompany } from "@/redux/companySlice";
-import EditCompanyForm from "@/components/company/EditCompanyForm";
-import { useRouter } from "next/navigation";
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import CheckIcon from '@mui/icons-material/Check';
+import BlockIcon from '@mui/icons-material/Block';
+import Link from 'next/link';
+import { toggleActiveState, deleteCompany } from '@/redux/companySlice';
+import EditCompanyForm from '@/components/company/EditCompanyForm';
+import { useRouter } from 'next/navigation';
 import {
   useGetEmployerCompaniesQuery,
   useGetActiveCompanyQuery,
   useGetInactiveCompanyQuery,
-} from "@/services/api";
+} from '@/services/api';
 
 const CompanyTable = ({ companies, statusFilter = {} }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { data: companiesData, isLoading } = useGetEmployerCompaniesQuery();
-
-
-
-
 
   const activeCompanies = companiesData?.data?.active_companies || [];
   const inactiveCompanies = companiesData?.data?.inactive_companies || [];
@@ -50,9 +46,8 @@ const CompanyTable = ({ companies, statusFilter = {} }) => {
   console.log(activeCompanies);
   console.log(inactiveCompanies);
 
-
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: '100%' }}>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -65,7 +60,7 @@ const CompanyTable = ({ companies, statusFilter = {} }) => {
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          {/* <TableBody>
             {filteredCompanies.map((companies) => (
             <TableRow>
               <TableRow key={companies.id}>
@@ -76,11 +71,9 @@ const CompanyTable = ({ companies, statusFilter = {} }) => {
 
             </TableRow>
             ))}
-          </TableBody>
+          </TableBody> */}
         </Table>
       </TableContainer>
-
-
     </Box>
   );
 };

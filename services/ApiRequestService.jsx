@@ -3,7 +3,7 @@ const myHeaders = {
   // Authorization: token,
 };
 
-const getToken = () => {
+export const getToken = () => {
   let token = JSON.parse(localStorage.getItem('token'));
   if (token) {
     return `Bearer ${token}`;
