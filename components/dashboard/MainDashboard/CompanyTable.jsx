@@ -38,10 +38,6 @@ const CompanyTable = ({ companies, statusFilter = {} }) => {
   const router = useRouter();
   const { data: companiesData, isLoading } = useGetEmployerCompaniesQuery();
 
-
-
-
-
   const activeCompanies = companiesData?.data?.active_companies || [];
   const inactiveCompanies = companiesData?.data?.inactive_companies || [];
   const allCompanies = [...activeCompanies, ...inactiveCompanies];
@@ -49,7 +45,6 @@ const CompanyTable = ({ companies, statusFilter = {} }) => {
   console.log(statusFilter);
   console.log(activeCompanies);
   console.log(inactiveCompanies);
-
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -65,7 +60,7 @@ const CompanyTable = ({ companies, statusFilter = {} }) => {
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          {/* <TableBody>
             {filteredCompanies.map((companies) => (
             <TableRow>
               <TableRow key={companies.id}>
@@ -76,11 +71,9 @@ const CompanyTable = ({ companies, statusFilter = {} }) => {
 
             </TableRow>
             ))}
-          </TableBody>
+          </TableBody> */}
         </Table>
       </TableContainer>
-
-
     </Box>
   );
 };
