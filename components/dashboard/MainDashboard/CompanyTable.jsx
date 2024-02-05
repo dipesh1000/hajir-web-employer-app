@@ -1,6 +1,5 @@
-// Import the necessary dependencies
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -11,51 +10,59 @@ import {
   Paper,
   IconButton,
   Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
 } from "@mui/material";
 import {
+  useDeleteCompanyMutation,
   useGetActiveCompanyQuery,
   useGetEmployerCompaniesQuery,
   useGetInactiveCompanyQuery,
 } from "@/services/api";
+import { DeleteOutline, Edit } from "@mui/icons-material";
 
 const CompanyTable = ({ statusFilter }) => {
-  // Use the custom hooks to fetch data
   const { data: companiesData, isLoading } = useGetEmployerCompaniesQuery();
-  const { data: activeCompaniesData, isLoading: activeLoading } =
-    useGetActiveCompanyQuery();
-  const { data: inactiveCompaniesData, isLoading: inactiveLoading } =
-    useGetInactiveCompanyQuery();
+  const activeCompanies = useGetActiveCompanyQuery();
+  const inactiveCompanies = useGetInactiveCompanyQuery();
+  const deleteCompanyMutation = useDeleteCompanyMutation();
 
-  // Assuming companiesData is an array of companies, modify the structure accordingly
-  const allCompanies = companiesData?.data || [];
+  const companyData =
+    companiesData?.data?.active_companies?.concat(
+      companiesData?.data?.inactive_companies
+    ) || [];
 
-  // Assuming activeCompaniesData and inactiveCompaniesData are arrays of companies, modify the structure accordingly
-  // const activeCompanies = activeCompaniesData?.data?.active_companies || [];
-  // const inactiveCompanies =
-  //   inactiveCompaniesData?.data?.inactive_companies || [];
+  const [selectedCompanyId, setSelectedCompanyId] = useState(null);
+  const [isConfirmationDialogOpen, setConfirmationDialogOpen] =
+    React.useState(false);
 
-  // Define filteredCompanies here
-  // let filteredCompanies = [];
+  const handleDeleteClick = (companyId) => {
+    setSelectedCompanyId(companyId);
+    setConfirmationDialogOpen(true);
+  };
 
-  // if (statusFilter === "active") {
-  //   filteredCompanies = activeCompanies;
-  // } else if (statusFilter === "inactive") {
-  //   filteredCompanies = inactiveCompanies;
-  // } else {
-  //   // "All" companies
-  //   filteredCompanies = allCompanies;
-  // }
+  const handleConfirmDelete = async () => {
+    try {
+      // Access the mutateAsync function directly from the hook
+      // const { mutateAsync } = deleteCompanyMutation;
+      console.log(selectedCompanyId, "deleted");
 
-  // Ensure filteredCompanies is always an array
-  // filteredCompanies = Array.isArray(filteredCompanies)
-  //   ? filteredCompanies
-  //   : [filteredCompanies];
+      // Make API request to delete the company using the mutation hook
+      await mutateAsync(selectedCompanyId);
+      setConfirmationDialogOpen(false);
+    } catch (error) {
+      console.error("Error deleting company:", error);
+      // Handle error (e.g., show an error message)
+    }
+  };
 
-  console.log("All Companies:", allCompanies);
-  console.log("Status Filter:", statusFilter);
-  console.log("Filtered Companies:", filteredCompanies);
-  console.log("from api endpoint", activeCompaniesData);
-  console.log("from api endpoint", activeCompaniesData);
+  const handleCloseConfirmationDialog = () => {
+    setConfirmationDialogOpen(false);
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -64,7 +71,7 @@ const CompanyTable = ({ statusFilter }) => {
           <TableHead>
             <TableRow>
               <TableCell>Company Name</TableCell>
-              <TableCell>Employee</TableCell>
+              <TableCell>Employee Count</TableCell>
               <TableCell>Approver</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>QR Code</TableCell>
@@ -72,34 +79,56 @@ const CompanyTable = ({ statusFilter }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredCompanies.map((company) => (
-              <TableRow key={company.id}>
-                <TableCell>{company.name}</TableCell>
-                <TableCell>{company.employee_count}</TableCell>
-                <TableCell>{company.id}</TableCell>
-                <TableCell>
-                  <span
-                    style={{
-                      background:
-                        company.status === "active" ? "#00800033" : "#FF505033",
-                      color: company.status === "inactive" ? "red" : "green",
-                      padding: "7px",
-                      borderRadius: "4px",
-                    }}
-                  >
-                    {company.status}
-                  </span>
-                </TableCell>
-                <TableCell>{company.qr_path}</TableCell>
-                <TableCell>
-                  <IconButton>{/* Your EditIcon */}</IconButton>
-                  <IconButton>{/* Your DeleteIcon */}</IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+            {companyData &&
+              companyData.map((company) => (
+                <TableRow key={company.id}>
+                  <TableCell>{company.name}</TableCell>
+                  <TableCell>{company.employee_count}</TableCell>
+                  <TableCell>need from backend</TableCell>
+                  <TableCell>{company.created_at}</TableCell>
+                  <TableCell>{company.qr_path}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => handleDeleteClick(company.id)}
+                    >
+                      <DeleteOutline />
+                    </IconButton>
+                    <IconButton
+                      aria-label="edit"
+                      onClick={() => {
+                        console.log("edit");
+                      }}
+                    >
+                      <Edit />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={isConfirmationDialogOpen}
+        onClose={handleCloseConfirmationDialog}
+      >
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this company?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfirmationDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmDelete} color="primary">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

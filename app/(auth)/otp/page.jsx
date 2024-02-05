@@ -1,69 +1,69 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
-import Image from 'next/image';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import { useAuth } from '@/context/AuthContext';
-import { useFormik } from 'formik';
-import { useSearchParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { useMediaQuery } from '@mui/material';
-import { postRequest } from '@/services/ApiRequestService';
+import React, { useEffect, useState } from "react";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
+import Image from "next/image";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import { useAuth } from "@/context/AuthContext";
+import { useFormik } from "formik";
+import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import { useMediaQuery } from "@mui/material";
+import { postRequest } from "@/services/ApiRequestService";
 
 // Styles for components
 const styles = {
   container: {
     flexGrow: 1,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   image: {
-    display: 'block',
-    maxWidth: '100%',
+    display: "block",
+    maxWidth: "100%",
     // Hide the image on screens smaller than 600px
-    '@media (maxWidth: 600px)': {
-      display: 'none',
+    "@media (maxWidth: 600px)": {
+      display: "none",
     },
   },
 };
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
   padding: theme.spacing(1),
-  textAlign: 'center',
+  textAlign: "center",
   color: theme.palette.text.secondary,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100%',
-  boxShadow: 'none',
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100%",
+  boxShadow: "none",
   elevation: 0,
-  background: 'transparent',
+  background: "transparent",
 }));
 
-const LogoContainer = styled('div')({
-  marginBottom: '16px',
+const LogoContainer = styled("div")({
+  marginBottom: "16px",
 });
 
 const Otp = () => {
   const query = useSearchParams();
-  const otpnumber = query.get('otp');
-  const phone = query.get('phone');
+  const otpnumber = query.get("otp");
+  const phone = query.get("phone");
   const router = useRouter();
 
   const { authUser, setAuthUser, setIsLoggedIn } = useAuth();
   const [otp, setOtp] = useState(
-    otpnumber?.toString().split('') || ['', '', '', '']
+    otpnumber?.toString().split("") || ["", "", "", ""]
   );
   const [loading, setLoading] = useState(false);
-  const isScreenSmall = useMediaQuery('(max-width:900px)');
+  const isScreenSmall = useMediaQuery("(max-width:900px)");
 
   async function getData(values) {
     const apiResponse = await postRequest(`/employer/verify-opt`, values);
@@ -78,34 +78,34 @@ const Otp = () => {
     //   }
     // );
     if (!apiResponse.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error("Network response was not ok");
     }
     return apiResponse.json();
   }
 
   const formik = useFormik({
     initialValues: {
-      phone: phone || '',
-      otp: otpnumber || '',
+      phone: phone || "",
+      otp: otpnumber || "",
     },
     onSubmit: async (values) => {
       try {
         setLoading(true);
         const data = await getData(values);
-        if (data.status === 'success') {
-          console.log('OTP verification successful');
-          localStorage.setItem('token', JSON.stringify(data.data.token));
-          localStorage.setItem('user', JSON.stringify(data.data.user));
+        if (data.status === "success") {
+          console.log("OTP verification successful");
+          localStorage.setItem("token", JSON.stringify(data.data.token));
+          localStorage.setItem("user", JSON.stringify(data.data.user));
           setIsLoggedIn(true);
           setAuthUser({ user: data.data.user, token: data.data.token });
-          router.push('/dashboard');
+          router.push("/dashboard");
         } else {
-          console.error('OTP verification failed. Message:', data.message);
-          alert('Wrong OTP. Please enter the correct OTP.');
+          console.error("OTP verification failed. Message:", data.message);
+          alert("Wrong OTP. Please enter the correct OTP.");
         }
       } catch (error) {
-        console.error('Error during OTP verification:', error.message);
-        alert('An error occurred during OTP verification. Please try again.');
+        console.error("Error during OTP verification:", error.message);
+        alert("An error occurred during OTP verification. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -113,9 +113,9 @@ const Otp = () => {
     enableReinitialize: true,
   });
 
-  if (otpnumber === '' || otpnumber === null) {
+  if (otpnumber === "" || otpnumber === null) {
     console.error(
-      'OTP is missing or empty. Please request a new OTP and verify.'
+      "OTP is missing or empty. Please request a new OTP and verify."
     );
   }
 
@@ -123,7 +123,7 @@ const Otp = () => {
     const newOtp = [...otp];
     newOtp[index] = value;
 
-    if (value !== '') {
+    if (value !== "") {
       const nextIndex = index + 1;
       if (nextIndex < newOtp.length) {
         document.getElementById(`otp-input-${nextIndex}`).focus();
@@ -137,8 +137,8 @@ const Otp = () => {
     }
 
     setOtp(newOtp);
-    let otpString = newOtp ? newOtp.join('') : '';
-    formik.setFieldValue('otp', otpString);
+    let otpString = newOtp ? newOtp.join("") : "";
+    formik.setFieldValue("otp", otpString);
   };
 
   // timer
@@ -162,7 +162,7 @@ const Otp = () => {
 
   const handleResendClick = () => {
     // Handle resend logic here (use client)
-    console.log('Resend button clicked');
+    console.log("Resend button clicked");
 
     // Reset the timer
     setTimer(30);
@@ -174,7 +174,7 @@ const Otp = () => {
   const timerSeconds = timer % 60;
 
   return (
-    <Box sx={{ flexGrow: 1, height: '100vh' }}>
+    <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <Image
@@ -184,7 +184,7 @@ const Otp = () => {
             alt="Logo"
             style={{
               ...styles.image,
-              display: isScreenSmall ? 'none' : 'block',
+              display: isScreenSmall ? "none" : "block",
             }}
           />
         </Grid>
@@ -195,7 +195,7 @@ const Otp = () => {
             </LogoContainer>
             <div>
               <h2>Authentication</h2>
-              <p style={{ whiteSpace: 'pre-line' }}>
+              <p style={{ whiteSpace: "pre-line" }}>
                 Salary calculation made easy, track your
                 <br />
                 staffs overtime, leave day, late day, and
@@ -209,10 +209,10 @@ const Otp = () => {
             <Box
               component="form"
               sx={{
-                '& > :not(style)': { m: 1 },
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
+                "& > :not(style)": { m: 1 },
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
               }}
               noValidate
               autoComplete="off"
@@ -220,23 +220,16 @@ const Otp = () => {
             >
               <div
                 sx={{
-                  width: '100%',
-                  marginX: 'auto',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  gap: '2.5rem',
-                  sm: { width: '350px' },
+                  marginX: "auto",
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
                 {/* Loading indicator */}
                 {loading && <p>Loading...</p>}
 
                 {/* OTP input boxes */}
-                <div
-                  className="flex space-x-2"
-                  sx={{ gap: '20px', marginTop: '1rem', marginBottom: '1rem' }}
-                >
+                <div className="flex space-x-2">
                   {otp.map((digit, index) => (
                     <TextField
                       key={index}
@@ -248,10 +241,11 @@ const Otp = () => {
                       variant="outlined"
                       size="large"
                       sx={{
-                        width: '80px', // Adjust the width as needed
-                        height: '80px', // Adjust the height as needed
-                        textAlign: 'center',
-                        marginRight: '20px', // Add marginRight to create a gap between input boxes
+                        width: "60px",
+                        height: "60px",
+                        margin: "10px",
+                        // paddingLeft: "50px",
+                        // paddingRight: "40px",
                       }}
                     />
                   ))}
@@ -268,15 +262,15 @@ const Otp = () => {
 
             <div
               style={{
-                whiteSpace: 'pre-line',
-                marginTop: '8px',
-                display: 'flex',
-                alignItems: 'center',
+                whiteSpace: "pre-line",
+                marginTop: "8px",
+                display: "flex",
+                alignItems: "center",
               }}
             >
-              <p style={{ color: timer === 0 ? 'red' : 'inherit' }}>
-                Do not receive OTP? Resend OTP in{' '}
-                <span style={{ color: 'red' }}>
+              <p style={{ color: timer === 0 ? "red" : "inherit" }}>
+                Do not receive OTP? Resend OTP in{" "}
+                <span style={{ color: "red" }}>
                   {timerMinutes}:
                   {timerSeconds < 10 ? `0${timerSeconds}` : timerSeconds}
                 </span>
@@ -287,9 +281,9 @@ const Otp = () => {
                   color="primary"
                   onClick={handleResendClick}
                   style={{
-                    marginLeft: '8px',
-                    borderColor: 'red',
-                    color: 'red',
+                    marginLeft: "8px",
+                    borderColor: "red",
+                    color: "red",
                   }}
                 >
                   Resend
@@ -299,14 +293,14 @@ const Otp = () => {
 
             <p
               style={{
-                whiteSpace: 'pre-line',
-                textDecoration: 'underline',
-                cursor: 'pointer',
-                color: '#3f51b5',
+                whiteSpace: "pre-line",
+                textDecoration: "underline",
+                cursor: "pointer",
+                color: "#3f51b5",
               }}
-              onClick={() => router.push('/login')}
+              onClick={() => router.push("/login")}
             >
-              Change number again{' '}
+              Change number again{" "}
             </p>
           </Item>
         </Grid>

@@ -78,21 +78,21 @@ export const api = createApi({
     //     body: companyData,
     //   }),
     // }),
-
-    // deleteCompany: builder.mutation({
-    //   query: (company_id) => ({
-    //     url: `employer/company/destroy/${company_id}`,
-    //     method: "DELETE",
-    //   }),
-    // }),
-
-    // updateCompanyStatus: builder.mutation({
-    //   query: ({ company_id, status }) => ({
-    //     url: `employer/company/status/${company_id}`,
-    //     method: "PUT",
-    //     body: { status },
-    //   }),
-    // }),
+    // deletecompany
+    deleteCompany: builder.mutation({
+      query: (company_id) => ({
+        url: `employer/company/destroy/${company_id}`,
+        method: "DELETE",
+      }),
+    }),
+    // update company status
+    updateCompanyStatus: builder.mutation({
+      query: ({ company_id, status }) => ({
+        url: `employer/company/status/${company_id}`,
+        method: "PUT",
+        body: { status },
+      }),
+    }),
     // All companies
     getEmployerCompanies: builder.query({
       query: () => "employer/company/employercompanies",
@@ -120,6 +120,7 @@ export const {
   useCreateCompanyMutation,
   useUpdateCompanyMutation,
   useDeleteCompanyMutation,
+
   useUpdateCompanyStatusMutation,
   useGetActiveCompanyQuery,
   useGetInactiveCompanyQuery,

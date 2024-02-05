@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
+import Router from "next/navigation";
 // import AddIcon from "@mui/icons-material/Add";
 import { postRequest } from "@/services/ApiRequestService";
 import {
@@ -85,7 +86,7 @@ const CreateCompany = () => {
         resetForm();
 
         // Navigate to the company dashboard or any other desired location
-        // router.push("/dashboard/");
+        router.push("/dashboard/company");
       } catch (error) {
         console.error("Error adding company:", error);
 

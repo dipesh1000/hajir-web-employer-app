@@ -9,7 +9,7 @@ const Page = () => {
   const formik = useFormik({
     initialValues: {
       name: "sdsdsdsdsdsdsdsds",
-      code: "0", // Default value
+      code: "0",
       date_type: "English",
       holiday_type: "Custom",
       custom_holiday_file: null,
@@ -27,24 +27,16 @@ const Page = () => {
       try {
         console.log("Data being sent:", values);
 
-        // Destructure the elements of the array
         const [mutateAsync] = createCompanyMutation;
 
-        // Make API request to create a new company using the mutation hook
         await mutateAsync(values);
 
-        // Show success message
         alert("Company added successfully!");
 
-        // Reset the form
         resetForm();
-
-        // Navigate to the company dashboard or any other desired location
-        // router.push("/dashboard/");
       } catch (error) {
         console.error("Error adding company:", error);
 
-        // Show a user-friendly error message
         alert("Error adding company. Please try again.");
       }
     },
