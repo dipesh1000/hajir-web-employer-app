@@ -1,13 +1,13 @@
-import CompanySidebar from "@/components/Sidebar/CompanySidebar";
-import Header from "@/components/Sidebar/Header/Header";
-import MainSidebar from "@/components/Sidebar/MainSidebar";
-import Sidebar from "@/components/Sidebar/MainSidebar";
-import HeaderCompany from "@/components/company/HeaderCompany";
-import { Box } from "@mui/material";
+import CompanySidebar from '@/components/Sidebar/CompanySidebar';
+import Header from '@/components/Sidebar/Header/Header';
+import MainSidebar from '@/components/Sidebar/MainSidebar';
+import Sidebar from '@/components/Sidebar/MainSidebar';
+import HeaderCompany from '@/components/company/HeaderCompany';
+import { Box } from '@mui/material';
 
 export const metadata = {
   title: "Hajir's Next.js App",
-  description: "A smart attadance system ",
+  description: 'A smart attadance system ',
 };
 const DRAWER_WIDTH = 240;
 

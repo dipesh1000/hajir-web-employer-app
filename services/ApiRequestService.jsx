@@ -3,7 +3,7 @@ const myHeaders = {
   // Authorization: token,
 };
 
-const getToken = () => {
+export const getToken = () => {
   let token = JSON.parse(localStorage.getItem('token'));
   if (token) {
     return `Bearer ${token}`;
@@ -23,11 +23,12 @@ export const postRequest = (url, body) => {
   });
 };
 
-const getRequest = (url, params) => {
-  return fetchClient(url, {
+export const getRequest = (url, params) => {
+  return fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
     method: 'GET',
-    params: { ...params },
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    headers: myHeaders,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: getToken(),
+    },
   });
 };
