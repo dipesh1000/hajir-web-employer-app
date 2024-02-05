@@ -17,18 +17,23 @@ const Template = ({ children }) => {
     }
   }, [isLoggedIn, router]);
 
+  console.log(isLoggedIn, 'from isLogged in');
+
   useEffect(() => {
     const token =
-      typeof window !== 'undefined' && localStorage.getItem('token');
-    const user = typeof window !== 'undefined' && localStorage.getItem('user');
+      typeof window !== 'undefined' &&
+      JSON.parse(localStorage.getItem('token'));
+    const user =
+      typeof window !== 'undefined' && JSON.parse(localStorage.getItem('user'));
 
-    if (!token) {
-      setIsLoggedIn(false);
-      // Redirect to the login page if there is no token
-      router.replace('/login');
-    } else {
+    if (token) {
       setIsLoggedIn(true);
       setAuthUser({ user: user, token });
+    } else {
+      setIsLoggedIn(false);
+      setAuthUser(null);
+      // Redirect to the login page if there is no token
+      router.replace('/login');
     }
   }, [router, setAuthUser, setIsLoggedIn]);
 

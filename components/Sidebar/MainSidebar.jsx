@@ -1,3 +1,4 @@
+'use client';
 // Sidebar.jsx
 import React from 'react';
 import Drawer from '@mui/material/Drawer';
@@ -15,8 +16,12 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutButton from './LogoutButton';
 import BusinessIcon from '@mui/icons-material/Business';
 import Link from 'next/link';
+import { getRequest, postRequest } from '@/services/ApiRequestService';
+import Snackbar from '@mui/material/Snackbar';
+import { useRouter } from 'next/navigation';
 
-const MainSidebar = ({ onLogoutClick }) => {
+const MainSidebar = () => {
+  const router = useRouter();
   const LINKS = [
     { text: 'Home', href: '/dashboard', icon: HomeIcon },
     { text: 'Company', href: '/dashboard/company', icon: BusinessIcon },
@@ -24,6 +29,14 @@ const MainSidebar = ({ onLogoutClick }) => {
     { text: 'My Plans', href: 'dashboard/myplans', icon: ChecklistIcon },
     // { text: "Settings", href: "/dashboard/settings", icon: SettingsIcon },
   ];
+
+  const onLogoutClick = async (e) => {
+    const logout = await getRequest(`/employer/logout`);
+    if (logout) {
+      localStorage.setItem('token', null);
+      return router.push('/login');
+    }
+  };
 
   return (
     <Drawer
@@ -57,7 +70,7 @@ const MainSidebar = ({ onLogoutClick }) => {
       </List>
       <Divider />
       <List>
-        <LogoutButton onClick={onLogoutClick} />
+        <LogoutButton onClick={(e) => onLogoutClick(e)} />
       </List>
     </Drawer>
   );
