@@ -67,6 +67,7 @@ export const api = createApi({
         url: "employer/company/store",
         method: "POST",
         body: companyData,
+        formData: true,
       }),
     }),
 
