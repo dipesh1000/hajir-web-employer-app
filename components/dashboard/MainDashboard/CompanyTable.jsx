@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
 import {
   Table,
   TableBody,
@@ -16,6 +17,7 @@ import {
   DialogContentText,
   DialogActions,
   Button,
+  TextField,
 } from "@mui/material";
 import {
   useDeleteCompanyMutation,
@@ -24,11 +26,13 @@ import {
   useGetInactiveCompanyQuery,
 } from "@/services/api";
 import { DeleteOutline, Edit } from "@mui/icons-material";
+import Link from "next/link";
+
+// Import statements
 
 const CompanyTable = ({ statusFilter }) => {
+  const router = useRouter();
   const { data: companiesData, isLoading } = useGetEmployerCompaniesQuery();
-  const activeCompanies = useGetActiveCompanyQuery();
-  const inactiveCompanies = useGetInactiveCompanyQuery();
   const deleteCompanyMutation = useDeleteCompanyMutation();
 
   const companyData =
@@ -39,6 +43,7 @@ const CompanyTable = ({ statusFilter }) => {
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] =
     React.useState(false);
+  const [isUpdateDialogOpen, setUpdateDialogOpen] = useState(false);
 
   const handleDeleteClick = (companyId) => {
     setSelectedCompanyId(companyId);
@@ -47,21 +52,31 @@ const CompanyTable = ({ statusFilter }) => {
 
   const handleConfirmDelete = async () => {
     try {
-      // Access the mutateAsync function directly from the hook
-      // const { mutateAsync } = deleteCompanyMutation;
       console.log(selectedCompanyId, "deleted");
-
-      // Make API request to delete the company using the mutation hook
-      await mutateAsync(selectedCompanyId);
+      await deleteCompanyMutation.mutateAsync(selectedCompanyId);
       setConfirmationDialogOpen(false);
     } catch (error) {
       console.error("Error deleting company:", error);
-      // Handle error (e.g., show an error message)
     }
+  };
+
+  const handleUpdateClick = (company) => {
+    setSelectedCompanyId(company.id);
+    // Additional logic for handling company data if needed
+    setUpdateDialogOpen(true);
+  };
+
+  const handleUpdate = () => {
+    setUpdateDialogOpen(false);
+    router.push(`/dashboard/company/editcompany/${selectedCompanyId}`);
   };
 
   const handleCloseConfirmationDialog = () => {
     setConfirmationDialogOpen(false);
+  };
+
+  const handleCloseUpdateDialog = () => {
+    setUpdateDialogOpen(false);
   };
 
   return (
@@ -82,7 +97,11 @@ const CompanyTable = ({ statusFilter }) => {
             {companyData &&
               companyData.map((company) => (
                 <TableRow key={company.id}>
-                  <TableCell>{company.name}</TableCell>
+                  <TableCell>
+                    <Link href={`/dashboard/company/${company.id}`} passHref>
+                      <Button color="primary">{company.name}</Button>
+                    </Link>
+                  </TableCell>
                   <TableCell>{company.employee_count}</TableCell>
                   <TableCell>need from backend</TableCell>
                   <TableCell>{company.created_at}</TableCell>
@@ -96,9 +115,7 @@ const CompanyTable = ({ statusFilter }) => {
                     </IconButton>
                     <IconButton
                       aria-label="edit"
-                      onClick={() => {
-                        console.log("edit");
-                      }}
+                      onClick={() => handleUpdateClick(company)}
                     >
                       <Edit />
                     </IconButton>
@@ -126,6 +143,25 @@ const CompanyTable = ({ statusFilter }) => {
           </Button>
           <Button onClick={handleConfirmDelete} color="primary">
             Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Update Dialog */}
+      <Dialog open={isUpdateDialogOpen} onClose={handleCloseUpdateDialog}>
+        <DialogTitle>Edit Company</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to update this company?
+          </DialogContentText>
+          {/* Add other fields as needed */}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseUpdateDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleUpdate} color="primary">
+            Update
           </Button>
         </DialogActions>
       </Dialog>

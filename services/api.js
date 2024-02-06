@@ -1,18 +1,18 @@
 // api.js
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { getToken } from './ApiRequestService';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { getToken } from "./ApiRequestService";
 
-const hardcodedToken = JSON.parse(localStorage.getItem('token'));
+const hardcodedToken = JSON.parse(localStorage.getItem("token"));
 
 export const api = createApi({
-  reducerPath: 'api',
+  reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://hajirappv2.an4soft.com/api/v2/',
+    baseUrl: "https://hajirappv2.an4soft.com/api/v2/",
     // Include headers in each request
     prepareHeaders: (headers) => {
       const newHeaders = new Headers(headers);
-      newHeaders.set('Authorization', `Bearer ${hardcodedToken}`);
-      newHeaders.set('Content-Type', 'application/json');
+      newHeaders.set("Authorization", `Bearer ${hardcodedToken}`);
+      newHeaders.set("Content-Type", "application/json");
       return newHeaders;
     },
   }),
@@ -64,20 +64,20 @@ export const api = createApi({
 
     createCompany: builder.mutation({
       query: (companyData) => ({
-        url: 'employer/company/store',
-        method: 'POST',
+        url: "employer/company/store",
+        method: "POST",
         body: companyData,
         formData: true,
       }),
     }),
 
-    // updateCompany: builder.mutation({
-    //   query: ({ company_id, companyData }) => ({
-    //     url: `employer/company/update/${company_id}`,
-    //     method: "PUT",
-    //     body: companyData,
-    //   }),
-    // }),
+    updateCompany: builder.mutation({
+      query: ({ company_id, companyData }) => ({
+        url: `employer/company/update/${company_id}`,
+        method: "PUT",
+        body: companyData,
+      }),
+    }),
     // deletecompany
     deleteCompany: builder.mutation({
       query: (company_id) => ({
@@ -95,17 +95,22 @@ export const api = createApi({
     }),
     // All companies
     getEmployerCompanies: builder.query({
-      query: () => 'employer/company/employercompanies',
+      query: () => "employer/company/employercompanies",
     }),
 
     // Get Active Company
     getActiveCompany: builder.query({
-      query: () => 'employer/company/active',
+      query: () => "employer/company/active",
     }),
 
     // Get Inactive Company
     getInactiveCompany: builder.query({
-      query: () => 'employer/company/inactive',
+      query: () => "employer/company/inactive",
+    }),
+
+    // Get Candidates for a company by company_id
+    getCandidates: builder.query({
+      query: (company_id) => `employer/company/candidates/${company_id}`,
     }),
   }),
 });
@@ -120,7 +125,7 @@ export const {
   useCreateCompanyMutation,
   useUpdateCompanyMutation,
   useDeleteCompanyMutation,
-
+  useGetCandidatesQuery,
   useUpdateCompanyStatusMutation,
   useGetActiveCompanyQuery,
   useGetInactiveCompanyQuery,

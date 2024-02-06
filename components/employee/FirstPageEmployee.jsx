@@ -3,8 +3,8 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import TabsActiveInactive from "@/components/dashboard/MainDashboard/TabsActiveInactive";
-import CompanyTable from "@/components/dashboard/MainDashboard/CompanyTable";
+// import TabsActiveInactive from "@/components/dashboard/MainDashboard/TabsActiveInactive";
+// import CompanyTable from "@/components/dashboard/MainDashboard/CompanyTable";
 
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
@@ -12,6 +12,8 @@ import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import EmployeeTable from "./employeetable.jsx/EmployeeTable";
 import { FirstPage } from "@mui/icons-material";
+import { useGetCandidatesQuery } from "@/services/api";
+import TabsActiveInactive from "../dashboard/MainDashboard/TabsActiveInactive";
 
 const StyledButton = styled(Button)({
   marginTop: "40px",
@@ -27,9 +29,11 @@ const FirstPageEmployee = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { companyId } = useParams();
+  const getCandidates = useGetCandidatesQuery();
+  console.log(getCandidates, "getCandidates");
 
   // const companies = useSelector((state) => state.company.companies) || [];
-  const employees = useSelector((state) => state.company.employees) || [];
+  // const employees = useSelector((state) => state.company.employees) || [];
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   const handleChangeTab = (event, newValue) => {
@@ -102,7 +106,7 @@ const FirstPageEmployee = () => {
                   height: "100%",
                 }}
               >
-                <EmployeeTable employees={employees} />
+                {/* <EmployeeTable employees={employees} /> */}
               </Box>
               <Box
                 sx={{
@@ -110,7 +114,7 @@ const FirstPageEmployee = () => {
                   height: "100%",
                 }}
               >
-                <EmployeeTable employees={employees} statusFilter="active" />
+                {/* <EmployeeTable employees={employees} statusFilter="active" /> */}
               </Box>
               <Box
                 sx={{
@@ -118,7 +122,7 @@ const FirstPageEmployee = () => {
                   height: "100%",
                 }}
               >
-                <EmployeeTable employees={employees} statusFilter="inactive" />
+                {/* <EmployeeTable employees={employees} statusFilter="inactive" /> */}
               </Box>
             </Box>
           </Grid>

@@ -2,8 +2,25 @@
 
 import React, { useState } from "react";
 import { Box, Checkbox, Grid, Typography } from "@mui/material";
-
+import { useFormik } from "formik";
+import * as yup from "yup";
 const Step3Component = () => {
+  const validationSchema = yup.object({
+    week_days_off: yup.array().required("Week Days Off is required"),
+    // half_day_off: yup.boolean().required("Half Day Off is required"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      week_days_off: [1, 7],
+      // half_day_off: false,
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
+
   const days = [
     "Sunday",
     "Monday",

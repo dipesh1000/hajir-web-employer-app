@@ -36,6 +36,16 @@ const Step4Component = () => {
     setWorkingHours(`${formattedHours}:${formattedMinutes}`);
   };
 
+  const formik = useFormik({
+    initialValues: {
+      overtimeChecked: 1, // Assuming it's always checked
+      sickLeaveChecked: 1, // Assuming it's always checked
+      casualLeaveChecked: 1,
+      workingHours,
+      allowLateAttendanceChecked: 1, // Assuming it's always checked
+      overTimeRatioChecked: 1, // Assuming it's always checked
+    },
+  });
   const handleSubmit = () => {
     // Form submission logic here, use checkbox states when needed.
     const formData = {
