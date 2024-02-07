@@ -1,5 +1,4 @@
-'use client';
-
+"use client"
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -67,16 +66,6 @@ const Otp = () => {
 
   async function getData(values) {
     const apiResponse = await postRequest(`/employer/verify-opt`, values);
-    // const apiResponse = await fetch(
-    //   `${process.env.NEXT_PUBLIC_API_URL}/employer/verify-opt`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(values),
-    //   }
-    // );
     if (!apiResponse.ok) {
       throw new Error('Network response was not ok');
     }
@@ -127,9 +116,14 @@ const Otp = () => {
       const nextIndex = index + 1;
       if (nextIndex < newOtp.length) {
         document.getElementById(`otp-input-${nextIndex}`).focus();
+      } else {
+        // Move the cursor to the right side of the input box
+        const inputBox = document.getElementById(`otp-input-${index}`);
+        const inputLength = inputBox.value.length;
+        inputBox.setSelectionRange(inputLength, inputLength);
       }
     } else {
-      // Move to the previous input box if deleted
+      // Move to the left side of the previous input box if deleted
       const prevIndex = index - 1;
       if (prevIndex >= 0) {
         document.getElementById(`otp-input-${prevIndex}`).focus();
@@ -248,10 +242,13 @@ const Otp = () => {
                       variant="outlined"
                       size="large"
                       sx={{
-                        width: '80px', // Adjust the width as needed
-                        height: '80px', // Adjust the height as needed
+                        width: '50px', // Adjust the width as needed
+                        height: '40px', // Adjust the height as needed
                         textAlign: 'center',
-                        marginRight: '20px', // Add marginRight to create a gap between input boxes
+                        justifyContent: 'center',
+                        marginRight: '20px',
+                        alignItems: 'center',
+                        paddingLeft: '8px', // Add marginRight to create a gap between input boxes
                       }}
                     />
                   ))}
