@@ -9,6 +9,7 @@ import DashboardSecondComponent from './MainDashboard/DashboardSecondComponent';
 import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useRouter } from 'next/navigation';
+import DashboardDetailedbottom from './DashboardDetailedButtom/DashboardDetailedbottom';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   flexGrow: 1,
@@ -36,17 +37,13 @@ export default function FirstDashboard() {
 
   return (
     <StyledBox>
-      <Grid container spacing={4}>
-        <Grid item xs={7}>
+      <Grid container spacing={2} >
+        <Grid item xs={7} >
           <Box p={3}>
             <DashboardFirstComponent />
           </Box>
         </Grid>
-        <Grid item xs={5}>
-          <Box p={3}>
-            <DashboardSecondComponent />
-          </Box>
-        </Grid>
+    
       </Grid>
       {/* <StyledButton
         variant="contained"
@@ -55,6 +52,7 @@ export default function FirstDashboard() {
       >
         Create Company
       </StyledButton> */}
+      <DashboardDetailedbottom />
     </StyledBox>
   );
 }

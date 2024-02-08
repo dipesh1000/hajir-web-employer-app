@@ -51,11 +51,11 @@ const CompanyTable = ({ statusFilter }) => {
   //   ? filteredCompanies
   //   : [filteredCompanies];
 
-  console.log("All Companies:", allCompanies);
-  console.log("Status Filter:", statusFilter);
-  console.log("Filtered Companies:", filteredCompanies);
-  console.log("from api endpoint", activeCompaniesData);
-  console.log("from api endpoint", activeCompaniesData);
+  // console.log("All Companies:", allCompanies);
+  // console.log("Status Filter:", statusFilter);
+  // console.log("Filtered Companies:", filteredCompanies);
+  // console.log("from api endpoint", activeCompaniesData);
+  // console.log("from api endpoint", activeCompaniesData);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -71,7 +71,7 @@ const CompanyTable = ({ statusFilter }) => {
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          {/* <TableBody>
             {filteredCompanies.map((company) => (
               <TableRow key={company.id}>
                 <TableCell>{company.name}</TableCell>
@@ -92,12 +92,12 @@ const CompanyTable = ({ statusFilter }) => {
                 </TableCell>
                 <TableCell>{company.qr_path}</TableCell>
                 <TableCell>
-                  <IconButton>{/* Your EditIcon */}</IconButton>
-                  <IconButton>{/* Your DeleteIcon */}</IconButton>
+                  <IconButton></IconButton>
+                  <IconButton</IconButton>
                 </TableCell>
               </TableRow>
             ))}
-          </TableBody>
+          </TableBody> */}
         </Table>
       </TableContainer>
     </Box>

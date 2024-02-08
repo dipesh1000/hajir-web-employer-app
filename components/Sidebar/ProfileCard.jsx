@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import * as React from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
@@ -11,28 +11,42 @@ import CloseIcon from "@mui/icons-material/Close";
 import TextField from "@mui/material/TextField";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
+import LoopIcon from "@mui/icons-material/Loop";
+import { MenuItem, Select, InputLabel, FormControl } from "@mui/material";
+import styles from "styled-components";
 
 const ProfileContainer = styled(Button)({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
   padding: "20px",
-  cursor: "pointer",
-  // transition: "transform 0.2s",
-  // "&:hover": {
-  //   transform: "scale(1.05)",
-  // },
+  cursor: "pointer"
 });
 
-// const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-//   "& .MuiDialogContent-root": {
-//     // padding: theme.spacing(2),
-//   },
-//   "& .MuiDialogActions-root": {
-//     padding: theme.spacing(1),
-//   },
-// }));
-const NewBootstrapDialog = styled(Dialog)(() => ({}));
+const NewBootstrapDialog = styled(Dialog)(() => ({
+  marginLeft: "160px",
+
+
+}));
+
+const Wrapper = styles.div`
+  width: "490%"
+`;
+
+const Container = styles.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Row = styles.div`
+  display: flex;
+  align-items: center; /* Vertically center elements */
+`;
+
+const Column = styles.div`
+  flex: 1;
+  margin-right: 10px;
+`;
 
 export default function ProfileCard() {
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -40,6 +54,10 @@ export default function ProfileCard() {
   const [userData, setUserData] = React.useState({
     name: "Nitesh Shrestha",
     email: "nitesh@gmail.com",
+    gender: "Mr",
+    birthdate: "10/2/1995",
+    maritalStatus: "married",
+    phone: "9887679041"
   });
 
   const handleOpenDialog = () => {
@@ -56,25 +74,23 @@ export default function ProfileCard() {
   };
 
   const handleSaveProfile = () => {
-    // Save changes
     setEditMode(false);
     handleCloseDialog();
   };
 
   const handleCancelEdit = () => {
-    // Cancel editing
     setEditMode(false);
     handleCloseDialog();
   };
 
   return (
     <>
-      <ProfileContainer sx={{}} onClick={handleOpenDialog}>
+      <ProfileContainer onClick={handleOpenDialog}>
         <Avatar
           src="/avatar.svg"
           sx={{
             width: 100,
-            height: 100,
+            height: 100
           }}
           alt="Profile Avatar"
         />
@@ -85,7 +101,7 @@ export default function ProfileCard() {
             fontWeight: "semi-bold",
             mt: 1,
             color: "black",
-            textTransform: "none",
+            textTransform: "none"
           }}
         >
           {userData.name}
@@ -98,97 +114,167 @@ export default function ProfileCard() {
           {userData.email}
         </Typography>
       </ProfileContainer>
-
-      <NewBootstrapDialog
-        onClose={handleCloseDialog}
-        aria-labelledby="customized-dialog-title"
-        open={openDialog}
-      >
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          {editMode ? "Edit Profile" : "Profile Details"}
-        </DialogTitle>
-        <IconButton
-          aria-label="close"
-          onClick={handleCloseDialog}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
+      <Wrapper>
+        <NewBootstrapDialog
+          onClose={handleCloseDialog}
+          aria-labelledby="customized-dialog-title"
+          open={openDialog}
+          fullWidth
+          maxWidth="md"
         >
-          <CloseIcon />
-        </IconButton>
-        <DialogContent dividers>
-          {editMode ? (
-            <>
-              <Avatar
-                src="/avatar.svg"
-                sx={{
-                  width: 80,
-                  height: 80,
-                }}
-                alt="Profile Avatar"
-              />
-              <input
-                type="file"
-                accept="image/*"
-                style={{ margin: "10px 0" }}
-              />
-            </>
-          ) : (
+          <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+            <h1 style={{ textAlign: "center", marginTop:"-10px" , fontWeight:"400"}} >Profile</h1>
+          </DialogTitle>
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseDialog}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500]
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <DialogContent>
             <Avatar
               src="/avatar.svg"
               sx={{
-                width: 100,
-                height: 100,
+                width: 140,
+                height: 140,
+                marginLeft: "360px",
+                marginTop:"-20px"
               }}
               alt="Profile Avatar"
             />
-          )}
-          <TextField
-            label="Name"
-            fullWidth
-            margin="normal"
-            value={userData.name}
-            onChange={(e) => setUserData({ ...userData, name: e.target.value })}
-            disabled={!editMode}
-          />
-          <TextField
-            label="Email"
-            fullWidth
-            margin="normal"
-            value={userData.email}
-            onChange={(e) =>
-              setUserData({ ...userData, email: e.target.value })
-            }
-            disabled={!editMode}
-          />
-        </DialogContent>
-        <DialogActions>
-          {editMode ? (
+            <DialogActions>
+              {!editMode && (
+                <Button
+                  sx={{
+                    marginRight: "370px",
+                    backgroundColor: "rgba(0, 128, 0, 0.2)",
+                    color: "#000",
+                    textAlign: "center",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}
+                  onClick={handleEditProfile}
+                >
+                  Edit Profile
+                </Button>
+              )}
+            </DialogActions>
+            <h1 style={{ marginTop: "-5px" }}>Personal Details</h1>
+            <Container>
+              <Row>
+                <FormControl style={{ width: "130px", marginTop:"8px" }}>
+                  <InputLabel htmlFor="demo-simple-select-label">
+                    Gender <span style={{ color: "red" }}> *</span>
+                  </InputLabel>{" "}
+                  <Select
+                    value={userData.gender}
+                    label="Gender"
+                    onChange={(e) =>
+                      setUserData({ ...userData, gender: e.target.value })
+                    }
+                    disabled={!editMode}
+                  >
+                    <MenuItem value="Mr">Mr</MenuItem>
+                    <MenuItem value="Mrs">Mrs</MenuItem>
+                  </Select>
+                </FormControl>
+                <Column>
+                  <TextField
+                    label="Name"
+                    margin="normal"
+                    value={userData.name}
+                    onChange={(e) =>
+                      setUserData({ ...userData, name: e.target.value })
+                    }
+                    disabled={!editMode}
+                    sx={{width: "300px", marginLeft:"20px"}}
+                  />
+                </Column>
+                <Column>
+                  <TextField
+                    label="Email"
+                    margin="normal"
+                    value={userData.email}
+                    onChange={(e) =>
+                      setUserData({ ...userData, email: e.target.value })
+                    }
+                    disabled={!editMode}
+                    sx={{width:"400px"}}
+                  />
+                </Column>
+              </Row>
+              <Row>
+                <Column>
+                  <TextField
+                    label="10/2/1995"
+                    margin="normal"
+                    value={userData.birthdate}
+                    onChange={(e) =>
+                      setUserData({ ...userData, birthdate: e.target.value })
+                    }
+                    disabled={!editMode}
+                    sx={{width:"436px"}}
+                  />
+                </Column>
+                <Column>
+                  <TextField
+                    label="Married"
+                    margin="normal"
+                    value={userData.maritalStatus}
+                    onChange={(e) =>
+                      setUserData({
+                        ...userData,
+                        maritalStatus: e.target.value
+                      })
+                    }
+                    disabled={!editMode}
+                    sx={{width:"396px"}}
+                  />
+                </Column>
+              </Row>
+              <Row>
+                <TextField
+                  label="Phone"
+                  margin="normal"
+                  value={userData.phone}
+                  onChange={(e) =>
+                    setUserData({ ...userData, phone: e.target.value })
+                  }
+                  disabled={!editMode}
+                  sx={{width:"436px"}}
+                />
+              </Row>
+            </Container>
+          </DialogContent>
+          <h1></h1>
+          {editMode && (
             <>
-              <Button variant="contained" onClick={handleSaveProfile}>
-                Save Changes
+              <Button
+                variant="contained"
+                onClick={handleSaveProfile}
+                sx={{
+                  width: "150px",
+                  height: "59px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                  marginLeft: "230px"
+                }}
+              >
+                <LoopIcon />
+                Update
               </Button>
-              <Button onClick={handleCancelEdit}>Cancel</Button>
             </>
-          ) : (
-            <Button
-              sx={{
-                backgroundColor: "#f9f9f9",
-                color: "#000",
-                "&:hover": {
-                  backgroundColor: "#f9f9f9",
-                },
-              }}
-              onClick={handleEditProfile}
-            >
-              Edit Profile
-            </Button>
           )}
-        </DialogActions>
-      </NewBootstrapDialog>
+          <h2></h2>
+        </NewBootstrapDialog>
+      </Wrapper>
     </>
   );
 }

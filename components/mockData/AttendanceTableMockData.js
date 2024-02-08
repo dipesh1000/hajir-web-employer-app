@@ -18,7 +18,7 @@ const AttendanceTableMockData = () => {
       clockOut: "06:30 PM",
       department: "Management",
       attendanceStatus: "Present",
-      email: "biraj.doe@example.com",
+      email: "biraj.don@example.com",
       types: ["attendance", "extraBreakTaken"],
     },
     {
