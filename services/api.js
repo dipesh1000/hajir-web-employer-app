@@ -7,7 +7,7 @@ const hardcodedToken = JSON.parse(localStorage.getItem("token"));
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://hajirappv2.an4soft.com/api/v2/",
+    baseUrl: "https://veloxlabs.net/api/v2",
     // Include headers in each request
     prepareHeaders: (headers) => {
       const newHeaders = new Headers(headers);
@@ -82,7 +82,7 @@ export const api = createApi({
     deleteCompany: builder.mutation({
       query: (company_id) => ({
         url: `employer/company/destroy/${company_id}`,
-        method: "DELETE",
+        method: "POST",
       }),
     }),
     // update company status
@@ -110,7 +110,15 @@ export const api = createApi({
 
     // Get Candidates for a company by company_id
     getCandidates: builder.query({
-      query: (company_id) => `employer/company/candidates/${company_id}`,
+      query: (companyId) => `/employer/candidate/get-candidates/${companyId}`,
+    }),
+
+    createCandidate: builder.mutation({
+      query: ({ candidateData, companyId }) => ({
+        url: `employer/candidate/store/${companyId}`,
+        method: "POST",
+        body: candidateData,
+      }),
     }),
   }),
 });
@@ -126,6 +134,7 @@ export const {
   useUpdateCompanyMutation,
   useDeleteCompanyMutation,
   useGetCandidatesQuery,
+  useCreateCandidateMutation,
   useUpdateCompanyStatusMutation,
   useGetActiveCompanyQuery,
   useGetInactiveCompanyQuery,

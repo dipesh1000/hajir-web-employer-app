@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter
 import {
   Table,
   TableBody,
@@ -9,41 +8,29 @@ import {
   TableHead,
   TableRow,
   Paper,
-  IconButton,
   Box,
+  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
   DialogActions,
   Button,
-  TextField,
 } from "@mui/material";
-import {
-  useDeleteCompanyMutation,
-  useGetActiveCompanyQuery,
-  useGetEmployerCompaniesQuery,
-  useGetInactiveCompanyQuery,
-} from "@/services/api";
+import { useDeleteCompanyMutation } from "@/services/api";
 import { DeleteOutline, Edit } from "@mui/icons-material";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import useImage from "../../../hooks/useImage";
 
-// Import statements
-
-const CompanyTable = ({ statusFilter }) => {
+const CompanyTable = ({ companies, statusFilter }) => {
   const router = useRouter();
-  const { data: companiesData, isLoading } = useGetEmployerCompaniesQuery();
-  const deleteCompanyMutation = useDeleteCompanyMutation();
-
-  const companyData =
-    companiesData?.data?.active_companies?.concat(
-      companiesData?.data?.inactive_companies
-    ) || [];
-
+  const [deleteCompanyMutation] = useDeleteCompanyMutation();
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
-  const [isConfirmationDialogOpen, setConfirmationDialogOpen] =
-    React.useState(false);
+  const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [isUpdateDialogOpen, setUpdateDialogOpen] = useState(false);
+  const [openQrCodeModal, setOpenQrCodeModal] = useState(false);
+  const [qrCodeContent, setQrCodeContent] = useState(""); // State to hold QR code content
 
   const handleDeleteClick = (companyId) => {
     setSelectedCompanyId(companyId);
@@ -52,17 +39,20 @@ const CompanyTable = ({ statusFilter }) => {
 
   const handleConfirmDelete = async () => {
     try {
-      console.log(selectedCompanyId, "deleted");
-      await deleteCompanyMutation.mutateAsync(selectedCompanyId);
+      console.log("Company deleted successfully", selectedCompanyId);
+      await deleteCompanyMutation(selectedCompanyId.toString());
       setConfirmationDialogOpen(false);
     } catch (error) {
       console.error("Error deleting company:", error);
     }
   };
 
+  const handleCloseConfirmationDialog = () => {
+    setConfirmationDialogOpen(false);
+  };
+
   const handleUpdateClick = (company) => {
     setSelectedCompanyId(company.id);
-    // Additional logic for handling company data if needed
     setUpdateDialogOpen(true);
   };
 
@@ -71,12 +61,14 @@ const CompanyTable = ({ statusFilter }) => {
     router.push(`/dashboard/company/editcompany/${selectedCompanyId}`);
   };
 
-  const handleCloseConfirmationDialog = () => {
-    setConfirmationDialogOpen(false);
-  };
-
   const handleCloseUpdateDialog = () => {
     setUpdateDialogOpen(false);
+  };
+
+  // Function to handle QR code click and open modal with QR code content
+  const handleQrCodeClick = (content) => {
+    setQrCodeContent(content);
+    setOpenQrCodeModal(true);
   };
 
   return (
@@ -87,45 +79,54 @@ const CompanyTable = ({ statusFilter }) => {
             <TableRow>
               <TableCell>Company Name</TableCell>
               <TableCell>Employee Count</TableCell>
-              <TableCell>Approver</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>QR Code</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {companyData &&
-              companyData.map((company) => (
-                <TableRow key={company.id}>
-                  <TableCell>
-                    <Link href={`/dashboard/company/${company.id}`} passHref>
-                      <Button color="primary">{company.name}</Button>
-                    </Link>
-                  </TableCell>
-                  <TableCell>{company.employee_count}</TableCell>
-                  <TableCell>need from backend</TableCell>
-                  <TableCell>{company.created_at}</TableCell>
-                  <TableCell>{company.qr_path}</TableCell>
-                  <TableCell>
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => handleDeleteClick(company.id)}
-                    >
-                      <DeleteOutline />
-                    </IconButton>
-                    <IconButton
-                      aria-label="edit"
-                      onClick={() => handleUpdateClick(company)}
-                    >
-                      <Edit />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+            {companies.map((company) => (
+              <TableRow key={company.id}>
+                <TableCell>
+                  <Link href={`/dashboard/company/${company.id}`} passHref>
+                    <Button color="primary">{company.name}</Button>
+                  </Link>
+                </TableCell>
+                <TableCell>{company.employee_count}</TableCell>
+                <TableCell>{company.status}</TableCell>
+                <TableCell>
+                  {/* UseImage component with onClick handler */}
+                  {useImage({
+                    src: company.qr_path,
+                    height: 50,
+                    width: 50,
+                    style: {
+                      // border: "1px solid black",
+                      // borderRadius: "5px",
+                    },
+                    alt: "QR Code",
+                    onClick: () => handleQrCodeClick(company.qr_path),
+                  })}
+                </TableCell>
+                <TableCell>
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => handleDeleteClick(company.id)}
+                  >
+                    <DeleteOutline />
+                  </IconButton>
+                  <IconButton
+                    aria-label="edit"
+                    onClick={() => handleUpdateClick(company)}
+                  >
+                    <Edit />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
-
       {/* Delete Confirmation Dialog */}
       <Dialog
         open={isConfirmationDialogOpen}
@@ -146,7 +147,6 @@ const CompanyTable = ({ statusFilter }) => {
           </Button>
         </DialogActions>
       </Dialog>
-
       {/* Update Dialog */}
       <Dialog open={isUpdateDialogOpen} onClose={handleCloseUpdateDialog}>
         <DialogTitle>Edit Company</DialogTitle>
@@ -163,6 +163,26 @@ const CompanyTable = ({ statusFilter }) => {
           <Button onClick={handleUpdate} color="primary">
             Update
           </Button>
+        </DialogActions>
+      </Dialog>
+      {/* QR Code Modal */}
+      <Dialog open={openQrCodeModal} onClose={() => setOpenQrCodeModal(false)}>
+        <DialogTitle>QR Code</DialogTitle>
+        <DialogContent>
+          {/* Display QR code image */}
+          {useImage({
+            src: qrCodeContent,
+            height: 500,
+            width: 500,
+            style: {
+              // border: "1px solid black",
+              // borderRadius: "5px",
+            },
+            alt: "QR Code",
+          })}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenQrCodeModal(false)}>Close</Button>
         </DialogActions>
       </Dialog>
     </Box>

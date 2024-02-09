@@ -1,62 +1,34 @@
-"use client";
-import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-// import TabsActiveInactive from "@/components/dashboard/MainDashboard/TabsActiveInactive";
-// import CompanyTable from "@/components/dashboard/MainDashboard/CompanyTable";
+// FirstPageEmployee.js
 
+import React, { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { Box, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
-import { useParams, useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import EmployeeTable from "./employeetable.jsx/EmployeeTable";
-import { FirstPage } from "@mui/icons-material";
 import { useGetCandidatesQuery } from "@/services/api";
 import TabsActiveInactive from "../dashboard/MainDashboard/TabsActiveInactive";
-
-const StyledButton = styled(Button)({
-  marginTop: "40px",
-  alignSelf: "center",
-  backgroundColor: "#3f51b5",
-  color: "#fff",
-  "&:hover": {
-    backgroundColor: "#2d3b55",
-  },
-});
+import EmployeeTable from "./employeetable.jsx/EmployeeTable";
 
 const FirstPageEmployee = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
   const { companyId } = useParams();
-  const getCandidates = useGetCandidatesQuery();
-  console.log(getCandidates, "getCandidates");
 
-  // const companies = useSelector((state) => state.company.companies) || [];
-  // const employees = useSelector((state) => state.company.employees) || [];
-  const [selectedTab, setSelectedTab] = React.useState(0);
+  const {
+    data: candidateData,
+    isLoading,
+    refetch,
+  } = useGetCandidatesQuery(companyId);
+
+  const [selectedTab, setSelectedTab] = useState(0);
 
   const handleChangeTab = (event, newValue) => {
     setSelectedTab(newValue);
+    refetch();
   };
 
   return (
     <>
-      <Box
-        sx={
-          {
-            //   flexGrow: 3,
-            //   width: "100vw",
-            //   height: "100vh",
-            //   display: "flex",
-            //   flexDirection: "column",
-            //   justifyContent: "start",
-            //   margin: 0,
-            //   padding: 0,
-            //   marginBottom: "1rem", // Add margin bottom for better spacing
-          }
-        }
-      >
+      <Box>
         <Grid
           container
           spacing={5}
@@ -72,10 +44,10 @@ const FirstPageEmployee = () => {
               }}
             >
               <Box>
-                <h2>Emplpoyee</h2>
+                <h2>Employee</h2>
               </Box>
               <Box>
-                <StyledButton
+                <Button
                   variant="contained"
                   onClick={() =>
                     router.push(
@@ -85,10 +57,9 @@ const FirstPageEmployee = () => {
                   startIcon={<AddIcon />}
                 >
                   Create Employee
-                </StyledButton>
+                </Button>
               </Box>
             </Box>
-            {/* <EmployeeTable/> */}
             <h4>
               <span>Dashboard</span> / <span>Company</span> /{" "}
               <span>Employee</span>
@@ -106,7 +77,7 @@ const FirstPageEmployee = () => {
                   height: "100%",
                 }}
               >
-                {/* <EmployeeTable employees={employees} /> */}
+                <EmployeeTable candidateData={candidateData} />
               </Box>
               <Box
                 sx={{
@@ -114,7 +85,10 @@ const FirstPageEmployee = () => {
                   height: "100%",
                 }}
               >
-                {/* <EmployeeTable employees={employees} statusFilter="active" /> */}
+                <EmployeeTable
+                  candidateData={candidateData}
+                  statusFilter="active"
+                />
               </Box>
               <Box
                 sx={{
@@ -122,7 +96,10 @@ const FirstPageEmployee = () => {
                   height: "100%",
                 }}
               >
-                {/* <EmployeeTable employees={employees} statusFilter="inactive" /> */}
+                <EmployeeTable
+                  candidateData={candidateData}
+                  statusFilter="inactive"
+                />
               </Box>
             </Box>
           </Grid>

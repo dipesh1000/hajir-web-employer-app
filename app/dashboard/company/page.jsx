@@ -8,7 +8,11 @@ import CompanyList from "@/components/company/CompanyList";
 
 export default function MainDashboard() {
   const dispatch = useDispatch();
-  const { data: companiesData, isLoading } = useGetEmployerCompaniesQuery();
+  const {
+    data: companiesData,
+    isLoading,
+    refetch,
+  } = useGetEmployerCompaniesQuery();
   console.log(companiesData, isLoading);
   // dispatch(setCompanies(companiesData));
 

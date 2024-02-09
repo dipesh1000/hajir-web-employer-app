@@ -2,15 +2,10 @@
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "source.unsplash.com",
-        hostname: "https://via.placeholder.com",
-
-        port: "",
-        pathname: "/random",
-      },
+    domains: [
+      "source.unsplash.com",
+      "https://via.placeholder.com",
+      "veloxlabs.net",
     ],
   },
 };

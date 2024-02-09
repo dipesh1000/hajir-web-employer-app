@@ -8,6 +8,7 @@ import EmployeeTable from "@/components/employee/employeetable.jsx/EmployeeTable
 import CompanyFormFirst from "@/components/company/CompanyList";
 import FirstPageCompany from "@/components/company/CreateCompanyCard";
 import EmployeeFormFirst from "@/components/employee/EmployeeFormFirst";
+import { useGetCandidatesQuery } from "@/services/api";
 
 export default function CompanyDashboard() {
   const dispatch = useDispatch();
@@ -15,11 +16,19 @@ export default function CompanyDashboard() {
   const { companyId } = useParams();
   console.log("companyId:", companyId); // Log the companyId
 
-  // const companies = useSelector((state) => state.company.companies) || [];
-  // const company = companies.find((c) => c.id === companyId);
-  // const employees = company ? company.employees : [];
-  // const showFirstPageEmployee = employees.length > 0;
-  const hasEmployees = true;
+  const {
+    data: candidateData,
+    isLoading,
+    refetch,
+  } = useGetCandidatesQuery(companyId); // Pass companyId to the query
+  // console.log("use client", candidateData, isLoading);
+  console.log(candidateData?.data?.active_candidates, "active_candidates");
+  console.log(candidateData?.data?.inactive_candidates, "inactive_candidates");
+
+  const hasEmployees =
+    (candidateData?.data?.active_candidates?.length || 0) +
+      (candidateData?.data?.inactive_candidates?.length || 0) >
+    0;
   return (
     <div>
       {/* {showFirstPageEmployee ? (

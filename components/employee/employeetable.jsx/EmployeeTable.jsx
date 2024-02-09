@@ -1,5 +1,6 @@
-"use client";
-import React, { useState } from "react";
+// EmployeeTable.js
+
+import React from "react";
 import {
   Table,
   TableBody,
@@ -8,20 +9,15 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
   Box,
-  Tooltip,
 } from "@mui/material";
 
-import Link from "next/link";
+const EmployeeTable = ({ candidateData, statusFilter }) => {
+  const candidates =
+    statusFilter === "active"
+      ? candidateData?.data?.active_candidates
+      : candidateData?.data?.inactive_candidates;
 
-const EmployeeTable = ({}) => {
   return (
     <Box sx={{ width: "100%" }}>
       <TableContainer component={Paper}>
@@ -29,27 +25,25 @@ const EmployeeTable = ({}) => {
           <TableHead>
             <TableRow>
               <TableCell>Employee Name</TableCell>
-              <TableCell>Department</TableCell>
-              <TableCell>Staff Code</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>Designation</TableCell>
               <TableCell>Phone</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Code</TableCell>
+              <TableCell>Marriage Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {filteredCompanies.map((company) => ( */}
-            <TableRow>
-              <TableCell>
-                <Link href="/dashboard/company">
-                  <Button color="primary">Alex</Button>
-                </Link>
-              </TableCell>
-              <TableCell>Software</TableCell>
-              <TableCell>012A</TableCell>
-              <TableCell>Active</TableCell>
-              <TableCell>9808426215</TableCell>
-              <TableCell>Edit</TableCell>
-            </TableRow>
+            {candidates &&
+              candidates.map((candidate) => (
+                <TableRow key={candidate.id}>
+                  <TableCell>{candidate.name}</TableCell>
+                  <TableCell>{candidate.designation}</TableCell>
+                  <TableCell>{candidate.phone}</TableCell>
+                  <TableCell>{candidate.status}</TableCell>
+                  <TableCell>{candidate.code}</TableCell>
+                  <TableCell>{candidate.marriage_status}</TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

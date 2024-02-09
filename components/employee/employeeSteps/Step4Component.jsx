@@ -46,6 +46,20 @@ const Step4Component = () => {
       overTimeRatioChecked: 1, // Assuming it's always checked
     },
   });
+
+  const validationSchema = yup.object({
+    overtimeChecked: yup.number().required("Overtime Hours is required"),
+    sickLeaveChecked: yup.number().required("Sick Leave is required"),
+    casualLeaveChecked: yup.number().required("Casual Leave is required"),
+    workingHours: yup.string().required("Working Hours is required"),
+    allowLateAttendanceChecked: yup
+      .number()
+      .required("Allow Late Attendance is required"),
+    overTimeRatioChecked: yup.number().required("Over Time Ratio is required"),
+
+    // Define validation schema for Step 4
+  });
+
   const handleSubmit = () => {
     // Form submission logic here, use checkbox states when needed.
     const formData = {

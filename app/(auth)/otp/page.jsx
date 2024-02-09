@@ -99,6 +99,7 @@ const Otp = () => {
           setIsLoggedIn(true);
           setAuthUser({ user: data.data.user, token: data.data.token });
           router.push("/dashboard");
+          refetch();
         } else {
           console.error("OTP verification failed. Message:", data.message);
           alert("Wrong OTP. Please enter the correct OTP.");

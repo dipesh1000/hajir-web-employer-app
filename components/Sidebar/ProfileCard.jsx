@@ -18,20 +18,8 @@ const ProfileContainer = styled(Button)({
   alignItems: "center",
   padding: "20px",
   cursor: "pointer",
-  // transition: "transform 0.2s",
-  // "&:hover": {
-  //   transform: "scale(1.05)",
-  // },
 });
 
-// const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-//   "& .MuiDialogContent-root": {
-//     // padding: theme.spacing(2),
-//   },
-//   "& .MuiDialogActions-root": {
-//     padding: theme.spacing(1),
-//   },
-// }));
 const NewBootstrapDialog = styled(Dialog)(() => ({}));
 
 export default function ProfileCard() {
@@ -69,7 +57,7 @@ export default function ProfileCard() {
 
   return (
     <>
-      <ProfileContainer sx={{}} onClick={handleOpenDialog}>
+      <ProfileContainer onClick={handleOpenDialog}>
         <Avatar
           src="/avatar.svg"
           sx={{
@@ -103,6 +91,8 @@ export default function ProfileCard() {
         onClose={handleCloseDialog}
         aria-labelledby="customized-dialog-title"
         open={openDialog}
+        fullWidth
+        maxWidth="md"
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
           {editMode ? "Edit Profile" : "Profile Details"}

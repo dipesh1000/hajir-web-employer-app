@@ -1,16 +1,30 @@
 "use client";
-import * as React from "react";
-import { styled } from "@mui/material/styles";
-// import FirstPageCompany from "@/components/company/FirstPageCompany";
-// import CompanyFormFirst from "@/components/company/CompanyFormFirst";
-// import { useDispatch, useSelector } from "react-redux";
-// import FirstPageEmployee from "@/components/employee/EmployeeFormFirst-";
-// import EmployeeTable from "@/components/employee/employeetable.jsx/EmployeeTable";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { useGetCandidatesQuery } from "@/services/api";
+import { setCompanies } from "@/redux/employerSlice";
+import CreateCompanyCard from "@/components/company/CreateCompanyCard";
+import CompanyList from "@/components/company/CompanyList";
+import { useParams } from "next/navigation";
 
-export default function CompanyDashboard() {
-  // const dispatch = useDispatch();
-  // const companies = useSelector((state) => state.company.companies) || [];
-  // const hasCompanies = companies.length > 0;
+export default function MainDashboard() {
+  const dispatch = useDispatch();
+  const { companyId } = useParams();
+  const { data: candidateData, isLoading } = useGetCandidatesQuery(companyId); // Pass companyId to the query
+  console.log("use client", candidateData, isLoading);
+  // dispatch(setCompanies(companiesData));
 
-  return <div>hello i am from employee page.jsx page </div>;
+  // Check if the user has any companies
+  // const hasCandidate =
+  //   (companiesData?.data?.active_companies?.length || 0) +
+  //     (companiesData?.data?.inactive_companies?.length || 0) >
+  //   0;
+
+  return (
+    <div>
+      <CompanyList />
+      hi
+      {/* {hasCandidate ? <CompanyList /> : <CreateCompanyCard />} */}
+    </div>
+  );
 }

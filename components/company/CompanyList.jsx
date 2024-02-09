@@ -1,33 +1,27 @@
-import React from "react";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import TabsActiveInactive from "@/components/dashboard/MainDashboard/TabsActiveInactive";
+// CompanyList.js
+
+import React, { useState } from "react";
+import { Box, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
 import { useGetEmployerCompaniesQuery } from "@/services/api";
+import TabsActiveInactive from "@/components/dashboard/MainDashboard/TabsActiveInactive";
 import CompanyTable from "../dashboard/MainDashboard/CompanyTable";
-
-const StyledButton = styled(Button)({
-  marginTop: "40px",
-  alignSelf: "center",
-  backgroundColor: "#3f51b5",
-  color: "#fff",
-  "&:hover": {
-    backgroundColor: "#2d3b55",
-  },
-});
 
 const CompanyList = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const { data: companiesData, isLoading } = useGetEmployerCompaniesQuery();
+  const {
+    data: companiesData,
+    isLoading,
+    refetch,
+  } = useGetEmployerCompaniesQuery();
 
-  const [selectedTab, setSelectedTab] = React.useState(0);
+  const [selectedTab, setSelectedTab] = useState(0);
 
   const handleChangeTab = (event, newValue) => {
+    refetch();
+
     setSelectedTab(newValue);
   };
 
@@ -60,7 +54,7 @@ const CompanyList = () => {
                 <h2>Company</h2>
               </Box>
               <Box>
-                <StyledButton
+                <Button
                   variant="contained"
                   onClick={() =>
                     router.push("/dashboard/company/createcompany")
@@ -68,7 +62,7 @@ const CompanyList = () => {
                   startIcon={<AddIcon />}
                 >
                   Create Company
-                </StyledButton>
+                </Button>
               </Box>
             </Box>
             <h4>

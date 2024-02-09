@@ -1,73 +1,20 @@
+// Step1Component.jsx
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import TextField from "@mui/material/TextField";
-import {
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
+import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 import { Box } from "@mui/system";
-import * as yup from "yup";
-import { useFormik } from "formik";
 
-const Step1Component = () => {
-  const validationSchema = yup.object({
-    code: yup
-      .string()
-      .required("Staff Code is required")
-      .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field"),
-    name_holder: yup.string().required("name_holder is required"),
-    contact: yup.string().required("Mobile Number is required"),
-    designation: yup.string().required("Designation is required"),
-    marriage_status: yup.string().required("Marriage Status is required"),
-    name: yup.string().required("Full Name is required"),
-    confirmPhoneNumber: yup
-      .string()
-      .required("Confirm Phone Number is required")
-      .oneOf([yup.ref("contact"), null], "Phone Numbers must match"),
-    departments: yup.string().required("departments is required"),
-  });
-
-  const [name_holder, setname_holder] = useState("Mr");
-  const [marriage_status, setmarriage_status] = useState("Married");
-  const [departments, setdepartments] = useState("");
-
-  const handleChangename_holder = (event) => {
-    setname_holder(event.target.value);
-  };
-
-  const handleChangemarriage_status = (event) => {
-    setmarriage_status(event.target.value);
-  };
-
-  const handleChangedepartments = (event) => {
-    setdepartments(event.target.value);
-  };
-
-  const formik = useFormik({
-    initialValues: {
-      code: "",
-      name_holder: "Mr",
-      contact: "",
-      designation: "",
-      marriage_status: "Married",
-      name: "",
-      confirmPhoneNumber: "",
-      departments: "",
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      // Handle form submission
-      console.log(values);
-    },
-  });
-
+const Step1Component = ({ formik, validationErrors }) => {
+  const isFormIncomplete =
+    Object.keys(validationErrors).length > 0 && formik.submitCount > 0;
+  // Log form values when moving to Step 2
+  // const moveToStep2 = () => {
+  //   console.log("Step 1 Form Values:", formik.values);
+  //   // Proceed to Step 2 logic...
+  // };
   return (
     <Grid container spacing={2}>
-      {/* Left Column */}
       <Grid item xs={6}>
         <Box
           sx={{
@@ -77,9 +24,9 @@ const Step1Component = () => {
             mt: 1,
           }}
         >
-          {/* Staff code  */}
+          {/* Staff Code */}
           <div>
-            Staff Code <span sx={{ color: "red" }}> *</span>
+            Staff Code <span style={{ color: "red" }}> *</span>
           </div>
           <TextField
             label="Staff Code"
@@ -88,20 +35,34 @@ const Step1Component = () => {
             margin="normal"
             name="code"
             {...formik.getFieldProps("code")}
-            error={formik.touched.code && Boolean(formik.errors.code)}
-            helperText={formik.touched.code && formik.errors.code}
+            error={
+              ((formik.touched.code || formik.submitCount > 0) &&
+                Boolean(formik.errors.code) &&
+                formik.touched.code &&
+                formik.errors.code) ||
+              (!formik.touched.code &&
+                formik.submitCount > 0 &&
+                formik.errors.code) ||
+              (validationErrors.code && validationErrors.code)
+            }
+            helperText={
+              (formik.touched.code && formik.errors.code) ||
+              (!formik.touched.code &&
+                formik.submitCount > 0 &&
+                formik.errors.code) ||
+              (validationErrors.code && validationErrors.code)
+            }
           />
 
-          <br />
-
+          {/* Name Holder */}
           <div style={{ display: "flex", alignItems: "baseline" }}>
             <FormControl>
               <InputLabel htmlFor="demo-simple-select-label">
-                name_holder <span style={{ color: "red" }}> *</span>
-              </InputLabel>{" "}
+                Name Holder <span style={{ color: "red" }}> *</span>
+              </InputLabel>
               <Select
                 value={formik.values.name_holder}
-                label="name_holder"
+                label="Name Holder"
                 onChange={formik.handleChange}
                 name="name_holder"
               >
@@ -110,6 +71,7 @@ const Step1Component = () => {
               </Select>
             </FormControl>
 
+            {/* Full Name */}
             <TextField
               label="Full Name"
               variant="outlined"
@@ -117,44 +79,88 @@ const Step1Component = () => {
               margin="normal"
               name="name"
               {...formik.getFieldProps("name")}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-              helperText={formik.touched.name && formik.errors.name}
+              error={
+                ((formik.touched.name || formik.submitCount > 0) &&
+                  Boolean(formik.errors.name) &&
+                  formik.touched.name &&
+                  formik.errors.name) ||
+                (!formik.touched.name &&
+                  formik.submitCount > 0 &&
+                  formik.errors.name) ||
+                (validationErrors.name && validationErrors.name)
+              }
+              helperText={
+                (formik.touched.name && formik.errors.name) ||
+                (!formik.touched.name &&
+                  formik.submitCount > 0 &&
+                  formik.errors.name) ||
+                (validationErrors.name && validationErrors.name)
+              }
             />
           </div>
 
-          <br />
+          {/* Phone Number */}
           <TextField
-            label="Phone Number "
+            label="Phone Number"
             variant="outlined"
             sx={{ width: "700px", marginTop: 0.1 }}
             margin="normal"
             name="contact"
             {...formik.getFieldProps("contact")}
-            error={formik.touched.contact && Boolean(formik.errors.contact)}
-            helperText={formik.touched.contact && formik.errors.contact}
+            error={
+              ((formik.touched.contact || formik.submitCount > 0) &&
+                Boolean(formik.errors.contact) &&
+                formik.touched.contact &&
+                formik.errors.contact) ||
+              (!formik.touched.contact &&
+                formik.submitCount > 0 &&
+                formik.errors.contact) ||
+              (validationErrors.contact && validationErrors.contact)
+            }
+            helperText={
+              (formik.touched.contact && formik.errors.contact) ||
+              (!formik.touched.contact &&
+                formik.submitCount > 0 &&
+                formik.errors.contact) ||
+              (validationErrors.contact && validationErrors.contact)
+            }
           />
-          <br />
 
+          {/* Designation */}
           <TextField
-            label="Designation "
+            label="Designation"
             variant="outlined"
             sx={{ width: "700px", marginTop: 0.1 }}
             margin="normal"
             name="designation"
             {...formik.getFieldProps("designation")}
             error={
-              formik.touched.designation && Boolean(formik.errors.designation)
+              ((formik.touched.designation || formik.submitCount > 0) &&
+                Boolean(formik.errors.designation) &&
+                formik.touched.designation &&
+                formik.errors.designation) ||
+              (!formik.touched.designation &&
+                formik.submitCount > 0 &&
+                formik.errors.designation) ||
+              (validationErrors.designation && validationErrors.designation)
             }
-            helperText={formik.touched.designation && formik.errors.designation}
+            helperText={
+              (formik.touched.designation && formik.errors.designation) ||
+              (!formik.touched.designation &&
+                formik.submitCount > 0 &&
+                formik.errors.designation) ||
+              (validationErrors.designation && validationErrors.designation)
+            }
           />
-          <br />
+
+          {/* Marriage Status */}
           <FormControl sx={{ width: "700px", marginTop: 0.1 }}>
             <InputLabel
               htmlFor="demo-simple-select-label"
               sx={{ marginBottom: 0 }}
             >
               Marriage Status <span sx={{ color: "red" }}> *</span>
-            </InputLabel>{" "}
+            </InputLabel>
             <Select
               value={formik.values.marriage_status}
               label="Marriage Status"
@@ -167,8 +173,6 @@ const Step1Component = () => {
           </FormControl>
         </Box>
       </Grid>
-
-      {/* Right Column */}
       <Grid item xs={6}>
         <Box
           sx={{
@@ -178,49 +182,54 @@ const Step1Component = () => {
             mt: 20,
           }}
         >
-          {/* Full Name */}
-
           {/* Confirm Phone Number */}
           <TextField
-            label="Confirm Phone Number "
+            label="Confirm Phone Number"
             variant="outlined"
-            FormControl
             sx={{ width: "700px", marginTop: 8.4 }}
             margin="normal"
             name="confirmPhoneNumber"
             {...formik.getFieldProps("confirmPhoneNumber")}
             error={
-              formik.touched.confirmPhoneNumber &&
+              (formik.touched.confirmPhoneNumber || formik.submitCount > 0) &&
               Boolean(formik.errors.confirmPhoneNumber)
+              //   &&
+              //   formik.touched.confirmPhoneNumber &&
+              //   formik.errors.confirmPhoneNumber) ||
+              // (!formik.touched.confirmPhoneNumber &&
+              //   formik.submitCount > 0 &&
+              //   formik.errors.confirmPhoneNumber) ||
+              // (validationErrors.confirmPhoneNumber &&
+              //   validationErrors.confirmPhoneNumber)
             }
             helperText={
-              formik.touched.confirmPhoneNumber &&
-              formik.errors.confirmPhoneNumber
+              (formik.touched.confirmPhoneNumber &&
+                formik.errors.confirmPhoneNumber) ||
+              (!formik.touched.confirmPhoneNumber &&
+                formik.submitCount > 0 &&
+                formik.errors.confirmPhoneNumber) ||
+              (validationErrors.confirmPhoneNumber &&
+                validationErrors.confirmPhoneNumber)
             }
           />
+
+          {/* Departments */}
           <FormControl sx={{ width: "700px", marginTop: 2.8 }}>
             <InputLabel
               htmlFor="demo-simple-select-label"
               sx={{ marginBottom: 0 }}
             >
-              departments <span sx={{ color: "red" }}> *</span>
-            </InputLabel>{" "}
+              Departments <span sx={{ color: "red" }}> *</span>
+            </InputLabel>
             <Select
               value={formik.values.departments}
-              label="departments"
+              label="Departments"
               onChange={formik.handleChange}
               name="departments"
             >
-              <MenuItem value="IT departments">IT departments</MenuItem>
-              <MenuItem value="Finance departments">
-                Finance departments
-              </MenuItem>
-              <MenuItem value="Customer Support departments">
-                Customer Support departments
-              </MenuItem>
-              <MenuItem value="Business departments">
-                Business departments
-              </MenuItem>
+              <MenuItem value="1">IT departments</MenuItem>
+              <MenuItem value="2">Finance departments</MenuItem>
+              <MenuItem value="3">Customer Support departments</MenuItem>
             </Select>
           </FormControl>
         </Box>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import TextField from "@mui/material/TextField";
 import {
   Button,
@@ -17,26 +17,39 @@ import { Box } from "@mui/system";
 import * as yup from "yup";
 import { useFormik } from "formik";
 
-const Step2Component = () => {
-  const [salaryType, setSalaryType] = useState("fixed");
-  const [basicSalary, setBasicSalary] = useState("");
-  const [allowance, setAllowance] = useState("");
-  const [salaryAmount, setSalaryAmount] = useState("");
-  const [workingHours, setWorkingHours] = useState("08:00");
-  const [breakTime, setBreakTime] = useState("00:30");
-  const [dutyTime, setDutyTime] = useState("08:00");
-  const [probationPeriod, setProbationPeriod] = useState("3");
-  const [ampm, setAmpm] = useState("Am");
+const Step2Component = ({ formik }) => {
   const handleSalaryTypeChange = (event) => {
-    setSalaryType(event.target.value);
-    setBasicSalary("");
-    setAllowance("");
+    formik.handleChange(event);
+    formik.setFieldValue("basicSalary", "");
+    formik.setFieldValue("allowance_amount", "");
   };
 
-  const handleWorkingHoursChange = (increase) => {
-    const [hours, minutes] = workingHours.split(":").map(Number);
+  const handleworking_hoursChange = (increase) => {
+    const [hours, minutes] = formik.values.working_hours.split(":").map(Number);
 
-    // Increase or decrease by 30 minutes
+    // Increase or decrease by 10 minutes
+    const newMinutes = increase ? minutes + 10 : minutes - 30;
+    const newHours = newMinutes < 0 ? hours - 1 : hours + 1;
+
+    // Format the new time
+    const formattedHours = String(newHours).padStart(2, "0");
+    const formattedMinutes = String(
+      newMinutes < 0 ? 60 + newMinutes : newMinutes
+    ).padStart(2, "0");
+
+    formik.setFieldValue(
+      "working_hours",
+      `${formattedHours}:${formattedMinutes}`
+    );
+  };
+
+  const handlebreak_durationChange = (increase) => {
+    const break_duration = formik.values.break_duration;
+    if (!break_duration) return; // Null check
+
+    const [hours, minutes] = break_duration.split(":").map(Number);
+
+    // Increase or decrease by 10 minutes
     const newMinutes = increase ? minutes + 30 : minutes - 30;
     const newHours = newMinutes < 0 ? hours - 1 : hours + 1;
 
@@ -46,51 +59,31 @@ const Step2Component = () => {
       newMinutes < 0 ? 60 + newMinutes : newMinutes
     ).padStart(2, "0");
 
-    setWorkingHours(`${formattedHours}:${formattedMinutes}`);
+    formik.setFieldValue(
+      "break_duration",
+      `${formattedHours}:${formattedMinutes}`
+    );
   };
 
-  const handleBreakTimeChange = (increase) => {
-    const [hours, minutes] = breakTime.split(":").map(Number);
+  const handleAmPmChange = () => {
+    const duty_time = formik.values.duty_time;
+    if (!duty_time) return; // Null check
 
-    // Increase or decrease by 30 minutes
-    const newMinutes = increase ? minutes + 30 : minutes - 30;
-    const newHours = newMinutes < 0 ? hours - 1 : hours + 1;
+    const [time, period] = duty_time.split(" ");
+    const [hours, minutes] = time.split(":").map(Number);
 
-    // Format the new time
+    let newHours = hours;
+    if (period === "pm" && hours !== 12) {
+      newHours += 12;
+    } else if (period === "am" && hours === 12) {
+      newHours = 0;
+    }
+
     const formattedHours = String(newHours).padStart(2, "0");
-    const formattedMinutes = String(
-      newMinutes < 0 ? 60 + newMinutes : newMinutes
-    ).padStart(2, "0");
+    const formattedTime = `${formattedHours}:${minutes}`;
 
-    setBreakTime(`${formattedHours}:${formattedMinutes}`);
+    formik.setFieldValue("duty_time", formattedTime);
   };
-
-  // Form validation schema using Yup
-  const validationSchema = yup.object({
-    // salaryType: yup.string().required("Salary Type is required"),
-    basicSalary: yup.string().required("Basic Salary is required"),
-    allowance: yup.string().required("Allowance is required"),
-    salaryAmount: yup.string().required("Salary AMount is required"),
-  });
-  //here is the old validation
-
-  const formik = useFormik({
-    initialValues: {
-      salaryType: "fixed",
-      basicSalary: "",
-      allowance: "",
-      salaryAmount: "",
-      workingHours: "08:00",
-      dutyTime: "08:00",
-      breakTime: "00:30",
-      probationPeriod: "3",
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      // Handle form submission
-      console.log(values);
-    },
-  });
 
   return (
     <Grid container spacing={2}>
@@ -104,13 +97,9 @@ const Step2Component = () => {
             mt: 1,
           }}
         >
-          <Typography variant="body1">
-            Salary Type <span sx={{ color: "red" }}> *</span>
-          </Typography>
-
           <FormControl sx={{ width: "700px", marginTop: 2 }}>
             <InputLabel
-              htmlFor="salary-type"
+              htmlFor="salary_type"
               sx={{ color: "black", marginBottom: 0 }}
             >
               Salary Type
@@ -123,7 +112,7 @@ const Step2Component = () => {
                 formik.handleChange(e);
                 handleSalaryTypeChange(e);
               }}
-              id="salary-type"
+              id="salary_type"
             >
               <MenuItem value="Daily">Daily</MenuItem>
               <MenuItem value="Weekly">Weekly</MenuItem>
@@ -134,46 +123,44 @@ const Step2Component = () => {
           <Typography sx={{ marginTop: 2 }} variant="body1">
             Salary <span sx={{ color: "red" }}> *</span>
           </Typography>
-          {/* Radio buttons for "fixed" and "breakdown" */}
           <FormControl component="fieldset">
             <RadioGroup
               row
-              aria-label="salary-type"
+              aria-label="salary_type"
               sx={{ width: "700px", marginTop: 1 }}
-              name="salaryType"
-              value={formik.values.salaryType}
+              name="salary"
+              value={formik.values.salary}
               onChange={(e) => {
                 formik.handleChange(e);
                 handleSalaryTypeChange(e);
               }}
             >
               <FormControlLabel
-                value="fixed"
+                value="Fixed"
                 control={<Radio />}
                 label="Fixed"
               />
               <FormControlLabel
-                value="breakdown"
+                value="Breakdown"
                 control={<Radio />}
                 label="Breakdown"
               />
             </RadioGroup>
           </FormControl>
 
-          {formik.values.salaryType === "fixed" ? (
+          {formik.values.salary === "Fixed" ? (
             <TextField
               label="Salary Amount"
               variant="outlined"
               margin="normal"
               sx={{ width: "700px" }}
               name="basicSalary"
-              {...formik.getFieldProps("salaryAmount")}
+              {...formik.getFieldProps("basicSalary")}
               error={
-                formik.touched.salaryAmount &&
-                Boolean(formik.errors.salaryAmount)
+                formik.touched.basicSalary && Boolean(formik.errors.basicSalary)
               }
               helperText={
-                formik.touched.salaryAmount && formik.errors.salaryAmount
+                formik.touched.basicSalary && formik.errors.basicSalary
               }
             />
           ) : (
@@ -194,16 +181,20 @@ const Step2Component = () => {
                 }
               />
               <TextField
-                label="Allowance"
+                label="allowance_amount"
                 variant="outlined"
                 sx={{ width: "700px" }}
                 margin="normal"
-                name="allowance"
-                {...formik.getFieldProps("allowance")}
+                name="allowance_amount"
+                {...formik.getFieldProps("allowance_amount")}
                 error={
-                  formik.touched.allowance && Boolean(formik.errors.allowance)
+                  formik.touched.allowance_amount &&
+                  Boolean(formik.errors.allowance_amount)
                 }
-                helperText={formik.touched.allowance && formik.errors.allowance}
+                helperText={
+                  formik.touched.allowance_amount &&
+                  formik.errors.allowance_amount
+                }
               />
             </>
           )}
@@ -226,25 +217,22 @@ const Step2Component = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Button
               variant="outlined"
-              onClick={() => handleWorkingHoursChange(false)}
+              onClick={() => handleworking_hoursChange(false)}
             >
               -
             </Button>
             <TextField
               label="Working Hours"
               variant="outlined"
-              sx={{
-                width: "333px",
-                textAlign: "center",
-              }}
+              sx={{ width: "333px", textAlign: "center" }}
               margin="normal"
-              name="workingHours"
+              name="working_hours"
               inputProps={{ style: { textAlign: "center" } }}
-              {...formik.getFieldProps("workingHours")}
+              {...formik.getFieldProps("working_hours")}
             />
             <Button
               variant="outlined"
-              onClick={() => handleWorkingHoursChange(true)}
+              onClick={() => handleworking_hoursChange(true)}
             >
               +
             </Button>
@@ -258,23 +246,23 @@ const Step2Component = () => {
               label="Duty Time"
               variant="outlined"
               margin="normal"
-              name="dutyTime"
-              {...formik.getFieldProps("dutyTime")}
-              sx={{
-                width: "375px",
-                textAlign: "center",
-              }}
+              name="duty_time"
+              {...formik.getFieldProps("duty_time")}
+              sx={{ width: "375px", textAlign: "center" }}
             />
             <FormControl sx={{ width: "95px", marginTop: 1 }}>
               <InputLabel htmlFor="am">AM/PM</InputLabel>
               <Select
                 value={formik.values.ampm}
-                label="AM/PM<"
-                onChange={(e) => formik.handleChange(e)}
+                label="AM/PM"
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  handleAmPmChange();
+                }}
                 name="ampm"
               >
-                <MenuItem value="am">Am</MenuItem>
-                <MenuItem value="Pm">Pm</MenuItem>
+                <MenuItem value="am">AM</MenuItem>
+                <MenuItem value="pm">PM</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -285,25 +273,22 @@ const Step2Component = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Button
               variant="outlined"
-              onClick={() => handleBreakTimeChange(false)}
+              onClick={() => handlebreak_durationChange(false)}
             >
               -
             </Button>
             <TextField
               label="Break Time"
               variant="outlined"
-              sx={{
-                width: "333px",
-                textAlign: "center",
-              }}
+              sx={{ width: "333px", textAlign: "center" }}
               margin="normal"
-              name="breakTime"
+              name="break_duration"
               inputProps={{ style: { textAlign: "center" } }}
-              {...formik.getFieldProps("breakTime")}
+              {...formik.getFieldProps("break_duration")}
             />
             <Button
               variant="outlined"
-              onClick={() => handleBreakTimeChange(true)}
+              onClick={() => handlebreak_durationChange(true)}
             >
               +
             </Button>
@@ -312,21 +297,19 @@ const Step2Component = () => {
           <Typography variant="body1">
             Probation Period <span sx={{ color: "red" }}> *</span>
           </Typography>
-
           <FormControl sx={{ width: "482px" }}>
             <Select
-              value={formik.values.probationPeriod}
-              label="Probation Period "
+              value={formik.values.probation_period}
+              label="Probation Period"
               onChange={(e) => {
                 formik.handleChange(e);
-                handleSalaryTypeChange(e);
               }}
-              name="probationPeriod"
+              name="probation_period"
             >
               <MenuItem value="1 month">1 month</MenuItem>
-              <MenuItem value="3 month">3 month</MenuItem>
-              <MenuItem value="6 month">6 month</MenuItem>
-              <MenuItem value="12 month ">12 month</MenuItem>
+              <MenuItem value="3 months">3 months</MenuItem>
+              <MenuItem value="6 months">6 months</MenuItem>
+              <MenuItem value="12 months">12 months</MenuItem>
             </Select>
           </FormControl>
         </Box>

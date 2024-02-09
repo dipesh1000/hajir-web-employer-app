@@ -65,7 +65,7 @@ const CreateCompany = () => {
       name: "",
       code: "",
       date_type: "",
-      holiday_type: "Custom",
+      holiday_type: "",
     },
     validationSchema: validationSchema,
     // onSubmit function
@@ -76,16 +76,13 @@ const CreateCompany = () => {
         // Destructure the elements of the array
         const [mutateAsync] = createCompanyMutation;
 
-        // Make API request to create a new company using the mutation hook
         await mutateAsync(values);
 
-        // Show success message
         alert("Company added successfully!");
 
         // Reset the form
         resetForm();
 
-        // Navigate to the company dashboard or any other desired location
         router.push("/dashboard/company");
       } catch (error) {
         console.error("Error adding company:", error);
