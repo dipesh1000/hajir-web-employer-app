@@ -316,7 +316,7 @@ export default function ProfileCard() {
                         }}
                       >
                         <TextField
-                          label="New Phone Number"
+                          label="New Phone Numbers"
                           margin="normal"
                           value={newPhoneNumber}
                           onChange={(e) => setNewPhoneNumber(e.target.value)}
