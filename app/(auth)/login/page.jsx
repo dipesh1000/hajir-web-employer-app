@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -14,6 +14,13 @@ import ScrollDialog from '@/components/Auth/ScrollDialog';
 import { postRequest } from '@/services/ApiRequestService';
 
 // Styled components
+const BasicGridStyles = {
+  image: {
+    display: 'block',
+    maxWidth: '100%',
+  },
+};
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -45,11 +52,46 @@ const validationSchema = yup.object({
     ),
 });
 
+
 // Main component
 export default function Signin() {
+  const images = [
+    {
+      src: "/auth/otp1111.png",
+      width: 175,
+      height: 190,
+      alt: "First Image",
+      paragraph: "Login with employer will help you to track your <br/> all the staff activities from your smart devices.",
+    },
+    {
+      src: "/auth/otp2222.png",
+      width: 175,
+      height: 190,
+      alt: "Second Image",
+      paragraph: "You can manage your employee attendance, <br/> salary, overtime and payroll anywhere in the world."
+    },
+    {
+      src: "/auth/otp3333.png",
+      width: 175,
+      height: 190,
+      alt: "Third Image",
+      paragraph: "Live attendance, quick reports, allowance & overtime <br/> expense calculation and export reports in csv/excel/pdf."
+    },
+  ];
+  
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setSelectedImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 2000);
+  
+    return () => clearInterval(intervalId);
+  }, []); // Run the effect only once when the component mounts
+  
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [buttonClicked, setButtonClicked] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
 
   const handleClose = () => {
     setOpen(false);
@@ -98,22 +140,19 @@ export default function Signin() {
     <Box
       sx={{
         flexGrow: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
       }}
     >
-      <Grid container spacing={2}>
+      <Grid container>
         <Grid item xs={12} md={6}>
           {/* Apply styles to the image */}
           <Image
             src="/auth/login.png"
             width={950}
-            height={1000}
+            height={925}
             alt="Logo"
             style={{
-              // ...styles.image,
-              display: isScreenSmall ? 'none' : 'block',
+              ...BasicGridStyles.image,
+              display: useMediaQuery('(max-width:900px)') ? 'none' : 'block',
             }}
           />
         </Grid>
@@ -122,23 +161,17 @@ export default function Signin() {
             <LogoContainer>
               <Image src="/hajir-logo.png" width={140} height={50} alt="Logo" />
             </LogoContainer>
-            <div>
+        
               <h2>Authentication</h2>
-              <p style={{ whiteSpace: 'pre-line' }}>
-                Salary calculation made easy, track your
-                <br />
-                staffs overtime, leave day, late day, and
-                <br />
-                live daily wages interactive reportss.
-              </p>
-              <Image
-                src="/auth/login-min.png"
-                width={150}
-                height={150}
-                alt="Logo"
-              />
-            </div>
+              <div dangerouslySetInnerHTML={{ __html: images[selectedImageIndex].paragraph }} />
 
+              <Image
+                src={images[selectedImageIndex].src}
+                width={images[selectedImageIndex].width}
+                height={images[selectedImageIndex].height}
+                alt={images[selectedImageIndex].alt}
+                style={{"marginTop":"15px"}}
+              />
             <Box
               component="form"
               sx={{
@@ -162,6 +195,7 @@ export default function Signin() {
                 value={formik.values.phone}
                 error={formik.touched.phone && Boolean(formik.errors.phone)}
                 helperText={formik.touched.phone && formik.errors.phone}
+                style={{"marginTop":"20px"}}
               />
 
               <Button
