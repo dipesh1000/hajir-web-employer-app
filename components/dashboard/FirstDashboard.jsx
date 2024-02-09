@@ -20,6 +20,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
   justifyContent: 'start',
   alignItems: 'center',
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+
 }));
 
 const StyledButton = styled(Button)({

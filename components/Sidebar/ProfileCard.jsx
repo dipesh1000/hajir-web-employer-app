@@ -1,3 +1,4 @@
+
 "use client"
 import * as React from "react";
 import Button from "@mui/material/Button";
@@ -12,7 +13,11 @@ import TextField from "@mui/material/TextField";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import LoopIcon from "@mui/icons-material/Loop";
+import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { MenuItem, Select, InputLabel, FormControl } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+
 import styles from "styled-components";
 
 const ProfileContainer = styled(Button)({
@@ -25,8 +30,6 @@ const ProfileContainer = styled(Button)({
 
 const NewBootstrapDialog = styled(Dialog)(() => ({
   marginLeft: "160px",
-
-
 }));
 
 const Wrapper = styles.div`
@@ -51,6 +54,9 @@ const Column = styles.div`
 export default function ProfileCard() {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [editMode, setEditMode] = React.useState(false);
+  const [changePhoneMode, setChangePhoneMode] = React.useState(false);
+  const [newPhoneNumber, setNewPhoneNumber] = React.useState('');
+  const [confirmPhoneNumber, setConfirmPhoneNumber] = React.useState('');
   const [userData, setUserData] = React.useState({
     name: "Nitesh Shrestha",
     email: "nitesh@gmail.com",
@@ -81,6 +87,10 @@ export default function ProfileCard() {
   const handleCancelEdit = () => {
     setEditMode(false);
     handleCloseDialog();
+  };
+
+  const handleChangePhoneNumber = () => {
+    setChangePhoneMode(!changePhoneMode);
   };
 
   return (
@@ -121,6 +131,7 @@ export default function ProfileCard() {
           open={openDialog}
           fullWidth
           maxWidth="md"
+          scroll="body"
         >
           <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
             <h1 style={{ textAlign: "center", marginTop:"-10px" , fontWeight:"400"}} >Profile</h1>
@@ -152,7 +163,7 @@ export default function ProfileCard() {
               {!editMode && (
                 <Button
                   sx={{
-                    marginRight: "370px",
+                    marginRight: "350px",
                     backgroundColor: "rgba(0, 128, 0, 0.2)",
                     color: "#000",
                     textAlign: "center",
@@ -161,7 +172,7 @@ export default function ProfileCard() {
                   }}
                   onClick={handleEditProfile}
                 >
-                  Edit Profile
+                  <EditIcon/>Edit Profile
                 </Button>
               )}
             </DialogActions>
@@ -219,7 +230,7 @@ export default function ProfileCard() {
                       setUserData({ ...userData, birthdate: e.target.value })
                     }
                     disabled={!editMode}
-                    sx={{width:"436px"}}
+                    sx={{width:"433px"}}
                   />
                 </Column>
                 <Column>
@@ -234,21 +245,63 @@ export default function ProfileCard() {
                       })
                     }
                     disabled={!editMode}
-                    sx={{width:"396px"}}
+                    sx={{width:"399px"}}
                   />
                 </Column>
               </Row>
               <Row>
-                <TextField
-                  label="Phone"
-                  margin="normal"
-                  value={userData.phone}
-                  onChange={(e) =>
-                    setUserData({ ...userData, phone: e.target.value })
-                  }
-                  disabled={!editMode}
-                  sx={{width:"436px"}}
-                />
+                <Column>
+                  {!editMode && (
+                    <TextField
+                      label="Initial Phone Number"
+                      margin="normal"
+                      value={userData.phone}
+                      disabled
+                      sx={{width:"433px"}}
+                    />
+                  )}
+                  {editMode && (
+                    <TextField
+                      label="Old Phone Number"
+                      margin="normal"
+                      value={userData.phone}
+                      disabled
+                      sx={{width:"433px"}}
+                    />
+                  )}
+                </Column>
+              </Row>
+              <Row>
+                {editMode && (
+                  <>
+                    <div style={{ display: "flex", alignItems: "center", marginTop:"" }}>
+                      {changePhoneMode ? (
+                        <CheckCircleIcon style={{ marginRight: "10px" }} />
+                      ) : (
+                        <CircleOutlinedIcon style={{ marginRight: "10px" }} />
+                      )}
+                      <h1 onClick={handleChangePhoneNumber} style={{ fontWeight: "100", fontSize: "17px",width: "200px" }}>Change Phone number</h1>
+                    </div>
+                    {changePhoneMode && (
+                      <div style={{ display: "flex", alignItems: "center", marginTop:"100px", marginLeft:"-232px",gap:"15px" }}>
+                        <TextField
+                          label="New Phone Number"
+                          margin="normal"
+                          value={newPhoneNumber}
+                          onChange={(e) => setNewPhoneNumber(e.target.value)}
+                          style={{width:"433px"}}
+                        />
+                        <TextField
+                          label="Confirm New Phone Number"
+                          margin="normal"
+                          value={confirmPhoneNumber}
+                          onChange={(e) => setConfirmPhoneNumber(e.target.value)}
+                          style={{width:"400px"}}
+                        />
+                      </div>
+                    )}
+                  </>
+                )}
               </Row>
             </Container>
           </DialogContent>
@@ -264,7 +317,7 @@ export default function ProfileCard() {
                   justifyContent: "center",
                   alignItems: "center",
                   textAlign: "center",
-                  marginLeft: "230px"
+                  marginLeft: "400px"
                 }}
               >
                 <LoopIcon />
@@ -278,3 +331,4 @@ export default function ProfileCard() {
     </>
   );
 }
+

@@ -19,7 +19,7 @@ const Img = styled('img')({
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
   margin: 'auto',
-width:"1600px",
+width:"1230px",
 height:"500px",
 marginLeft:"-20px",
   flexGrow: 1,

@@ -10,6 +10,42 @@ import Button from '@mui/material/Button';
 import Link from 'next/link';
 import { useMediaQuery } from '@mui/material';
 
+// Styles for components
+const BasicGridStyles = {
+  container: {
+    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height:'100vh',
+  },
+  image: {
+    display: 'block',
+    maxWidth: '100%',
+  },
+};
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100%',
+  boxShadow: 'none',
+  elevation: 0,
+  background: 'transparent',
+}));
+
+const LogoContainer = styled('div')({
+  marginBottom: '16px',
+});
+
+  
+
+
 
 export default function BasicGrid() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
