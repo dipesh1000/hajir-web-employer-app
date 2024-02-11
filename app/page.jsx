@@ -92,6 +92,7 @@ export default function BasicGrid() {
             style={{
               ...BasicGridStyles.image,
               display: useMediaQuery("(max-width:900px)") ? "none" : "block",
+              objectFit: "cover",
             }}
           />
         </Grid>

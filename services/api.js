@@ -74,8 +74,9 @@ export const api = createApi({
     updateCompany: builder.mutation({
       query: ({ company_id, companyData }) => ({
         url: `employer/company/update/${company_id}`,
-        method: "PUT",
+        method: "POST",
         body: companyData,
+        formData: true,
       }),
     }),
     // deletecompany
@@ -89,7 +90,7 @@ export const api = createApi({
     updateCompanyStatus: builder.mutation({
       query: ({ company_id, status }) => ({
         url: `employer/company/status/${company_id}`,
-        method: "PUT",
+        method: "POST",
         body: { status },
       }),
     }),

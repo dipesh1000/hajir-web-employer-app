@@ -18,7 +18,7 @@ import {
   Button,
 } from "@mui/material";
 import { useDeleteCompanyMutation } from "@/services/api";
-import { DeleteOutline, Edit } from "@mui/icons-material";
+import { DeleteOutline, Edit, Update, UpdateSharp } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import useImage from "../../../hooks/useImage";
@@ -60,7 +60,9 @@ const CompanyTable = ({ companies, statusFilter }) => {
     setUpdateDialogOpen(false);
     router.push(`/dashboard/company/editcompany/${selectedCompanyId}`);
   };
-
+  const handleUpdateStatusClick = (company) => {
+    // setSelectedCompanyId(company.id);
+  };
   const handleCloseUpdateDialog = () => {
     setUpdateDialogOpen(false);
   };
@@ -120,6 +122,12 @@ const CompanyTable = ({ companies, statusFilter }) => {
                     onClick={() => handleUpdateClick(company)}
                   >
                     <Edit />
+                  </IconButton>
+                  <IconButton
+                    aria-label="status"
+                    onClick={() => handleUpdateStatusClick(company)}
+                  >
+                    <UpdateSharp />
                   </IconButton>
                 </TableCell>
               </TableRow>
