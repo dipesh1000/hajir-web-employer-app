@@ -9,18 +9,20 @@ import Button from "@mui/material/Button";
 import Link from "next/link";
 import { useMediaQuery } from "@mui/material";
 
-// Styles for components
 const BasicGridStyles = {
   container: {
     flexGrow: 1,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: "100vh",
+    height: "100vh", // Adjusted minHeight instead of maxHeight
+    objectFit: "cover",
+    overflow: "hidden",
   },
   image: {
     display: "block",
     maxWidth: "100%",
+    height: "auto", // Ensuring the image maintains aspect ratio
   },
 };
 const Item = styled(Paper)(({ theme }) => ({
@@ -79,22 +81,22 @@ export default function BasicGrid() {
 
     return () => clearInterval(intervalId);
   }, []); // Run the effect only once when the component mounts
+  const isMobile = useMediaQuery("(max-width:900px)");
 
   return (
     <Box sx={BasicGridStyles.container}>
-      <Grid container>
+      <Grid container spacing={3} justifyContent="center" alignItems="center">
         <Grid item xs={12} md={6}>
-          <Image
-            width={950}
-            height={900}
-            alt="login image"
-            src="/auth/login-image-default.png"
-            style={{
-              ...BasicGridStyles.image,
-              display: useMediaQuery("(max-width:900px)") ? "none" : "block",
-              objectFit: "cover",
-            }}
-          />
+          {!isMobile && ( // Hide the image on mobile screens
+            <Image
+              src="/auth/login-image-default.png"
+              alt="login image"
+              layout="responsive" // Making the image responsive
+              width={isMobile ? 300 : 900} // Adjusted width based on screen size
+              height={900}
+              style={BasicGridStyles.image}
+            />
+          )}
         </Grid>
         <Grid item xs={12} md={6}>
           <Item>
