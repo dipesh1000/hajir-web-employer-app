@@ -87,11 +87,13 @@ export default function BasicGrid() {
           <Image
             width={950}
             height={900}
+
             alt="login image"
             src="/auth/login-image-default.png"
             style={{
               ...BasicGridStyles.image,
               display: useMediaQuery("(max-width:900px)") ? "none" : "block",
+              objectFit: "cover", height: "auto"
             }}
           />
         </Grid>

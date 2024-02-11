@@ -286,33 +286,49 @@ export default function ProfileCard() {
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        marginTop: "",
+                   
                       }}
                     >
-                      {changePhoneMode ? (
-                        <CheckCircleIcon style={{ marginRight: "10px" }} />
-                      ) : (
-                        <CircleOutlinedIcon style={{ marginRight: "10px" }} />
-                      )}
-                      <h1
-                        onClick={handleChangePhoneNumber}
-                        style={{
-                          fontWeight: "100",
-                          fontSize: "17px",
-                          width: "200px",
-                        }}
-                      >
-                        Change Phone number
-                      </h1>
+                     
+                     <div className="change"
+  onClick={handleChangePhoneNumber}
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+  }}
+>
+  {changePhoneMode ? (
+    <CheckCircleIcon style={{ marginRight: "10px"  }} />
+  ) : (
+    <CircleOutlinedIcon style={{ marginRight: "10px"}} />
+  )}
+  <span>Change Phone number</span>
+</div>
+
+
+
                     </div>
-                    {changePhoneMode && (
+                 {changePhoneMode && (
+
+
+<div sx={{marginTop:"100px"}}>
+  <TextField/>
+  <TextField/>
+</div>
+                 )}
+
+
+
+                    {/* {changePhoneMode && (
                       <div
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          marginTop: "100px",
-                          marginLeft: "-232px",
-                          gap: "15px",
+                        
+
+                          flexDirection: "column", // Change to column layout
+                          alignItems: "flex-start", // Align items to the start
+                      
                         }}
                       >
                         <TextField
@@ -320,7 +336,7 @@ export default function ProfileCard() {
                           margin="normal"
                           value={newPhoneNumber}
                           onChange={(e) => setNewPhoneNumber(e.target.value)}
-                          style={{ width: "433px" }}
+                          style={{ width: "443px" }}
                         />
                         <TextField
                           label="Confirm New Phone Number"
@@ -332,7 +348,7 @@ export default function ProfileCard() {
                           style={{ width: "400px" }}
                         />
                       </div>
-                    )}
+                    )} */}
                   </>
                 )}
               </Row>
@@ -351,14 +367,16 @@ export default function ProfileCard() {
                   alignItems: "center",
                   textAlign: "center",
                   marginLeft: "400px",
+               marginTop:'10px'
                 }}
               >
                 <LoopIcon />
                 Update
               </Button>
+              <h2></h2>
             </>
           )}
-          <h2></h2>
+    
         </NewBootstrapDialog>
       </Wrapper>
     </>

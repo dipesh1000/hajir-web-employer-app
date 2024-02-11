@@ -339,22 +339,12 @@ const Content = styled.div`
   height: 340px;
   gap: 5px;
   align-items: flex-start;
-  font-size: 15px;
+
   flex-wrap: wrap;
   position: relative;
 
-  li {
-  
-    @media (max-width: 1512px) {
-      font-size: 14px;
-   
-    }
 
-  //   @media (max-width: 1439) {
-  //     font-size: 12px;
-
-  //   }
-  // }
+  }
 `;
 
 
@@ -385,7 +375,7 @@ xs: 'column',
        marginTop:"10px",
         '& > :not(style)': {
           m: 1,
-          width: "400px",
+      width:'400px',
           height: "490px",
             alignItems: "center",
             justifyContent: "center",
@@ -395,10 +385,18 @@ xs: 'column',
       }
       
     >
+
      <Paper
   sx={{
     height: "500px",
     width: "250px",
+fontSize:{
+  xl:'18px',
+  lg:'16px',
+  md:'17px',
+  sm:'13px',
+  xs:'10px',
+},
 
   }}
 >
@@ -513,8 +511,16 @@ Add 5 employee
   <Button variant="outlined" style={{borderColor:"green"}} >Get Started</Button>
 
       </Paper>
+   
       <Paper
-
+      sx={{
+fontSize:{
+  xl:'18px',
+  lg:'16px',
+  md:'17px',
+  sm:'13px',
+  xs:'10px',
+},}}
 >
           <Top style={{
                     backgroundColor:  '#1E90FF',
@@ -548,8 +554,16 @@ Add 33 employee
                     <Button variant="outlined" style={{borderColor:"green", marginTop:"120px"}}>Upgrade to standard</Button>
 
       </Paper>
+  
       <Paper
-
+      sx={{
+        fontSize:{
+          xl:'18px',
+          lg:'16px',
+          md:'17px',
+          sm:'13px',
+          xs:'10px',
+        },}}
 >
                   <Top style={{
                     backgroundColor:  '#1E90FF',
