@@ -1,5 +1,3 @@
-// FirstPageEmployee.js
-
 import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Box, Grid } from "@mui/material";
@@ -22,9 +20,17 @@ const FirstPageEmployee = () => {
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleChangeTab = (event, newValue) => {
-    setSelectedTab(newValue);
     refetch();
+    setSelectedTab(newValue);
   };
+
+  const activeEmployee = candidateData?.data?.active_candidates || [];
+  const inactiveEmployee = candidateData?.data?.inactive_candidates || [];
+  const allEmployee = [...activeEmployee, ...inactiveEmployee];
+
+  const totalCountEmployee = allEmployee.length;
+  const activeCountEmployee = activeEmployee.length;
+  const inactiveCountEmployee = inactiveEmployee.length;
 
   return (
     <>
@@ -68,8 +74,9 @@ const FirstPageEmployee = () => {
               <TabsActiveInactive
                 value={selectedTab}
                 handleChange={handleChangeTab}
-                sx={{ gap: 50 }}
-                notificationsCount={{ all: 5, active: 2, inactive: 3 }}
+                totalCount={totalCountEmployee}
+                activeCount={activeCountEmployee}
+                inactiveCount={inactiveCountEmployee}
               />
               <Box
                 sx={{
@@ -77,7 +84,7 @@ const FirstPageEmployee = () => {
                   height: "100%",
                 }}
               >
-                <EmployeeTable candidateData={candidateData} />
+                <EmployeeTable candidateData={candidateData} />{" "}
               </Box>
               <Box
                 sx={{

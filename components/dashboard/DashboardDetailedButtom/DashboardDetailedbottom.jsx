@@ -18,50 +18,69 @@ const Item = styled(Paper)(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
- marginTop:"20px"
+  marginTop: "20px",
 }));
 
 const DashboardDetailedbottom = () => {
   return (
-    <Stack
-      direction={{ xs: "column", sm: "row" }}
-      sx={{ width: "100%", marginTop:"10px" }}
-      spacing={{ xs: 1, sm: 2, md: 12 }}
+    <Box
+      style={{
+        flexGrow: 1,
+        height: "100%",
+        display: "flex",
+        width: "100%",
+        flexDirection: "column",
+      }}
     >
-      <Item sx={{  backgroundColor: 'rgba(34, 64, 139, 0.08)',height:"120px"}}>
-    
-        <Typography variant="body1"  sx={{color: "black",fontSize:"20px"}}>Total Company</Typography>
-        <Typography sx={{ color: "#22408B", fontSize:"28px"}} variant="h6">
-        0
-        </Typography>
-      </Item>
-
-      <Item sx={{ backgroundColor: 'rgba(34, 64, 139, 0.09)',height:"120px" }}>
-  
-        <Typography variant="body1" sx={{color: "black", fontSize:"20px"}}>Total Employee</Typography>
-        <Typography sx={{ color: "#22408B", fontSize:"28px"}} variant="h6">
-          0
-        </Typography>
-      </Item>
-
-      <Item sx={{   backgroundColor: 'rgba(0, 128, 0, 0.08)',height:"120px" }}>
-    
-        <Typography variant="body1" sx={{color: "black", fontSize:"20px"}}>Active Employee</Typography>
-        <Typography sx={{ color: "#22408B", fontSize:"28px" }} variant="h6">
-          0
-        </Typography>
-      </Item>
-      <Item sx={{  backgroundColor: 'rgba(255, 80, 80, 0.08)',
-height:"120px"
-
-}}>
-      
-        <Typography variant="body1" sx={{color: "black", fontSize:"20px"}}>InActive Employee</Typography>
-        <Typography sx={{ color: "#22408B", fontSize:"28px" }} variant="h6">
-          0
-        </Typography>
-      </Item>
-    </Stack>
+      <Stack
+        container
+        direction={{ xs: "column", sm: "row" }}
+        sx={{ width: "100%", marginTop: "10px" }}
+        spacing={{ xs: 1, sm: 2, md: 1 }}
+      >
+        z``
+        <Item
+          sx={{ backgroundColor: "rgba(34, 64, 139, 0.08)", height: "120px" }}
+        >
+          <Typography variant="body1" sx={{ color: "black", fontSize: "20px" }}>
+            Total Company
+          </Typography>
+          <Typography sx={{ color: "#22408B", fontSize: "28px" }} variant="h6">
+            0
+          </Typography>
+        </Item>
+        <Item
+          sx={{ backgroundColor: "rgba(34, 64, 139, 0.09)", height: "120px" }}
+        >
+          <Typography variant="body1" sx={{ color: "black", fontSize: "20px" }}>
+            Total Employee
+          </Typography>
+          <Typography sx={{ color: "#22408B", fontSize: "28px" }} variant="h6">
+            0
+          </Typography>
+        </Item>
+        <Item
+          sx={{ backgroundColor: "rgba(0, 128, 0, 0.08)", height: "120px" }}
+        >
+          <Typography variant="body1" sx={{ color: "black", fontSize: "20px" }}>
+            Active Employee
+          </Typography>
+          <Typography sx={{ color: "#22408B", fontSize: "28px" }} variant="h6">
+            0
+          </Typography>
+        </Item>
+        <Item
+          sx={{ backgroundColor: "rgba(255, 80, 80, 0.08)", height: "120px" }}
+        >
+          <Typography variant="body1" sx={{ color: "black", fontSize: "20px" }}>
+            InActive Employee
+          </Typography>
+          <Typography sx={{ color: "#22408B", fontSize: "28px" }} variant="h6">
+            0
+          </Typography>
+        </Item>
+      </Stack>
+    </Box>
   );
 };
 

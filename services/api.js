@@ -114,11 +114,21 @@ export const api = createApi({
       query: (companyId) => `/employer/candidate/get-candidates/${companyId}`,
     }),
 
+    // Create Candidate for a company by company_id
     createCandidate: builder.mutation({
       query: ({ candidateData, companyId }) => ({
         url: `employer/candidate/store/${companyId}`,
         method: "POST",
         body: candidateData,
+      }),
+    }),
+
+    // Invite Candidate for a company by company_id
+    inviteCandidate: builder.mutation({
+      query: ({ candidate_id, status, companyId }) => ({
+        url: `/employer/${companyId}/invitation/store`,
+        method: "POST",
+        body: { candidate_id, status },
       }),
     }),
   }),
@@ -135,6 +145,7 @@ export const {
   useUpdateCompanyMutation,
   useDeleteCompanyMutation,
   useGetCandidatesQuery,
+  useInviteCandidateMutation,
   useCreateCandidateMutation,
   useUpdateCompanyStatusMutation,
   useGetActiveCompanyQuery,

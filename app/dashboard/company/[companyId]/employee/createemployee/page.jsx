@@ -83,7 +83,7 @@ const HorizontalLinearStepper = () => {
       name_holder: "Mr", //required string
       name: "", // required
       code: "CAAA", // required
-      contact: "9898981586", // required
+      contact: "9845971897", // required
       designation: "CEO", // required
       marriage_status: "Unmarried", //required enum['Married', 'Unmarried']
       salary_type: "Weekly", // required - enum ['Weekly', 'Monthly']
