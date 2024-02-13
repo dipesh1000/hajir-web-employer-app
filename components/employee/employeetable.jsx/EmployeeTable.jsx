@@ -21,12 +21,17 @@ import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import UpdateIcon from "@mui/icons-material/Update";
-import StatusChangeIcon from "@mui/icons-material/TrackChanges"; // Example status change icon
-import { useInviteCandidateMutation } from "@/services/api";
+import StatusChangeIcon from "@mui/icons-material/TrackChanges";
+import {
+  useDeleteCandidateMutation,
+  useInviteCandidateMutation,
+} from "@/services/api";
 import { useParams } from "next/navigation";
 
 const EmployeeTable = ({ candidateData, statusFilter }) => {
   const [inviteCandidate] = useInviteCandidateMutation();
+  const [deleteCandidate] = useDeleteCandidateMutation();
+  const [selectedCandidateId, setSelectedCandidateId] = useState();
   const { companyId } = useParams();
 
   const candidates =
@@ -40,7 +45,7 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
     useState(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
   const [isStatusChangeDialogOpen, setIsStatusChangeDialogOpen] =
-    useState(false); // State for status change dialog
+    useState(false);
 
   const openInviteDialog = (candidate) => {
     setSelectedCandidate(candidate);
@@ -76,8 +81,22 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
     setIsStatusChangeDialogOpen(false);
   };
 
-  const handleConfirmDelete = () => {
-    // Implement delete functionality here
+  const handleDeleteClick = (candidate_id) => {
+    console.log("Candidate ID:", candidate_id);
+    setSelectedCandidateId(candidate_id);
+    setIsConfirmationDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    const candidate_id = selectedCandidateId;
+    console.log("Candidate deleted successfully");
+
+    try {
+      await deleteCandidate(companyId, candidate_id);
+      setIsConfirmationDialogOpen(false);
+    } catch (error) {
+      console.error("Error deleting candidate:", error);
+    }
   };
 
   const handleUpdate = () => {
@@ -131,7 +150,7 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
                     </IconButton>
                     <IconButton
                       aria-label="delete"
-                      onClick={() => setIsConfirmationDialogOpen(true)}
+                      onClick={() => handleDeleteClick(candidate.candidate_id)}
                     >
                       <DeleteOutlineIcon />
                     </IconButton>
@@ -194,7 +213,7 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
           <Button onClick={handleCloseUpdateDialog} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleUpdate} color="primary">
+          <Button onClick={handleConfirmDelete} color="primary">
             Update
           </Button>
         </DialogActions>

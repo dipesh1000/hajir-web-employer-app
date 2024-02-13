@@ -1,6 +1,5 @@
 // api.js
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { getToken } from "./ApiRequestService";
 
 const hardcodedToken = JSON.parse(localStorage.getItem("token"));
 
@@ -21,6 +20,8 @@ export const api = createApi({
     //   query: () => "data",
     // }),
 
+    //******************AUTH ***********************
+
     // Employee Registration
     // registerEmployee: builder.mutation({
     //   query: (employeeData) => ({
@@ -40,27 +41,28 @@ export const api = createApi({
     // }),
 
     // Profile Update
-    // updateProfile: builder.mutation({
-    //   query: (profileData) => ({
-    //     url: "employer/profile-update",
-    //     method: "POST",
-    //     body: profileData,
-    //   }),
-    // }),
+    updateProfile: builder.mutation({
+      query: (profileData) => ({
+        url: "employer/profile-update",
+        method: "POST",
+        body: profileData,
+      }),
+    }),
 
     // Change Phone Number
-    // changePhoneNumber: builder.mutation({
-    //   query: (phoneNumberData) => ({
-    //     url: "employer/change-phonenumber",
-    //     method: "POST",
-    //     body: phoneNumberData,
-    //   }),
-    // }),
+    changePhoneNumber: builder.mutation({
+      query: (phoneNumberData) => ({
+        url: "employer/change-phonenumber",
+        method: "POST",
+        body: phoneNumberData,
+      }),
+    }),
 
     // Get Profile
-    // getProfile: builder.query({
-    //   query: () => "employer/get-profile",
-    // }),
+    getProfile: builder.query({
+      query: () => "employer/get-profile",
+    }),
+    //****************** Company ***********************
 
     createCompany: builder.mutation({
       query: (companyData) => ({
@@ -131,6 +133,14 @@ export const api = createApi({
         body: { candidate_id, status },
       }),
     }),
+
+    // deletecompany
+    deleteCandidate: builder.mutation({
+      query: (companyId, candidate_id) => ({
+        url: `/employer/candidate/destroy/${companyId}/${candidate_id}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -141,6 +151,7 @@ export const {
   useUpdateProfileMutation,
   useChangePhoneNumberMutation,
   useGetProfileQuery,
+  useDeleteCandidateMutation,
   useCreateCompanyMutation,
   useUpdateCompanyMutation,
   useDeleteCompanyMutation,

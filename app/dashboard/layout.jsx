@@ -6,7 +6,7 @@ export const metadata = {
   title: "Hajir's ",
   description: "A smart attadance system ",
 };
-const DRAWER_WIDTH = 240;
+const DRAWER_WIDTH = 250;
 
 export default function DashboardLayout({ children }) {
   return (

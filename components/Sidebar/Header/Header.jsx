@@ -11,7 +11,7 @@ import HeaderMenu from "./HeaderMenu";
 import Image from "next/image";
 
 const Header = ({ onMenuIconClick }) => (
-  <AppBar position="fixed" elevation={1} color="transparent">
+  <AppBar position="fixed" elevation={1} color="inherit">
     <Toolbar>
       <div style={{ display: "flex", alignItems: "center" }}>
         <Image src="/hajir-logo.png" width={140} height={50} alt="Hajir Logo" />
