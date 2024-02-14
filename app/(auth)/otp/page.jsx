@@ -15,22 +15,43 @@ import { useMediaQuery } from "@mui/material";
 import { postRequest } from "@/services/ApiRequestService";
 
 // Styles for components
-const styles = {
+// const styles = {
+//   container: {
+//     flexGrow: 1,
+//     display: "flex",
+//     alignItems: "center",
+//     justifyContent: "center",
+//     overflow:'hidden',
+//   },
+//   image: {
+//     display: "block",
+//     maxWidth: "100%",
+//     // Hide the image on screens smaller than 600px
+//     "@media (maxWidth: 600px)": {
+//       display: "none",
+//     },
+//   },
+// };
+const BasicGridStyles = {
   container: {
     flexGrow: 1,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    height: "100vh", // Adjusted minHeight instead of maxHeight
+    objectFit: "cover",
+    overflow: "hidden",
+
+   backgroundColor: "#FAFAFA;",
+
   },
   image: {
     display: "block",
     maxWidth: "100%",
-    // Hide the image on screens smaller than 600px
-    "@media (maxWidth: 600px)": {
-      display: "none",
-    },
+    height: "auto", // Ensuring the image maintains aspect ratio
   },
 };
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -169,19 +190,21 @@ const Otp = () => {
   const timerSeconds = timer % 60;
 
   return (
-    <Box sx={{ flexGrow: 1, height: "100vh" }}>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Image
-            src="/auth/login.png"
-            width={950}
-            height={925}
-            alt="Logo"
-            style={{
-              ...styles.image,
-              display: isScreenSmall ? "none" : "block",
-            }}
-          />
+    <Box sx={BasicGridStyles.container}>
+      <Grid container spacing={3} justifyContent="center" alignItems="center">
+        <Grid item xs={12} md={6}>
+        {!isScreenSmall && (
+                      <Image
+              src="/auth/login.png"
+              alt="login image"
+              layout="responsive" // Making the image responsive
+              width={isScreenSmall ? 300 : 900} // Adjusted width based on screen size
+              height={900}
+              style={BasicGridStyles.image}
+            />
+          )}
+  
+
         </Grid>
         <Grid item xs={12} md={6}>
           <Item>
@@ -189,7 +212,9 @@ const Otp = () => {
               <Image src="/hajir-logo.png" width={140} height={50} alt="Logo" />
             </LogoContainer>
             <div>
-              <h2>Authentication</h2>
+              
+ <h1 style={{ color: 'rgba(34, 64, 139, 0.87)' , fontWeight:'500', fontSize:'18px', marginTop:'-10px'}}>Smart attendance system</h1>
+              {/* <h2>Authentication</h2>
               <p style={{ whiteSpace: "pre-line" }}>
                 Salary calculation made easy, track your
                 <br />
@@ -198,8 +223,17 @@ const Otp = () => {
                 live daily wages interactive reports.
                 <br />
                 Enter the one-time password sent to your mobile number
-              </p>
+              </p> */}
+              <h1 style={{fontWeight:'400', fontSize:'14px',whiteSpace: "pre-line",marginTop:'20px'}}>Enter the OTP code that has been sent to your mobile number </h1>
             </div>
+<Image
+src="/auth/maskotp.png"
+    width={175}
+    height={170}
+   style={{marginTop:'20px', marginBottom:'60px'}}
+/>
+
+
 
             <Box
               component="form"
@@ -224,7 +258,7 @@ const Otp = () => {
                 {loading && <p>Loading...</p>}
 
                 {/* OTP input boxes */}
-                <div className="flex space-x-2">
+<div className="flex space-x-2">
                   {otp.map((digit, index) => (
                     <TextField
                       key={index}
@@ -234,24 +268,27 @@ const Otp = () => {
                       value={digit}
                       onChange={(e) => handleInputChange(index, e.target.value)}
                       variant="outlined"
-                      size="large"
-                      sx={{
-                        width: "50px", // Adjust the width as needed
-                        height: "40px", // Adjust the height as needed
+                      size="small"
+                      // size="large"
+                     sx={{
+                      
+                       width: "50px", // Adjust the width as needed
+                       height: "40px", // Adjust the height as needed
                         textAlign: "center",
                         justifyContent: "center",
                         marginRight: "20px",
                         alignItems: "center",
                         paddingLeft: "8px", // Add marginRight to create a gap between input boxes
+                     fontWeight:'bold'
                       }}
                     />
+                  
                   ))}
-                </div>
+          </div>
 
-                <br />
 
                 {/* Verify button */}
-                <Button type="submit" variant="contained" color="primary">
+                <Button type="submit" variant="contained" color="primary" sx={{marginTop:'30px', width:'260px'}}>
                   Verify
                 </Button>
               </div>

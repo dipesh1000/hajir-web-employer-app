@@ -1,7 +1,7 @@
-"use client";
 import * as React from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
+import { useFormik } from "formik";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -14,10 +14,17 @@ import Typography from "@mui/material/Typography";
 import LoopIcon from "@mui/icons-material/Loop";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { MenuItem, Select, InputLabel, FormControl } from "@mui/material";
+import {
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  InputAdornment,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import styles from "styled-components";
+import { CalendarIcon } from "@mui/x-date-pickers";
 
 const ProfileContainer = styled(Button)({
   display: "flex",
@@ -32,22 +39,20 @@ const NewBootstrapDialog = styled(Dialog)(() => ({
 }));
 
 const Wrapper = styles.div`
-  width: "490%"
-`;
-
-const Container = styles.div`
+  width: "100%";
   display: flex;
-  flex-direction: column;
+  flex-direction:row,
+  gap: 5px,
 `;
 
-const Row = styles.div`
-  display: flex;
-  align-items: center; /* Vertically center elements */
-`;
-
-const Column = styles.div`
+const LeftColumn = styles.div`
   flex: 1;
-  margin-right: 10px;
+justify-content: space-evenly,
+align-items: center,
+`;
+
+const RightColumn = styles.div`
+  flex: 1;
 `;
 
 export default function ProfileCard() {
@@ -130,6 +135,7 @@ export default function ProfileCard() {
           open={openDialog}
           fullWidth
           maxWidth="md"
+          // maxWidth={editMode ? "md" : "md"}
           scroll="body"
         >
           <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
@@ -138,6 +144,7 @@ export default function ProfileCard() {
                 textAlign: "center",
                 marginTop: "-10px",
                 fontWeight: "400",
+                marginBottom: "-30px",
               }}
             >
               Profile
@@ -155,14 +162,14 @@ export default function ProfileCard() {
           >
             <CloseIcon />
           </IconButton>
+
           <DialogContent>
             <Avatar
               src="/avatar.svg"
               sx={{
-                width: 140,
-                height: 140,
+                width: 136,
+                height: 125,
                 marginLeft: "360px",
-                marginTop: "-20px",
               }}
               alt="Profile Avatar"
             />
@@ -184,181 +191,229 @@ export default function ProfileCard() {
                 </Button>
               )}
             </DialogActions>
-            <h1 style={{ marginTop: "-5px" }}>Personal Details</h1>
-            <Container>
-              <Row>
-                <FormControl style={{ width: "130px", marginTop: "8px" }}>
-                  <InputLabel htmlFor="demo-simple-select-label">
-                    Gender <span style={{ color: "red" }}> *</span>
-                  </InputLabel>{" "}
+            <h1
+              style={{
+                marginTop: "20px",
+                marginBottom: "-15px",
+                fontWeight: "300",
+                fontSize: "18px",
+              }}
+            >
+              Personal Details
+            </h1>
+            <div style={{ display: "flex" }}>
+              <LeftColumn>
+                <FormControl sx={{ marginTop: "16px" }}>
                   <Select
                     value={userData.gender}
-                    label="Gender"
                     onChange={(e) =>
                       setUserData({ ...userData, gender: e.target.value })
                     }
-                    disabled={!editMode}
+                    disabled={!editMode} // Disable select functionality based on editMode
+                    sx={{
+                      "& .MuiSelect-icon": {
+                        color: "rgb(0, 0, 139)", // Change the color of the default dropdown icon to blue
+                      },
+                      width: "100px",
+                    }}
                   >
                     <MenuItem value="Mr">Mr</MenuItem>
                     <MenuItem value="Mrs">Mrs</MenuItem>
                   </Select>
                 </FormControl>
-                <Column>
-                  <TextField
-                    label="Name"
-                    margin="normal"
-                    value={userData.name}
-                    onChange={(e) =>
-                      setUserData({ ...userData, name: e.target.value })
-                    }
-                    disabled={!editMode}
-                    sx={{ width: "300px", marginLeft: "20px" }}
-                  />
-                </Column>
-                <Column>
-                  <TextField
-                    label="Email"
-                    margin="normal"
-                    value={userData.email}
-                    onChange={(e) =>
-                      setUserData({ ...userData, email: e.target.value })
-                    }
-                    disabled={!editMode}
-                    sx={{ width: "400px" }}
-                  />
-                </Column>
-              </Row>
-              <Row>
-                <Column>
-                  <TextField
-                    label="10/2/1995"
-                    margin="normal"
-                    value={userData.birthdate}
-                    onChange={(e) =>
-                      setUserData({ ...userData, birthdate: e.target.value })
-                    }
-                    disabled={!editMode}
-                    sx={{ width: "433px" }}
-                  />
-                </Column>
-                <Column>
-                  <TextField
-                    label="Married"
-                    margin="normal"
-                    value={userData.maritalStatus}
-                    onChange={(e) =>
-                      setUserData({
-                        ...userData,
-                        maritalStatus: e.target.value,
-                      })
-                    }
-                    disabled={!editMode}
-                    sx={{ width: "399px" }}
-                  />
-                </Column>
-              </Row>
-              <Row>
-                <Column>
-                  {!editMode && (
-                    <TextField
-                      label="Initial Phone Number"
-                      margin="normal"
-                      value={userData.phone}
-                      disabled
-                      sx={{ width: "433px" }}
-                    />
-                  )}
-                  {editMode && (
-                    <TextField
-                      label="Old Phone Number"
-                      margin="normal"
-                      value={userData.phone}
-                      disabled
-                      sx={{ width: "433px" }}
-                    />
-                  )}
-                </Column>
-              </Row>
-              <Row>
-                {editMode && (
-                  <>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginTop: "",
+
+                {/* <TextField
+
+    margin="normal"
+    value={userData.name}
+
+
+    {editMode && (
+      label="Full name"
+    )}
+    onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+    disabled={!editMode}
+  sx={{marginLeft:'20px', width:'285px'}}
+  /> */}
+
+                {/* <TextField
+  margin="normal"
+  value={userData.name}
+  onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+  disabled={!editMode}
+  sx={{ marginLeft: '20px', width: '285px' }}
+  placeholder={editMode ? 'Full name' : ''}
+/> */}
+
+                {/* <TextField
+  margin="normal"
+  value={editMode ? '' : userData.name} // Set value to empty string in edit mode
+  onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+  disabled={!editMode}
+  sx={{ marginLeft: '20px', width: '285px' }}
+  placeholder="Full name" // Always show "Full name" as placeholder
+/> */}
+                <TextField
+                  margin="normal"
+                  value={userData.name} // Set value to empty string in edit mode
+                  onChange={(e) =>
+                    setUserData({ ...userData, name: e.target.value })
+                  }
+                  disabled={!editMode}
+                  sx={{ marginLeft: "20px", width: "285px" }}
+                  placeholder={editMode ? "Full name" : ""} // Always show "Full name" as placeholder
+                />
+
+                <TextField
+                  // label="Birthdate"
+                  margin="normal"
+                  value={userData.birthdate}
+                  onChange={(e) =>
+                    setUserData({ ...userData, birthdate: e.target.value })
+                  }
+                  disabled={!editMode}
+                  sx={{ width: "405px" }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton edge="end">
+                          <CalendarIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </LeftColumn>
+              <RightColumn>
+                <TextField
+                  margin="normal"
+                  value={userData.email}
+                  onChange={(e) =>
+                    setUserData({ ...userData, email: e.target.value })
+                  }
+                  disabled={!editMode}
+                  sx={{ width: "100%" }}
+                />
+
+                {editMode ? (
+                  <FormControl sx={{ width: "100%", marginTop: "16px" }}>
+                    <Select
+                      value={userData.maritalStatus}
+                      onChange={(e) =>
+                        setUserData({
+                          ...userData,
+                          maritalStatus: e.target.value,
+                        })
+                      }
+                      sx={{
+                        "& .MuiSelect-icon": {
+                          color: "rgb(0, 0, 139)", // Change the color of the default dropdown icon to blue
+                        },
                       }}
                     >
-                      {changePhoneMode ? (
-                        <CheckCircleIcon style={{ marginRight: "10px" }} />
-                      ) : (
-                        <CircleOutlinedIcon style={{ marginRight: "10px" }} />
-                      )}
-                      <h1
-                        onClick={handleChangePhoneNumber}
-                        style={{
-                          fontWeight: "100",
-                          fontSize: "17px",
-                          width: "200px",
-                        }}
-                      >
-                        Change Phone number
-                      </h1>
-                    </div>
-                    {changePhoneMode && (
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          marginTop: "100px",
-                          marginLeft: "-232px",
-                          gap: "15px",
-                        }}
-                      >
-                        <TextField
-                          label="New Phone Numbers"
-                          margin="normal"
-                          value={newPhoneNumber}
-                          onChange={(e) => setNewPhoneNumber(e.target.value)}
-                          style={{ width: "433px" }}
-                        />
-                        <TextField
-                          label="Confirm New Phone Number"
-                          margin="normal"
-                          value={confirmPhoneNumber}
-                          onChange={(e) =>
-                            setConfirmPhoneNumber(e.target.value)
-                          }
-                          style={{ width: "400px" }}
-                        />
-                      </div>
-                    )}
+                      <MenuItem value="married">Married</MenuItem>
+                      <MenuItem value="unmarried">Unmarried</MenuItem>
+                    </Select>
+                  </FormControl>
+                ) : (
+                  <TextField
+                    margin="normal"
+                    value={
+                      userData.maritalStatus === "married"
+                        ? "Married"
+                        : "Unmarried"
+                    }
+                    disabled={!editMode}
+                    sx={{ width: "100%" }}
+                  />
+                )}
+              </RightColumn>
+            </div>
+            <TextField
+              margin="normal"
+              value={userData.phone}
+              disabled
+              sx={{ width: "405px" }}
+            />
+
+            {editMode && (
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginTop: "",
+                  }}
+                >
+                  {changePhoneMode ? (
+                    <CheckCircleIcon
+                      onClick={handleChangePhoneNumber}
+                      style={{ marginRight: "10px", color: "rgb(0, 0, 139)" }}
+                    />
+                  ) : (
+                    <CircleOutlinedIcon
+                      onClick={handleChangePhoneNumber}
+                      style={{ marginRight: "10px", color: "rgb(0, 0, 139)" }}
+                    />
+                  )}
+                  <h1
+                    onClick={handleChangePhoneNumber}
+                    style={{
+                      fontWeight: "100",
+                      fontSize: "17px",
+                      width: "200px",
+                    }}
+                  >
+                    Change Phone number
+                  </h1>
+                </div>
+                {changePhoneMode && (
+                  <>
+                    <TextField
+                      label="Change number"
+                      margin="normal"
+                      value={newPhoneNumber}
+                      onChange={(e) => setNewPhoneNumber(e.target.value)}
+                      style={{ width: "405px", marginRight: "25px" }}
+                    />
+                    <TextField
+                      label="Confirm Change Number"
+                      margin="normal"
+                      value={confirmPhoneNumber}
+                      onChange={(e) => setConfirmPhoneNumber(e.target.value)}
+                      style={{ width: "420px" }}
+                    />
                   </>
                 )}
-              </Row>
-            </Container>
+              </>
+            )}
           </DialogContent>
-          <h1></h1>
+
           {editMode && (
-            <>
+            <DialogActions
+              sx={{
+                justifyContent: "center",
+                marginBottom: "5px",
+                marginTop: "-10px",
+              }}
+            >
               <Button
                 variant="contained"
                 onClick={handleSaveProfile}
                 sx={{
                   width: "150px",
-                  height: "59px",
+                  height: "45px",
                   justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                  marginLeft: "400px",
+                  // alignItems: "center",
+                  // textAlign: "center",
+                  // marginLeft: "auto",
                 }}
               >
                 <LoopIcon />
                 Update
               </Button>
-            </>
+            </DialogActions>
           )}
-          <h2></h2>
         </NewBootstrapDialog>
       </Wrapper>
     </>
