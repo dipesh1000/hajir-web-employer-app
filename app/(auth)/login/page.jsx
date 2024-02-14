@@ -12,15 +12,28 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import ScrollDialog from '@/components/Auth/ScrollDialog';
 import { postRequest } from '@/services/ApiRequestService';
-
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css';
+ 
 // Styled components
 const BasicGridStyles = {
-  image: {
-    display: 'block',
-    maxWidth: '100%',
-  },
-};
 
+container: {
+  flexGrow: 1,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  height: "100vh", // Adjusted minHeight instead of maxHeight
+  objectFit: "cover",
+  overflow: "hidden",
+ 
+},
+image: {
+  display: "block",
+  maxWidth: "100%",
+  height: "auto", // Ensuring the image maintains aspect ratio
+},
+};
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -55,6 +68,20 @@ const validationSchema = yup.object({
 
 // Main component
 export default function Signin() {
+  // const [phoneNumber, setPhoneNumber] = useState('');
+  // const [valid, setValid] = useState(true);
+
+  // const handleChange = (event) => {
+  //   const input = event.target.value;
+  //   setPhoneNumber(input);
+  //   setValid(validatePhoneNumber(input));
+  // };
+
+  // const validatePhoneNumber = (phoneNumber) => {
+  //   const phoneNumberPattern = /^\d{10}$/; // Validates a 10-digit phone number
+
+  //   return phoneNumberPattern.test(phoneNumber);
+  // };
   const images = [
     {
       src: "/auth/otp1111.png",
@@ -106,7 +133,7 @@ export default function Signin() {
 
   const formik = useFormik({
     initialValues: {
-      phone: '9808426215',
+      phone: '',
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -138,14 +165,17 @@ export default function Signin() {
 
   return (
     <Box
-      sx={{
-        flexGrow: 1,
-      }}
+      sx={
+    BasicGridStyles.container
+      }
     >
-      <Grid container>
+      {/* <Grid container> */}
+        {/* <Grid item xs={12} md={6}> */}
+        <Grid container spacing={3} justifyContent="center" alignItems="center">
         <Grid item xs={12} md={6}>
+         
           {/* Apply styles to the image */}
-          <Image
+          {/* <Image
             src="/auth/login.png"
             width={950}
             height={925}
@@ -154,8 +184,17 @@ export default function Signin() {
               ...BasicGridStyles.image,
               display: useMediaQuery('(max-width:900px)') ? 'none' : 'block',
             }}
-          />
-        </Grid>
+          /> */}
+  {!isScreenSmall && ( 
+          <Image    src="/auth/login.png"
+              alt="login image"
+              layout="responsive" // Making the image responsive
+              width={isScreenSmall ? 300 : 900} // Adjusted width based on screen size
+              height={900}
+              style={BasicGridStyles.image}  />
+      
+  )}
+              </Grid>
         <Grid item xs={12} md={6}>
           <Item>
             <LogoContainer>
@@ -183,27 +222,53 @@ export default function Signin() {
               noValidate
               autoComplete="off"
               onSubmit={formik.handleSubmit}
+              style={{ width: '250px' }}
             >
-              <TextField
-                fullWidth
-                id="phone"
-                label="Phone Number"
-                placeholder="+977 9841234567"
-                name="phone"
-                type="tel"
-                onChange={formik.handleChange}
-                value={formik.values.phone}
-                error={formik.touched.phone && Boolean(formik.errors.phone)}
-                helperText={formik.touched.phone && formik.errors.phone}
-                style={{"marginTop":"20px"}}
-              />
+ 
 
+
+
+    <PhoneInput
+      country={'np'} // Set Nepal as the default country
+      inputExtraProps={{
+        placeholder: '977', // Placeholder for the country code
+      }}
+      
+    
+      value={formik.values.phone}
+      onChange={(phone) => formik.setFieldValue('phone', phone)}
+    
+      inputStyle={{
+        width: '100%',
+        padding: '12px 14px', // Adjust padding as needed
+        fontSize: 'inherit',
+      }}
+      inputProps={{
+        style: { paddingRight: '0px' }, // Remove right padding to align with button
+      }}
+    />
+
+{/* // <TextField
+//                 fullWidth
+//                 id="phone"
+//                 label="Phone Number"
+//                 placeholder="+977 9841234567"
+//                 name="phone"
+//                 type="tel"
+//                 onChange={formik.handleChange}
+//                 value={formik.values.phone}
+//                 error={formik.touched.phone && Boolean(formik.errors.phone)}
+//                 helperText={formik.touched.phone && formik.errors.phone}
+//                 style={{"marginTop":"20px"}} */}
+             
+  
               <Button
                 variant="contained"
                 type="submit"
                 disabled={buttonClicked}
+                style={{width:'300px', marginLeft:'60px'}}
               >
-                Login
+                Get OTP
               </Button>
             </Box>
 

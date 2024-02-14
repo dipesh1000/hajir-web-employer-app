@@ -1,4 +1,5 @@
 // import theme from '@/GlobalThemeSettings';
+
 import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry';
 import AuthProvider from '@/context/AuthContext';
 import { Providers } from '@/redux/providers';
@@ -16,7 +17,10 @@ export default function RootLayout({ children }) {
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <AuthProvider>
             <ThemeRegistry>
-              <Providers>{children}</Providers>
+              <Providers>
+              
+                {children}
+                </Providers>
             </ThemeRegistry>
           </AuthProvider>
         </AppRouterCacheProvider>
