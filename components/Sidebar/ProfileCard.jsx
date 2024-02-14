@@ -1,3 +1,4 @@
+"use client"
 import * as React from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
@@ -19,6 +20,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import styles from "styled-components";
 import { CalendarIcon } from "@mui/x-date-pickers";
+import { BackdropProps } from "@mui/material/Dialog";
 
 const ProfileContainer = styled(Button)({
   display: "flex",
@@ -48,8 +50,21 @@ align-items: center,
 const RightColumn = styles.div`
   flex: 1;
 `;
+const BlurBackdrop = styled('div')({
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  backdropFilter: 'blur(5px)',
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+});
 
 export default function ProfileCard() {
+  
+  const [avatarClicked, setAvatarClicked] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+
   const [openDialog, setOpenDialog] = React.useState(false);
   const [editMode, setEditMode] = React.useState(false);
   const [changePhoneMode, setChangePhoneMode] = React.useState(false);
@@ -63,7 +78,11 @@ export default function ProfileCard() {
     maritalStatus: "married",
     phone: "9887679041",
   });
-
+  const [uploadedImage, setUploadedImage] = React.useState(null); // Store the uploaded image
+  const handleAvatarClick = () => {
+    setAvatarClicked(true);
+    setDialogOpen(true);
+  };
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
@@ -90,16 +109,28 @@ export default function ProfileCard() {
   const handleChangePhoneNumber = () => {
     setChangePhoneMode(!changePhoneMode);
   };
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Set the uploaded image as the avatar
+        setUploadedImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <>
       <ProfileContainer onClick={handleOpenDialog} >
         <Avatar
-          src="/avatar.svg"
+
+          src={uploadedImage || "/avatar.svg"}
           sx={{
             width: 100,
             height: 100,
-       
+
           }}
           alt="Profile Avatar"
         />
@@ -129,8 +160,8 @@ export default function ProfileCard() {
           aria-labelledby="customized-dialog-title"
           open={openDialog}
           fullWidth
-         
-          maxWidth= "md"
+
+          maxWidth="md"
           // maxWidth={editMode ? "md" : "md"}
           scroll="body"
         >
@@ -139,10 +170,12 @@ export default function ProfileCard() {
               style={{
                 textAlign: "center",
                 marginTop: "-10px",
-                fontWeight: "400",
-                marginBottom:'-30px'
+                fontWeight: "500",
+                marginBottom: '-30px',
+                fontSize: '26px'
               }}
             >
+
               Profile
             </h1>
           </DialogTitle>
@@ -156,20 +189,59 @@ export default function ProfileCard() {
               color: (theme) => theme.palette.grey[500],
             }}
           >
-              <CloseIcon />
+            <CloseIcon />
           </IconButton>
       
-          <DialogContent>
-            <Avatar
-              src="/avatar.svg"
-              sx={{
-                width: 136,
-                height: 125,
-                marginLeft: "360px",
-    
-              }}
-              alt="Profile Avatar"
-            />
+          
+<DialogContent >
+  {editMode ? (
+    <div style={{ position: "relative", display: "inline-block" }}>
+        <label htmlFor="upload-input">
+      <Avatar
+      
+          src={uploadedImage || "/avatar.svg"}
+        sx={{
+          width: 139,
+          height: 128,
+          zIndex: 1, // Lower zIndex for Avatar
+          marginLeft: "360px",
+        }}
+        alt="Profile Avatar"
+      />
+   
+        <img
+          src="/imageUpload.png"
+          alt="Upload Image"
+          // style={{ left: "93%",marginLeft:'460px', cursor: "pointer" }}
+          style={{ position: "absolute", top: "90%", left: "93%", transform: "translate(-50%, -50%)", zIndex: 2 }} // Higher zIndex for image upload icon
+
+        />
+        </label>
+      <input
+        id="upload-input"
+        type="file"
+        accept="image/*"
+        style={{ display: "none" }}
+          onChange={handleImageUpload}
+      />
+  
+   
+  </div>
+  ) : (
+    <Avatar
+       src={uploadedImage || "/avatar.svg"}
+      sx={{
+        width: 139,
+        height: 128,
+        marginLeft: "360px",
+      }}
+      alt="Profile Avatar"
+    />
+  )}
+
+
+
+
             <DialogActions>
               {!editMode && (
                 <Button
@@ -188,78 +260,37 @@ export default function ProfileCard() {
                 </Button>
               )}
             </DialogActions>
-            <h1 style={{ marginTop: "20px" ,marginBottom:'-15px', fontWeight:'300', fontSize:'18px'}}>Personal Details</h1>
+            <h1 style={{ marginTop: "20px", marginBottom: '-15px', fontWeight: '300', fontSize: '18px' }}>Personal Details</h1>
             <div style={{ display: "flex" }}>
               <LeftColumn>
-                <FormControl sx={{marginTop:'16px'}} >
-
-    
-<Select
-  value={userData.gender}
-  onChange={(e) => setUserData({ ...userData, gender: e.target.value })}
-  disabled={!editMode} // Disable select functionality based on editMode
-  sx={{
-    "& .MuiSelect-icon": {
-      color: "rgb(0, 0, 139)", // Change the color of the default dropdown icon to blue
-    }, width:'100px',
-  }}
->
-  <MenuItem value="Mr">Mr</MenuItem>
-  <MenuItem value="Mrs">Mrs</MenuItem>
-</Select>
+                <FormControl sx={{ marginTop: '16px' }} >
 
 
+                  <Select
+                    value={userData.gender}
+                    onChange={(e) => setUserData({ ...userData, gender: e.target.value })}
+                    disabled={!editMode} // Disable select functionality based on editMode
+                    sx={{
+                      "& .MuiSelect-icon": {
+                        color: "rgb(0, 0, 139)", // Change the color of the default dropdown icon to blue
+                      }, width: '100px',
+                    }}
+                  >
+                    <MenuItem value="Mr">Mr</MenuItem>
+                    <MenuItem value="Mrs">Mrs</MenuItem>
+                  </Select>
 
+</FormControl>
 
-                </FormControl>
-             
-                  {/* <TextField
-    
-    margin="normal"
-    value={userData.name}
-
-
-    {editMode && (
-      label="Full name"
-    )}
-    onChange={(e) => setUserData({ ...userData, name: e.target.value })}
-    disabled={!editMode}
-  sx={{marginLeft:'20px', width:'285px'}}
-  /> */}
-
-  
-
-
-
-{/* <TextField
-  margin="normal"
-  value={userData.name}
-  onChange={(e) => setUserData({ ...userData, name: e.target.value })}
-  disabled={!editMode}
-  sx={{ marginLeft: '20px', width: '285px' }}
-  placeholder={editMode ? 'Full name' : ''}
-/> */}
-
-{/* <TextField
-  margin="normal"
-  value={editMode ? '' : userData.name} // Set value to empty string in edit mode
-  onChange={(e) => setUserData({ ...userData, name: e.target.value })}
-  disabled={!editMode}
-  sx={{ marginLeft: '20px', width: '285px' }}
-  placeholder="Full name" // Always show "Full name" as placeholder
-/> */}
-<TextField
-  margin="normal"
-  value={userData.name} // Set value to empty string in edit mode
-  onChange={(e) => setUserData({ ...userData, name: e.target.value })}
-  disabled={!editMode}
-  sx={{ marginLeft: '20px', width: '285px' }}
-  placeholder={editMode ? 'Full name': ''} // Always show "Full name" as placeholder
-/>
-
-
-
-     <TextField
+                <TextField
+                  margin="normal"
+                  value={userData.name} // Set value to empty string in edit mode
+                  onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                  disabled={!editMode}
+                  sx={{ marginLeft: '20px', width: '285px' }}
+                  placeholder={editMode ? 'Full name' : ''} // Always show "Full name" as placeholder
+                />
+        <TextField
                   // label="Birthdate"
                   margin="normal"
                   value={userData.birthdate}
@@ -273,10 +304,10 @@ export default function ProfileCard() {
                       <InputAdornment position="end">
                         <IconButton
                           edge="end"
-                     
+
                         >
                           <CalendarIcon />
-    
+
                         </IconButton>
                       </InputAdornment>
                     )
@@ -285,9 +316,9 @@ export default function ProfileCard() {
 
               </LeftColumn>
               <RightColumn>
-           
-                   <TextField
-              
+
+                <TextField
+
                   margin="normal"
                   value={userData.email}
                   onChange={(e) =>
@@ -296,34 +327,34 @@ export default function ProfileCard() {
                   disabled={!editMode}
                   sx={{ width: "100%" }}
                 />
- 
 
- {editMode ? (
-  <FormControl sx={{ width: "100%", marginTop:'16px' }}>
-   
-    <Select
-      value={userData.maritalStatus}
-      onChange={(e) =>
-        setUserData({ ...userData, maritalStatus: e.target.value })
-      }
-      sx={{
-        "& .MuiSelect-icon": {
-          color: "rgb(0, 0, 139)", // Change the color of the default dropdown icon to blue
-        }, 
-      }}
-    >
-      <MenuItem value="married">Married</MenuItem>
-      <MenuItem value="unmarried">Unmarried</MenuItem>
-    </Select>
-  </FormControl>
-) : (
-  <TextField
-    margin="normal"
-    value={userData.maritalStatus === "married" ? "Married" : "Unmarried"}
-    disabled={!editMode}
-    sx={{ width: "100%" }}
-  />
-)}
+
+                {editMode ? (
+                  <FormControl sx={{ width: "100%", marginTop: '16px' }}>
+
+                    <Select
+                      value={userData.maritalStatus}
+                      onChange={(e) =>
+                        setUserData({ ...userData, maritalStatus: e.target.value })
+                      }
+                      sx={{
+                        "& .MuiSelect-icon": {
+                          color: "rgb(0, 0, 139)", // Change the color of the default dropdown icon to blue
+                        },
+                      }}
+                    >
+                      <MenuItem value="married">Married</MenuItem>
+                      <MenuItem value="unmarried">Unmarried</MenuItem>
+                    </Select>
+                  </FormControl>
+                ) : (
+                  <TextField
+                    margin="normal"
+                    value={userData.maritalStatus === "married" ? "Married" : "Unmarried"}
+                    disabled={!editMode}
+                    sx={{ width: "100%" }}
+                  />
+                )}
 
 
 
@@ -337,65 +368,60 @@ export default function ProfileCard() {
               value={userData.phone}
               disabled
               sx={{ width: "405px" }}
-             
+
             />
 
-{editMode && (
+            {editMode && (
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginTop: "",
+                  }}
+                >
+                  {changePhoneMode ? (
+                    <CheckCircleIcon onClick={handleChangePhoneNumber} style={{ marginRight: "10px", color: "rgb(0, 0, 139)", }} />
+                  ) : (
+                    <CircleOutlinedIcon onClick={handleChangePhoneNumber} style={{ marginRight: "10px", color: "rgb(0, 0, 139)", }} />
+                  )}
+                  <h1
+                    onClick={handleChangePhoneNumber}
+                    style={{
+                      fontWeight: "100",
+                      fontSize: "17px",
+                      width: "200px",
+                    }}
+                  >
+                    Change Phone number
+                  </h1>
+                </div>
+                {changePhoneMode && (
                   <>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginTop: "",
-                      }}
-                    >
-                      {changePhoneMode ? (
-                        <CheckCircleIcon     onClick={handleChangePhoneNumber} style={{ marginRight: "10px",  color: "rgb(0, 0, 139)",}} />
-                      ) : (
-                        <CircleOutlinedIcon      onClick={handleChangePhoneNumber} style={{ marginRight: "10px", color: "rgb(0, 0, 139)", }} />
-                      )}
-                      <h1
-                        onClick={handleChangePhoneNumber}
-                        style={{
-                          fontWeight: "100",
-                          fontSize: "17px",
-                          width: "200px",
-                        }}
-                      >
-                        Change Phone number
-                      </h1>
-                    </div>
-                    {changePhoneMode && (
-                     <>
-                        <TextField
-                          label="Change number"
-                          margin="normal"
-                          value={newPhoneNumber}
-                          onChange={(e) => setNewPhoneNumber(e.target.value)}
-                          style={{ width: "405px", marginRight:'25px' }}
-                        />
-                        <TextField
-                          label="Confirm Change Number"
-                          margin="normal"
-                          value={confirmPhoneNumber}
-                          onChange={(e) =>
-                            setConfirmPhoneNumber(e.target.value)
-                          }
-                          style={{ width: "420px" }}
-                        />
-                     </>
-                    )}
+                    <TextField
+                      label="Change number"
+                      margin="normal"
+                      value={newPhoneNumber}
+                      onChange={(e) => setNewPhoneNumber(e.target.value)}
+                      style={{ width: "405px", marginRight: '25px' }}
+                    />
+                    <TextField
+                      label="Confirm Change Number"
+                      margin="normal"
+                      value={confirmPhoneNumber}
+                      onChange={(e) =>
+                        setConfirmPhoneNumber(e.target.value)
+                      }
+                      style={{ width: "420px" }}
+                    />
                   </>
                 )}
+              </>
+            )}
           </DialogContent>
 
-
-
-
-
-
           {editMode && (
-            <DialogActions sx={{  justifyContent: "center", marginBottom:'5px', marginTop:'-10px'}}>
+            <DialogActions sx={{ justifyContent: "center", marginBottom: '5px', marginTop: '-10px' }}>
               <Button
                 variant="contained"
                 onClick={handleSaveProfile}
@@ -406,7 +432,7 @@ export default function ProfileCard() {
                   // alignItems: "center",
                   // textAlign: "center",
                   // marginLeft: "auto",
-                 
+
                 }}
               >
                 <LoopIcon />
@@ -414,11 +440,9 @@ export default function ProfileCard() {
               </Button>
             </DialogActions>
           )}
-      
+
         </NewBootstrapDialog>
       </Wrapper>
     </>
   );
-}
-
-
+              }

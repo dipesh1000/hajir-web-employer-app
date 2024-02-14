@@ -15,6 +15,7 @@ import { postRequest } from '@/services/ApiRequestService';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css';
  
+
 // Styled components
 const BasicGridStyles = {
 
@@ -202,8 +203,15 @@ export default function Signin() {
             </LogoContainer>
         
               <h2>Authentication</h2>
-              <div dangerouslySetInnerHTML={{ __html: images[selectedImageIndex].paragraph }} />
 
+<div>
+  {images[selectedImageIndex].paragraph.split('<br/>').map((line, index) => (
+    <React.Fragment key={index}>
+      {line}
+      <br />
+    </React.Fragment>
+  ))}
+</div>
               <Image
                 src={images[selectedImageIndex].src}
                 width={images[selectedImageIndex].width}
