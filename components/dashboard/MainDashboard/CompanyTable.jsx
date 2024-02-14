@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import {
   Table,
   TableBody,
@@ -17,7 +17,11 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import { useDeleteCompanyMutation } from "@/services/api";
+import {
+  useDeleteCompanyMutation,
+  useGetActiveCompanyQuery,
+  useGetInactiveCompanyQuery,
+} from "@/services/api";
 import { DeleteOutline, Edit, Update, UpdateSharp } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -25,6 +29,13 @@ import useImage from "../../../hooks/useImage";
 
 const CompanyTable = ({ companies, statusFilter }) => {
   const router = useRouter();
+  const activeCompaniesData = useGetActiveCompanyQuery();
+  const activeCompanies = activeCompaniesData.data?.companies || [];
+
+  console.log("activeCompanies", activeCompanies);
+  const inactiveCompaniesData = useGetInactiveCompanyQuery();
+  const inactiveCompanies = inactiveCompaniesData.data?.companies || [];
+  console.log("inactiveCompanies", inactiveCompanies);
   const [deleteCompanyMutation] = useDeleteCompanyMutation();
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
@@ -95,7 +106,13 @@ const CompanyTable = ({ companies, statusFilter }) => {
                   </Link>
                 </TableCell>
                 <TableCell>{company.employee_count}</TableCell>
-                <TableCell>{company.status}</TableCell>
+                <TableCell>
+                  {activeCompanies.some(
+                    (activeCompany) => activeCompany.id === company.id
+                  )
+                    ? "Active"
+                    : "Inactive"}
+                </TableCell>{" "}
                 <TableCell>
                   {/* UseImage component with onClick handler */}
                   {useImage({
