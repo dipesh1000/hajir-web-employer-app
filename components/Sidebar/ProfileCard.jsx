@@ -1,3 +1,4 @@
+
 "use client"
 import * as React from "react";
 import Button from "@mui/material/Button";
@@ -52,7 +53,7 @@ const RightColumn = styles.div`
 `;
 const BlurBackdrop = styled('div')({
   backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  backdropFilter: 'blur(5px)',
+  backdropFilter: 'blur(10px)',
   position: 'fixed',
   top: 0,
   left: 0,
@@ -162,8 +163,14 @@ export default function ProfileCard() {
           fullWidth
 
           maxWidth="md"
-          // maxWidth={editMode ? "md" : "md"}
+     
           scroll="body"
+       
+          slotProps={{
+            backdrop: {
+              sx: { backdropFilter: avatarClicked ? 'blur(10px)' : 'none' }
+            }
+          }}
         >
           <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
             <h1
@@ -194,12 +201,11 @@ export default function ProfileCard() {
       
           
 <DialogContent >
-  {editMode ? (
-    <div style={{ position: "relative", display: "inline-block" }}>
-        <label htmlFor="upload-input">
+{editMode ? (
+  <div style={{ position: "relative", display: "inline-block" }}>
+    <label htmlFor="upload-input">
       <Avatar
-      
-          src={uploadedImage || "/avatar.svg"}
+        src={uploadedImage || "/avatar.svg"}
         sx={{
           width: 139,
           height: 128,
@@ -208,37 +214,59 @@ export default function ProfileCard() {
         }}
         alt="Profile Avatar"
       />
-   
-        <img
-          src="/imageUpload.png"
-          alt="Upload Image"
-          // style={{ left: "93%",marginLeft:'460px', cursor: "pointer" }}
-          style={{ position: "absolute", top: "90%", left: "93%", transform: "translate(-50%, -50%)", zIndex: 2 }} // Higher zIndex for image upload icon
-
-        />
-        </label>
-      <input
-        id="upload-input"
-        type="file"
-        accept="image/*"
-        style={{ display: "none" }}
-          onChange={handleImageUpload}
+      <img
+        src="/imageUpload.png"
+        alt="Upload Image"
+        style={{ position: "absolute", top: "90%", left: "93%", transform: "translate(-50%, -50%)", zIndex: 2 }}
       />
-  
-   
+    </label>
+    <input
+      id="upload-input"
+      type="file"
+      accept="image/*"
+      style={{ display: "none" }}
+      onChange={handleImageUpload}
+    />
   </div>
-  ) : (
+) : (
+  <Avatar
+    src={uploadedImage || "/avatar.svg"}
+    sx={{
+      width: 139,
+      height: 128,
+      marginLeft: "360px",
+    }}
+    alt="Profile Avatar"
+    onClick={handleAvatarClick} 
+    slotProps={{
+      backdrop: {
+        sx: {
+          backdropFilter: avatarClicked ? 'blur(90px)' : 'none' // Increase the blur when avatar is clicked
+        }
+      }
+    }}
+  />
+)}
+{!editMode && avatarClicked ? (
+  <Dialog open={avatarClicked} onClose={() => setAvatarClicked(false)} sx={{padding:0, marginLeft:'170px',top:'0%', backgroundColor: 'transparent'}} PaperProps={{ sx: { boxShadow: 'none', borderRadius:'0' } }}>
     <Avatar
-       src={uploadedImage || "/avatar.svg"}
+      src={uploadedImage || "/avatar.svg"}
       sx={{
-        width: 139,
-        height: 128,
-        marginLeft: "360px",
+        width: 229,
+        height: 218,
+        justifyContent:'center',
+        alignContent:'center',
+        alignItems:'center',
+ backgroundColor: 'inherit',
+ padding:0,
+
+ 
+    
       }}
       alt="Profile Avatar"
     />
-  )}
-
+  </Dialog>
+) : null}
 
 
 
