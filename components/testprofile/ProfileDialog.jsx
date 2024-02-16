@@ -12,6 +12,9 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 import { useFormik } from "formik";
 import EditProfileDialog from "./EditProfileDialog";
 
@@ -38,11 +41,31 @@ const ProfileDialog = ({ open, handleClose, profileData }) => {
     handleClose(); // Close the current dialog
     setEditProfileOpen(true); // Open the Edit Profile dialog
   };
+  const handleCloseDialog = () => {
+   handleClose();
+  };
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>View Profile</DialogTitle>
+      <Dialog open={open} onClose={handleClose} maxWidth="md" >
+        <DialogTitle  style={{
+                textAlign: "center",
+                marginTop: "-10px",
+                fontWeight: "500",
+                marginBottom: '10px',
+                fontSize: '26px'}}>Profile</DialogTitle>
+                       <IconButton
+            aria-label="close"
+            onClick={handleCloseDialog}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon/>
+          </IconButton>
         <DialogContent>
           <Avatar
             src={"/avatar.svg"}
@@ -54,27 +77,50 @@ const ProfileDialog = ({ open, handleClose, profileData }) => {
             }}
             alt="Profile Avatar"
           />
+             <DialogActions>
+          <Button onClick={handleEditProfileOpen} sx={ {marginRight: "350px",
+                    backgroundColor: "rgba(0, 128, 0, 0.2)",
+                    color: "#000",
+                    textAlign: "center",
+                    alignItems: "center",
+                    justifyContent: "center"}}>  <EditIcon />Edit Profile</Button>
+        </DialogActions>
           <form onSubmit={formikView.handleSubmit}>
+          <FormControl  style={{width:'120px',marginBottom: '20px'}}>
+              <Select
+                id="gender"
+                name="gender"
+              
+                variant="outlined"
+                value={formikView.values.gender}
+                disabled
+              >
+                <MenuItem value="Mr">Mr</MenuItem>
+                <MenuItem value="Miss">Miss</MenuItem>
+              </Select>
+            </FormControl>
             <TextField
-              fullWidth
+              
               id="name"
               name="name"
               label="Name"
               variant="outlined"
               value={formikView.values.name}
               disabled
+              sx={{width:'310px', marginLeft:'20px',marginBottom: '20px'}}
             />
             <TextField
-              fullWidth
+            
               id="email"
               name="email"
               label="Email"
               variant="outlined"
               value={formikView.values.email}
               disabled
+              sx={{width:'380px', marginLeft:'20px',marginBottom: '20px'}}
             />
             <TextField
-              fullWidth
+          
               id="birthdate"
               name="birthdate"
               label="Birthdate"
@@ -85,48 +131,36 @@ const ProfileDialog = ({ open, handleClose, profileData }) => {
               InputLabelProps={{
                 shrink: true,
               }}
+              sx={{width:'450px',marginBottom: '20px'}}
             />
-            <FormControl fullWidth>
-              <Select
-                id="gender"
-                name="gender"
-                label="Gender"
-                variant="outlined"
-                value={formikView.values.gender}
-                disabled
-              >
-                <MenuItem value="Mr">Mr</MenuItem>
-                <MenuItem value="Miss">Miss</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl fullWidth>
+           
+            <FormControl >
               <Select
                 id="maritalStatus"
                 name="maritalStatus"
-                label="Marital Status"
+             
                 variant="outlined"
                 value={formikView.values.maritalStatus}
                 disabled
+                sx={{width:'380px', marginLeft:'20px',marginBottom: '20px'}}
               >
                 <MenuItem value="married">Married</MenuItem>
                 <MenuItem value="unmarried">Unmarried</MenuItem>
               </Select>
             </FormControl>
             <TextField
-              fullWidth
+              
               id="phone"
               name="phone"
               label="Phone Number"
               variant="outlined"
               value={formikView.values.phone}
               disabled
+              sx={{width:'450px',marginBottom: '20px'}}
             />
           </form>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleEditProfileOpen}>Edit</Button>
-          <Button onClick={handleClose}>Close</Button>
-        </DialogActions>
+     
       </Dialog>
       {/* Render EditProfileDialog only if editProfileOpen is true */}
       {editProfileOpen && (

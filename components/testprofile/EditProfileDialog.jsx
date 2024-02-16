@@ -9,17 +9,20 @@ import {
   FormControl,
   Select,
   MenuItem,
+  Avatar,
 } from "@mui/material";
 import { useFormik } from "formik";
 import {
   useChangePhoneNumberMutation,
   useUpdateProfileMutation,
 } from "@/services/api";
-
+import LoopIcon from "@mui/icons-material/Loop";
+import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 const EditProfileDialog = ({ open, handleClose, profileData }) => {
   const updateProfile = useUpdateProfileMutation();
   const changePhoneNumber = useChangePhoneNumberMutation();
-
+  const [changePhoneMode, setChangePhoneMode] = React.useState(false);
   const formikEdit = useFormik({
     initialValues: {
       name: profileData?.name || "",
@@ -35,32 +38,68 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
       // Add your submission logic here
     },
   });
-
+  const handleChangePhoneNumber = () => {
+    setChangePhoneMode(!changePhoneMode);
+  };
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Edit Profile</DialogTitle>
+    <Dialog open={open} onClose={handleClose} maxWidth="md">
+      <DialogTitle sx={{textAlign:'center'}}>Edit Profile</DialogTitle>
+      
+      <Avatar
+            src={"/avatar.svg"}
+            sx={{
+              width: 100,
+              height: 100,
+            marginLeft:'400px',
+            }}
+            alt="Profile Avatar"
+          />
+             <img
+        src="/imageUpload.png"
+        alt="Upload Image"
+        style={{position:'absolute', top: changePhoneMode ? "25%" : "29%", left: "53%", transform: "translate(-50%, -50%)", zIndex: 2 }}
+      />
       <DialogContent>
         <form onSubmit={formikEdit.handleSubmit} encType="multipart/form-data">
+        <FormControl  style={{width:'120px',marginBottom: '20px'}} >
+            <Select
+              id="gender"
+              name="gender"
+              variant="outlined"
+              value={formikEdit.values.gender}
+              onChange={formikEdit.handleChange}
+              sx={{  "& .MuiSelect-icon": {
+                color: "rgb(0, 0, 139)", // Change the color of the default dropdown icon to blue
+              }, marginTop:'5px'}}
+            >
+              <MenuItem value="Mr">Mr</MenuItem>
+              <MenuItem value="Miss">Miss</MenuItem>
+            </Select>
+          </FormControl>
           <TextField
-            fullWidth
             id="name"
             name="name"
             label="Name"
             variant="outlined"
             value={formikEdit.values.name}
             onChange={formikEdit.handleChange}
+            sx={{width:'310px', marginLeft:'20px',marginBottom: '20px',
+      marginTop:'5px'
+            }}
           />
           <TextField
-            fullWidth
             id="email"
             name="email"
             label="Email"
             variant="outlined"
             value={formikEdit.values.email}
             onChange={formikEdit.handleChange}
+            sx={{
+              marginTop:'5px',
+
+              width:'380px', marginLeft:'20px',marginBottom: '20px'}}
           />
           <TextField
-            fullWidth
             id="birthdate"
             name="birthdate"
             label="Birthdate"
@@ -71,59 +110,90 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
             InputLabelProps={{
               shrink: true,
             }}
-          />
-          <FormControl fullWidth>
-            <Select
-              id="gender"
-              name="gender"
-              label="Gender"
-              variant="outlined"
-              value={formikEdit.values.gender}
-              onChange={formikEdit.handleChange}
-            >
-              <MenuItem value="Mr">Mr</MenuItem>
-              <MenuItem value="Miss">Miss</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <Select
-              id="maritalStatus"
-              name="maritalStatus"
-              label="Marital Status"
-              variant="outlined"
-              value={formikEdit.values.maritalStatus}
-              onChange={formikEdit.handleChange}
-            >
-              <MenuItem value="married">Married</MenuItem>
-              <MenuItem value="unmarried">Unmarried</MenuItem>
-            </Select>
-          </FormControl>
+            sx={{width:'450px',marginBottom: '20px'}}
+          />       
+             <FormControl>
+          <Select
+            id="maritalStatus"
+            name="maritalStatus"
+
+            variant="outlined"
+            value={formikEdit.values.maritalStatus}
+            onChange={formikEdit.handleChange}
+          
+                               sx={{
+                        "& .MuiSelect-icon": {
+                          color: "rgb(0, 0, 139)", // Change the color of the default dropdown icon to blue
+                        },width:'380px', marginLeft:'20px'
+                      }}
+                    >
+                      <MenuItem value="married">Married</MenuItem>
+                      <MenuItem value="unmarried">Unmarried</MenuItem>
+                    </Select>
+                    </FormControl>
           <TextField
-            fullWidth
+        
+        
             id="phone"
             name="phone"
             label="Phone Number"
             variant="outlined"
             value={formikEdit.values.phone}
             onChange={formikEdit.handleChange}
+            sx={{width:'450px',}}
           />
-          <div>
-            <label> Upload File</label>
-            <input
-              type="file"
-              name="photo"
-              accept="image/*"
-              onChange={formikEdit.handleChange} // Change this line
-            />{" "}
-          </div>
+        
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+           {changePhoneMode ? (
+                    <CheckCircleIcon onClick={handleChangePhoneNumber} style={{ marginRight: "10px", color: "rgb(0, 0, 139)", }} />
+                  ) : (
+                    <CircleOutlinedIcon onClick={handleChangePhoneNumber} style={{ marginRight: "10px", color: "rgb(0, 0, 139)", }} />
+                  )}
+                  <h1
+                    onClick={handleChangePhoneNumber}
+                    style={{
+                      fontWeight: "100",
+                      fontSize: "17px",
+                      width: "200px",
+                    }}
+                  >
+                    Change Phone number
+                  </h1>
+                  </div>
+            {changePhoneMode && (
+                  <>
+                    <TextField
+                      label="Change number"
+                      margin="normal"
+                 
+                      style={{ width: "450px", marginRight:'20px' }}
+                    />
+                     <TextField
+                      label="Confirm Change Number"
+                      margin="normal"
+                    
+                      style={{ width: "380px",  }}
+                    /> 
+                  </>
+                )}
+              
         </form>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Close</Button>
-        <Button type="submit" onClick={formikEdit.handleSubmit}>
-          Save
-        </Button>
-      </DialogActions>
+    
+      <DialogActions sx={{ justifyContent: "center", marginBottom: '5px', marginTop: '-10px' }}>
+              <Button
+                variant="contained"
+                type="submit" onClick={formikEdit.handleSubmit}
+                sx={{
+                  width: "150px",
+                  height: "45px",
+                  justifyContent: "center",
+                }}
+              >
+                <LoopIcon/>
+                Update
+              </Button>
+            </DialogActions>
     </Dialog>
   );
 };
