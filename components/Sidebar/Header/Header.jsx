@@ -50,8 +50,12 @@ import HeaderMenu from "./HeaderMenu";
 import Image from "next/image";
 
 const Header = ({ onMenuIconClick }) => (
+<<<<<<< HEAD
+  <AppBar position="fixed" elevation={1} color="inherit">
+=======
   
   <AppBar position="fixed" elevation={1} color="inherit" style={{ zIndex: 999 }}  >
+>>>>>>> 3886ddf46da425623b2830c58a0229c3ae761191
     <Toolbar>
       <div style={{ display: "flex", alignItems: "center" }}>
         <Image src="/hajir-logo.png" width={140} height={50} alt="Hajir Logo" />

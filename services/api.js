@@ -1,6 +1,5 @@
 // api.js
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { getToken } from "./ApiRequestService";
 
 const hardcodedToken = JSON.parse(localStorage.getItem("token"));
 
@@ -21,6 +20,8 @@ export const api = createApi({
     //   query: () => "data",
     // }),
 
+    //******************AUTH ***********************
+
     // Employee Registration
     // registerEmployee: builder.mutation({
     //   query: (employeeData) => ({
@@ -40,27 +41,28 @@ export const api = createApi({
     // }),
 
     // Profile Update
-    // updateProfile: builder.mutation({
-    //   query: (profileData) => ({
-    //     url: "employer/profile-update",
-    //     method: "POST",
-    //     body: profileData,
-    //   }),
-    // }),
+    updateProfile: builder.mutation({
+      query: (profileData) => ({
+        url: "employer/profile-update",
+        method: "POST",
+        body: profileData,
+      }),
+    }),
 
     // Change Phone Number
-    // changePhoneNumber: builder.mutation({
-    //   query: (phoneNumberData) => ({
-    //     url: "employer/change-phonenumber",
-    //     method: "POST",
-    //     body: phoneNumberData,
-    //   }),
-    // }),
+    changePhoneNumber: builder.mutation({
+      query: (phoneNumberData) => ({
+        url: "employer/change-phonenumber",
+        method: "POST",
+        body: phoneNumberData,
+      }),
+    }),
 
     // Get Profile
-    // getProfile: builder.query({
-    //   query: () => "employer/get-profile",
-    // }),
+    getProfile: builder.query({
+      query: () => "employer/get-profile",
+    }),
+    //****************** Company ***********************
 
     createCompany: builder.mutation({
       query: (companyData) => ({
@@ -74,8 +76,9 @@ export const api = createApi({
     updateCompany: builder.mutation({
       query: ({ company_id, companyData }) => ({
         url: `employer/company/update/${company_id}`,
-        method: "PUT",
+        method: "POST",
         body: companyData,
+        formData: true,
       }),
     }),
     // deletecompany
@@ -89,7 +92,7 @@ export const api = createApi({
     updateCompanyStatus: builder.mutation({
       query: ({ company_id, status }) => ({
         url: `employer/company/status/${company_id}`,
-        method: "PUT",
+        method: "POST",
         body: { status },
       }),
     }),
@@ -113,11 +116,29 @@ export const api = createApi({
       query: (companyId) => `/employer/candidate/get-candidates/${companyId}`,
     }),
 
+    // Create Candidate for a company by company_id
     createCandidate: builder.mutation({
       query: ({ candidateData, companyId }) => ({
         url: `employer/candidate/store/${companyId}`,
         method: "POST",
         body: candidateData,
+      }),
+    }),
+
+    // Invite Candidate for a company by company_id
+    inviteCandidate: builder.mutation({
+      query: ({ candidate_id, status, companyId }) => ({
+        url: `/employer/${companyId}/invitation/store`,
+        method: "POST",
+        body: { candidate_id, status },
+      }),
+    }),
+
+    // deletecompany
+    deleteCandidate: builder.query({
+      query: ({ companyId, candidate_id }) => ({
+        url: `/employer/candidate/destroy/${companyId}/${candidate_id}`,
+        method: "GET", // Change method to GET
       }),
     }),
   }),
@@ -130,10 +151,12 @@ export const {
   useUpdateProfileMutation,
   useChangePhoneNumberMutation,
   useGetProfileQuery,
+  useDeleteCandidateQuery,
   useCreateCompanyMutation,
   useUpdateCompanyMutation,
   useDeleteCompanyMutation,
   useGetCandidatesQuery,
+  useInviteCandidateMutation,
   useCreateCandidateMutation,
   useUpdateCompanyStatusMutation,
   useGetActiveCompanyQuery,

@@ -1,25 +1,25 @@
-'use client';
-import React, { useState } from 'react';
-import Drawer from '@mui/material/Drawer';
-import Divider from '@mui/material/Divider';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ProfileCard from './ProfileCard';
-import HomeIcon from '@mui/icons-material/Home';
-import StarIcon from '@mui/icons-material/Star';
-import ChecklistIcon from '@mui/icons-material/Checklist';
-import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutButton from './LogoutButton';
-import BusinessIcon from '@mui/icons-material/Business';
-import Link from 'next/link';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import Collapse from '@mui/material/Collapse';
-import { useParams } from 'next/navigation';
-import { Button } from '@mui/material';
+"use client";
+import React, { useState } from "react";
+import Drawer from "@mui/material/Drawer";
+import Divider from "@mui/material/Divider";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import ProfileCard from "./ProfileCard";
+import HomeIcon from "@mui/icons-material/Home";
+import StarIcon from "@mui/icons-material/Star";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import SettingsIcon from "@mui/icons-material/Settings";
+import LogoutButton from "./LogoutButton";
+import BusinessIcon from "@mui/icons-material/Business";
+import Link from "next/link";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import Collapse from "@mui/material/Collapse";
+import { useParams } from "next/navigation";
+import { Button } from "@mui/material";
 
 const CompanySidebar = () => {
   const [openSettings, setOpenSettings] = useState(false);
@@ -27,7 +27,7 @@ const CompanySidebar = () => {
   const { companyId } = useParams();
 
   const onLogoutClick = (e) => {
-    console.log(e, 'click in 29');
+    console.log(e, "click in 29");
     // const response = await postRequest(`/api/employer/logout`);
     // if (response) {
     //   localStorage.clear('token');
@@ -36,68 +36,69 @@ const CompanySidebar = () => {
 
   const LINKS = [
     {
-      text: 'Home',
-      href: '/dashboard/company/',
+      text: "Home",
+      href: "/dashboard/",
       icon: HomeIcon,
     },
     {
-      text: 'Employee',
-      href: `/dashboard/company/${companyId}/employee/createemployee`,
+      text: "Employee",
+      href: `/dashboard/company/${companyId}/`,
       icon: HomeIcon,
     },
     {
-      text: 'Attendance',
+      text: "Attendance",
       href: `/dashboard/company/${companyId}/attendance/`,
       icon: HomeIcon,
     },
     {
-      text: 'Report',
+      text: "Report",
       icon: HomeIcon,
       sublinks: [
         {
-          text: 'Activity Report',
+          text: "Activity Report",
           href: `/dashboard/company/${companyId}/activityreport/`,
           icon: BusinessIcon,
         },
         {
-          text: 'Payments Reports',
+          text: "Payments Reports",
           href: `/dashboard/company/${companyId}/paymentreport/`,
           icon: StarIcon,
         },
       ],
     },
     {
-      text: 'Setting',
+      text: "Setting",
       icon: SettingsIcon,
       sublinks: [
         {
-          text: 'Messenger Inbox',
-          href: '/dashboard/company/messenger',
+          text: "Messenger Inbox",
+          href: `/dashboard/company/${companyId}/messenging/`,
+
           icon: BusinessIcon,
         },
-        // {
-        //   text: "Payments Reports",
-        //   href: "/dashboard/company/paymentsreports",
-        //   icon: StarIcon,
-        // },
+
         {
-          text: 'Missing Attendance',
-          href: '/dashboard/company/missingattendance',
+          text: "Missing Attendance",
+          href: `/dashboard/company/${companyId}/missingattendance/`,
+
           icon: ChecklistIcon,
         },
         {
-          text: 'Leave',
-          href: '/dashboard/company/leave',
+          text: "Leave",
+          href: `/dashboard/company/${companyId}/leave/`,
+
           icon: ChecklistIcon,
         },
         {
-          text: 'Add Approval',
-          href: '/dashboard/company/addapproval',
+          text: "Add Approval",
+          href: `/dashboard/company/${companyId}/addapproval/`,
+
           icon: SettingsIcon,
         },
         {
-          text: 'Update Holiday',
-          href: '/dashboard/company/updateholiday',
+          text: "Update Holiday",
+          href: `/dashboard/company/${companyId}/updateholiday/`,
+
           icon: SettingsIcon,
         },
       ],
@@ -119,11 +120,11 @@ const CompanySidebar = () => {
       sx={{
         width: 240,
         flexShrink: 0,
-        '& .MuiDrawer-paper': {
+        "& .MuiDrawer-paper": {
           width: 240,
-          boxSizing: 'border-box',
-          top: ['40px', '56px', '64px'],
-          height: 'auto',
+          boxSizing: "border-box",
+          top: ["40px", "56px", "64px"],
+          height: "auto",
           bottom: 0,
         },
       }}
@@ -139,7 +140,7 @@ const CompanySidebar = () => {
                 href={href}
                 onClick={
                   sublinks
-                    ? text === 'Report'
+                    ? text === "Report"
                       ? handleReportClick
                       : handleSettingsClick
                     : undefined
@@ -150,7 +151,7 @@ const CompanySidebar = () => {
                 </ListItemIcon>
                 <ListItemText primary={text} />
                 {sublinks &&
-                  (text === 'Report' ? (
+                  (text === "Report" ? (
                     openReport ? (
                       <ExpandLess />
                     ) : (
@@ -165,7 +166,7 @@ const CompanySidebar = () => {
             </ListItem>
             {sublinks && sublinks.length > 0 && (
               <Collapse
-                in={text === 'Report' ? openReport : openSettings}
+                in={text === "Report" ? openReport : openSettings}
                 timeout="auto"
                 unmountOnExit
               >

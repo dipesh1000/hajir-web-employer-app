@@ -1,10 +1,10 @@
 const myHeaders = {
-  Accept: 'application/json',
+  Accept: "application/json",
   // Authorization: token,
 };
 
 export const getToken = () => {
-  let token = JSON.parse(localStorage.getItem('token'));
+  let token = JSON.parse(localStorage.getItem("token"));
   if (token) {
     return `Bearer ${token}`;
   } else {
@@ -14,9 +14,9 @@ export const getToken = () => {
 
 export const postRequest = (url, body) => {
   return fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: getToken(),
     },
     body: JSON.stringify(body),
@@ -25,9 +25,9 @@ export const postRequest = (url, body) => {
 
 export const getRequest = (url, params) => {
   return fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: getToken(),
     },
   });

@@ -6,7 +6,7 @@ export const metadata = {
   title: "Hajir's ",
   description: "A smart attadance system ",
 };
-const DRAWER_WIDTH = 240;
+const DRAWER_WIDTH = 250;
 
 export default function DashboardLayout({ children }) {
   return (
@@ -17,7 +17,7 @@ export default function DashboardLayout({ children }) {
         component="main"
         sx={{
           flexGrow: 1,
-          bgcolor: "background.default",
+          // bgcolor: "#f2f2f2",
           ml: `${DRAWER_WIDTH}px`,
           mt: ["48px", "56px", "64px"],
           p: 3,

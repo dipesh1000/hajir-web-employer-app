@@ -3,7 +3,6 @@ import { useParams } from "next/navigation";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
-import { useSelector, useDispatch } from "react-redux";
 import {
   Box,
   Typography,
@@ -13,68 +12,68 @@ import {
   FormControlLabel,
   Radio,
   Grid,
+  LinearProgress,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 
 import CustomRadioGroup from "@/components/company/createcompany/RadioButton";
 import Link from "next/link";
-import {
-  useGetActiveCompanyQuery,
-  useUpdateCompanyMutation,
-} from "@/services/api";
+import { useGetActiveCompanyQuery } from "@/services/api";
+import { useUpdateCompanyMutation } from "@/services/api";
+import { useState } from "react";
 
 const EditCompany = () => {
-  const dispatch = useDispatch();
-
   const router = useRouter();
+  const [file, setFile] = useState(null);
+
   const { editCompanyId } = useParams();
-
   const getActiveCompany = useGetActiveCompanyQuery();
-  const UpdateCompany = useUpdateCompanyMutation();
-  // const mutateAsync = UpdateCompany.mutate; // Remove the array destructuring
+  const [updateCompany] = useUpdateCompanyMutation();
 
-  console.log(getActiveCompany, "getActiveCompany");
-  console.log(editCompanyId);
+  const [isLoading, setIsLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  // console.log(getActiveCompany, "getActiveCompany");
+  // console.log(editCompanyId);
   const companyDataToUpdate = getActiveCompany.data?.data?.companies || [];
   const selectedCompany = companyDataToUpdate.find(
     (company) => company.id === parseInt(editCompanyId, 10)
   );
 
-  console.log(selectedCompany, "selectedCompany");
-  console.log(selectedCompany?.name || "", "name");
-  console.log(selectedCompany?.code || "", "code");
-  console.log(selectedCompany?.date_type || "", "date_type");
-  console.log(selectedCompany?.holiday_type || "", "holiday_type");
   const validationSchema = yup.object({
     name: yup.string().required("Full name is required"),
     // code: yup.string().required("Please select a staff code"),
     date_type: yup.string().required("Please select a date"),
     holiday_type: yup.string().required("Please enter holidays"),
   });
+  // console.log(selectedCompany?.code, "this is for testing");
 
   const formik = useFormik({
     initialValues: {
       name: selectedCompany?.name || "",
-      code: selectedCompany?.code || "",
+      // name: "",
+      // code: selectedCompany?.code || "",
       date_type: selectedCompany?.date_type || "",
-      holiday_type: selectedCompany?.holiday_type || "Custom",
+      holiday_type: selectedCompany?.holiday_type || "",
       custom_holiday_file: "",
     },
-
     validationSchema: validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
         console.log("Data being updated and sent:", values);
         const formData = new FormData();
         formData.append("name", values.name);
-        formData.append("code", values.code);
         formData.append("date_type", values.date_type);
         formData.append("holiday_type", values.holiday_type);
         formData.append("custom_holiday_file", file);
-        // Use the mutate function for triggering the mutation
-        const [mutateAsync] = UpdateCompany();
 
-        await mutateAsync(values);
+        // Call the mutation function directly
+        const { data } = await updateCompany({
+          company_id: editCompanyId,
+          companyData: formData,
+        });
+
+        console.log("Company updated successfully:", data);
+
         // Show success message
         alert("Company updated successfully!");
 
@@ -91,11 +90,18 @@ const EditCompany = () => {
       }
     },
   });
+
+  // console.log(selectedCompany, "selectedCompany");
+  // console.log(selectedCompany?.name || "", "name");
+  // console.log(selectedCompany?.code || "", "code");
+  // console.log(selectedCompany?.date_type || "", "date_type");
+  // console.log(selectedCompany?.holiday_type || "", "holiday_type");
+
   const handleFileChange = (event) => {
     const uploadedFile = event.target.files[0];
     setFile(uploadedFile);
+    console.log(uploadedFile);
   };
-
   const handleDownload = (fileName) => {
     const filePath = `/${fileName}`;
 
@@ -201,8 +207,7 @@ const EditCompany = () => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                value={formik.values.name}
-                onChange={formik.handleChange}
+                {...formik.getFieldProps("name")}
                 error={formik.touched.name && Boolean(formik.errors.name)}
                 helperText={formik.touched.name && formik.errors.name}
               />
@@ -215,6 +220,7 @@ const EditCompany = () => {
               <CustomRadioGroup
                 name="date_type"
                 value={formik.values.date_type}
+                {...formik.getFieldProps("date_type")}
                 options={[
                   {
                     value: "English",
@@ -251,34 +257,35 @@ const EditCompany = () => {
               <Typography variant="body1" sx={{ marginBottom: "8px" }}>
                 Holidays
               </Typography>
-              {/* Default Government Holidays Box */}
-              <Box
-                sx={{
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  padding: "16px",
-                  width: "500px",
-                  display: "flex",
-                  transition: "background 0.3s, border 0.3s",
-                  "&:hover": { background: "#f5f5f5" },
-                  marginTop: "16px",
-                }}
-              >
-                <RadioGroup
-                  row
-                  name="holiday_type"
-                  value={formik.values.holiday_type}
-                  onChange={formik.handleChange}
+              <Box sx={{ marginBottom: "16px" }}>
+                <Box
+                  sx={{
+                    border: "1px solid #ccc",
+                    borderRadius: "4px",
+                    padding: "16px",
+                    width: "500px",
+                    display: "flex",
+                    transition: "background 0.3s, border 0.3s",
+                    "&:hover": { background: "#f5f5f5" },
+                    marginTop: "16px",
+                  }}
                 >
-                  <FormControlLabel
-                    value="Custom"
-                    control={<Radio />}
-                    label="Default Government Holidays"
-                  />
-                </RadioGroup>
+                  <RadioGroup
+                    row
+                    name="holiday_type"
+                    value={formik.values.holiday_type}
+                    onChange={formik.handleChange}
+                  >
+                    <FormControlLabel
+                      value="Government"
+                      control={<Radio />}
+                      label="Default Government Holidays"
+                    />
+                  </RadioGroup>
+                </Box>
+                {/* need to pdate this part */}
                 {formik.touched.holiday_type &&
-                  formik.errors.holiday_type ===
-                    "Default Government Holidays" && (
+                  formik.errors.holiday_type === "" && (
                     <Typography sx={{ color: "red", marginTop: "4px" }}>
                       {formik.errors.holiday_type}
                     </Typography>
@@ -296,37 +303,33 @@ const EditCompany = () => {
                   View Holidays (.pdf)
                 </Typography>
               </Button>
-              {/* Custom Holidays Box */}
-              <Box
-                sx={{
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  padding: "16px",
-                  width: "500px",
-                  display: "flex",
-                  transition: "background 0.3s, border 0.3s",
-                  "&:hover": { background: "#f5f5f5" },
-                  marginTop: "16px",
-                }}
-              >
-                <RadioGroup
-                  row
-                  name="holiday_type"
-                  value={formik.values.holiday_type}
-                  onChange={formik.handleChange}
+              <Box>
+                {/* Custom Holidays Box */}
+                <Box
+                  sx={{
+                    border: "1px solid #ccc",
+                    borderRadius: "4px",
+                    padding: "16px",
+                    width: "500px",
+                    display: "flex",
+                    transition: "background 0.3s, border 0.3s",
+                    "&:hover": { background: "#f5f5f5" },
+                    marginTop: "16px",
+                  }}
                 >
-                  <FormControlLabel
-                    value="Custom"
-                    control={<Radio />}
-                    label="Custom Holidays"
-                  />
-                </RadioGroup>
-                {formik.touched.holidays &&
-                  formik.errors.holidays === "Custom Holidays" && (
-                    <Typography sx={{ color: "red", marginTop: "4px" }}>
-                      {formik.errors.holidays}
-                    </Typography>
-                  )}
+                  <RadioGroup
+                    row
+                    name="holiday_type"
+                    value={formik.values.holiday_type}
+                    onChange={formik.handleChange}
+                  >
+                    <FormControlLabel
+                      value="Custom"
+                      control={<Radio />}
+                      label="Custom Holidays"
+                    />
+                  </RadioGroup>
+                </Box>
               </Box>
               <Button onClick={() => handleDownload("SpecialHoliday.xls")}>
                 <Typography
@@ -352,6 +355,14 @@ const EditCompany = () => {
                   Upload File
                   <input type="file" onChange={handleFileChange} hidden />
                 </Button>
+                {/* {isLoading && <LinearProgress value={uploadProgress} />} */}
+
+                {/* Conditionally render the file name if uploadedFile is not null */}
+                {file && (
+                  <Typography variant="body2" sx={{ marginTop: "8px" }}>
+                    Uploaded File: {file.name}
+                  </Typography>
+                )}
               </Box>
             </Box>
           </Grid>

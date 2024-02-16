@@ -38,7 +38,11 @@ const DashboardDetailedbottom = () => {
         sx={{ width: "100%", marginTop: "10px" }}
         spacing={{ xs: 1, sm: 2, md: 1 }}
       >
+<<<<<<< HEAD
+        z``
+=======
   
+>>>>>>> 3886ddf46da425623b2830c58a0229c3ae761191
         <Item
           sx={{ backgroundColor: "rgba(34, 64, 139, 0.08)", height: "120px" }}
         >

@@ -20,31 +20,29 @@ export default function TabsActiveInactive({
       <Tabs
         value={value}
         onChange={handleChange}
-        indicatorColor="secondary"
-        textColor="inherit"
-        variant="fullWidth"
-        aria-label="full width tabs example"
-        centered
+        indicatorColor="primary"
+        textColor="primary"
       >
         <Tab
           label={
             <div
-              style={{
-                fontSize: "1rem",
-                marginBottom: "4px",
-                marginRight: "6px",
-              }}
+            // style={{
+            //   fontSize: "1rem",
+            //   marginBottom: "4px",
+            //   marginRight: "6px",
+            // }}
             >
               All
               <span
                 style={{
+                  backgroundColor: "#22408B",
                   color: "white",
-                  backgroundColor: "grey",
-                  padding: "7px",
-                  marginLeft: "5px",
-                  // borderRadius: "50%",
-                  // fontSize: "0.8rem",
-                  fontWeight: "bold",
+                  padding: "2px 8px",
+                  borderRadius: "4px",
+                  fontSize: "1rem",
+                  marginBottom: "4px",
+                  marginRight: "6px",
+                  marginLeft: "6px",
                 }}
               >
                 {totalCount}
@@ -55,22 +53,23 @@ export default function TabsActiveInactive({
         <Tab
           label={
             <div
-              style={{
-                fontSize: "1rem",
-                marginBottom: "4px",
-                marginRight: "6px",
-              }}
+            // style={{
+            //   fontSize: "1rem",
+            //   marginBottom: "4px",
+            //   marginRight: "6px",
+            // }}
             >
               Active{" "}
               <span
                 style={{
-                  color: "white",
-                  backgroundColor: "grey",
-                  padding: "7px",
-                  marginLeft: "5px",
-                  // borderRadius: "50%",
-                  // fontSize: "0.8rem",
-                  fontWeight: "bold",
+                  backgroundColor: "#00800033",
+                  color: "#008000",
+                  padding: "2px 8px",
+                  borderRadius: "4px",
+                  fontSize: "1rem",
+                  marginBottom: "4px",
+                  marginRight: "6px",
+                  marginLeft: "6px",
                 }}
               >
                 {" "}
@@ -82,22 +81,23 @@ export default function TabsActiveInactive({
         <Tab
           label={
             <div
-              style={{
-                fontSize: "1rem",
-                marginBottom: "4px",
-                marginRight: "6px",
-              }}
+            // style={{
+            //   fontSize: "1rem",
+            //   marginBottom: "4px",
+            //   marginRight: "6px",
+            // }}
             >
               Inactive{" "}
               <span
                 style={{
-                  color: "white",
-                  backgroundColor: "grey",
-                  padding: "7px",
-                  marginLeft: "5px",
-                  // borderRadius: "50%",
-                  // fontSize: "0.8rem",
-                  fontWeight: "bold",
+                  backgroundColor: "#FF505033",
+                  color: "#FF5050",
+                  padding: "2px 8px",
+                  borderRadius: "4px",
+                  fontSize: "1rem",
+                  marginBottom: "4px",
+                  marginRight: "6px",
+                  marginLeft: "6px",
                 }}
               >
                 {" "}

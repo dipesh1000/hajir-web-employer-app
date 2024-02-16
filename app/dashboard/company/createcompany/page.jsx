@@ -232,7 +232,7 @@ const CreateCompany = () => {
               {/* New Staff Code Selection  */}
 
               <Typography variant="body1" sx={{ marginBottom: "8px" }}>
-                testing
+                Staff Code{" "}
               </Typography>
               <CustomRadioGroup
                 name="code"

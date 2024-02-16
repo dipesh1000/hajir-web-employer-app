@@ -310,13 +310,20 @@ const BasicGridStyles = {
     height: "100vh", // Adjusted minHeight instead of maxHeight
     objectFit: "cover",
     overflow: "hidden",
+<<<<<<< HEAD
+=======
    
+>>>>>>> 3886ddf46da425623b2830c58a0229c3ae761191
   },
   image: {
     display: "block",
     maxWidth: "100%",
+<<<<<<< HEAD
+    height: "auto", // Ensuring the image maintains aspect ratio
+=======
     height: "auto", 
  
+>>>>>>> 3886ddf46da425623b2830c58a0229c3ae761191
   },
 };
 const Item = styled(Paper)(({ theme }) => ({
@@ -393,7 +400,10 @@ export default function BasicGrid() {
               width={isMobile ? 300 : 900} // Adjusted width based on screen size
               height={900}
               style={BasicGridStyles.image}
+<<<<<<< HEAD
+=======
             
+>>>>>>> 3886ddf46da425623b2830c58a0229c3ae761191
             />
           )}
         </Grid>
