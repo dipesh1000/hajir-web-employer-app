@@ -42,55 +42,68 @@ const ProfileDialog = ({ open, handleClose, profileData }) => {
     setEditProfileOpen(true); // Open the Edit Profile dialog
   };
   const handleCloseDialog = () => {
-   handleClose();
+    handleClose();
   };
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose} maxWidth="md" >
-        <DialogTitle  style={{
-                textAlign: "center",
-                marginTop: "-10px",
-                fontWeight: "500",
-                marginBottom: '10px',
-                fontSize: '26px'}}>Profile</DialogTitle>
-                       <IconButton
-            aria-label="close"
-            onClick={handleCloseDialog}
-            sx={{
-              position: "absolute",
-              right: 8,
-              top: 8,
-              color: (theme) => theme.palette.grey[500],
-            }}
-          >
-            <CloseIcon/>
-          </IconButton>
+      <Dialog open={open} onClose={handleClose} maxWidth="md">
+        <DialogTitle
+          style={{
+            textAlign: "center",
+            marginTop: "-10px",
+            fontWeight: "500",
+            marginBottom: "3px",
+            fontSize: "26px",
+          }}
+        >
+          Profile
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleCloseDialog}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
         <DialogContent>
           <Avatar
             src={"/avatar.svg"}
             sx={{
-              width: 100,
-              height: 100,
-              margin: "auto",
-              marginBottom: 20,
+              width: 115,
+              height: 108,
+              marginLeft: "370px",
+              marginTop: "-10px",
+              marginBottom: "30px",
             }}
             alt="Profile Avatar"
           />
-             <DialogActions>
-          <Button onClick={handleEditProfileOpen} sx={ {marginRight: "350px",
-                    backgroundColor: "rgba(0, 128, 0, 0.2)",
-                    color: "#000",
-                    textAlign: "center",
-                    alignItems: "center",
-                    justifyContent: "center"}}>  <EditIcon />Edit Profile</Button>
-        </DialogActions>
+          <DialogActions>
+            <Button
+              onClick={handleEditProfileOpen}
+              sx={{
+                marginRight: "350px",
+                backgroundColor: "rgba(0, 128, 0, 0.2)",
+                color: "#000",
+                position: "relative", // Add this line
+                top: "-20px", // Adjust this value as needed
+              }}
+            >
+              <EditIcon />
+              Edit Profile
+            </Button>
+          </DialogActions>
+          <Typography>Personal Details</Typography>
           <form onSubmit={formikView.handleSubmit}>
-          <FormControl  style={{width:'120px',marginBottom: '20px'}}>
+            <FormControl style={{ width: "120px", marginBottom: "20px" }}>
               <Select
                 id="gender"
                 name="gender"
-              
                 variant="outlined"
                 value={formikView.values.gender}
                 disabled
@@ -100,27 +113,24 @@ const ProfileDialog = ({ open, handleClose, profileData }) => {
               </Select>
             </FormControl>
             <TextField
-              
               id="name"
               name="name"
               label="Name"
               variant="outlined"
               value={formikView.values.name}
               disabled
-              sx={{width:'310px', marginLeft:'20px',marginBottom: '20px'}}
+              sx={{ width: "310px", marginLeft: "20px", marginBottom: "20px" }}
             />
             <TextField
-            
               id="email"
               name="email"
               label="Email"
               variant="outlined"
               value={formikView.values.email}
               disabled
-              sx={{width:'380px', marginLeft:'20px',marginBottom: '20px'}}
+              sx={{ width: "380px", marginLeft: "20px", marginBottom: "20px" }}
             />
             <TextField
-          
               id="birthdate"
               name="birthdate"
               label="Birthdate"
@@ -131,38 +141,37 @@ const ProfileDialog = ({ open, handleClose, profileData }) => {
               InputLabelProps={{
                 shrink: true,
               }}
-              sx={{width:'450px',marginBottom: '20px'}}
+              sx={{ width: "450px", marginBottom: "20px" }}
             />
-           
-            <FormControl >
+            <FormControl>
               <Select
                 id="maritalStatus"
                 name="maritalStatus"
-             
                 variant="outlined"
                 value={formikView.values.maritalStatus}
                 disabled
-                sx={{width:'380px', marginLeft:'20px',marginBottom: '20px'}}
+                sx={{
+                  width: "380px",
+                  marginLeft: "20px",
+                  marginBottom: "20px",
+                }}
               >
                 <MenuItem value="married">Married</MenuItem>
                 <MenuItem value="unmarried">Unmarried</MenuItem>
               </Select>
             </FormControl>
             <TextField
-              
               id="phone"
               name="phone"
               label="Phone Number"
               variant="outlined"
               value={formikView.values.phone}
               disabled
-              sx={{width:'450px',marginBottom: '20px'}}
+              sx={{ width: "450px", marginBottom: "20px" }}
             />
           </form>
         </DialogContent>
-     
       </Dialog>
-      {/* Render EditProfileDialog only if editProfileOpen is true */}
       {editProfileOpen && (
         <EditProfileDialog
           open={editProfileOpen}
@@ -173,5 +182,4 @@ const ProfileDialog = ({ open, handleClose, profileData }) => {
     </>
   );
 };
-
 export default ProfileDialog;
