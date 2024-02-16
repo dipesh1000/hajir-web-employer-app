@@ -22,6 +22,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import styles from "styled-components";
 import { CalendarIcon } from "@mui/x-date-pickers";
 import { BackdropProps } from "@mui/material/Dialog";
+import * as Yup from "yup";
 
 const ProfileContainer = styled(Button)({
   display: "flex",
@@ -31,6 +32,18 @@ const ProfileContainer = styled(Button)({
   cursor: "pointer",
 });
 
+const ProfileSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  gender: Yup.string().required("Gender is required"),
+  birthdate: Yup.string().required("Birthdate is required"),
+  maritalStatus: Yup.string().required("Marital status is required"),
+  phone: Yup.string()
+    .matches(/^[0-9]{10}$/, "Phone number must be 10 digits")
+    .required("Phone number is required"),
+ 
+
+});
 const NewBootstrapDialog = styled(Dialog)(() => ({
   marginLeft: "160px",
 }));
@@ -79,6 +92,13 @@ export default function ProfileCard() {
     maritalStatus: "married",
     phone: "9887679041",
   });
+  const formik = useFormik({
+    initialValues: userData,
+    validationSchema: ProfileSchema,
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
   const [uploadedImage, setUploadedImage] = React.useState(null); // Store the uploaded image
   const handleAvatarClick = () => {
     setAvatarClicked(true);
@@ -98,6 +118,10 @@ export default function ProfileCard() {
   };
 
   const handleSaveProfile = () => {
+    if (Object.keys(formik.errors).length > 0) {
+      // If there are errors, do not close the dialog
+      return;
+    }
     setEditMode(false);
     handleCloseDialog();
   };
@@ -109,7 +133,9 @@ export default function ProfileCard() {
 
   const handleChangePhoneNumber = () => {
     setChangePhoneMode(!changePhoneMode);
-  };
+
+ 
+  
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -121,7 +147,11 @@ export default function ProfileCard() {
       reader.readAsDataURL(file);
     }
   };
+  const handleFieldChange = (e, fieldName) => {
+    formik.handleChange(e);
 
+    setUserData({ ...userData, [fieldName]: e.target.value });
+  };
   return (
     <>
       <ProfileContainer onClick={handleOpenDialog} >
@@ -260,17 +290,12 @@ export default function ProfileCard() {
  backgroundColor: 'inherit',
  padding:0,
 
- 
-    
       }}
       alt="Profile Avatar"
     />
   </Dialog>
 ) : null}
-
-
-
-            <DialogActions>
+    <DialogActions>
               {!editMode && (
                 <Button
                   sx={{
@@ -312,21 +337,34 @@ export default function ProfileCard() {
 
                 <TextField
                   margin="normal"
-                  value={userData.name} // Set value to empty string in edit mode
-                  onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                //  onChange={(e) => setUserData({ ...userData, name: e.target.value })}
                   disabled={!editMode}
                   sx={{ marginLeft: '20px', width: '285px' }}
-                  placeholder={editMode ? 'Full name' : ''} // Always show "Full name" as placeholder
+                  placeholder={editMode ? 'Full name' : ''}
+                  id="name"
+                  name="name"
+                  // label="Name"
+                  value={formik.values.name}
+                  onChange={(e) => handleFieldChange(e, 'name')} 
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.name && Boolean(formik.errors.name)}
+                  helperText={formik.touched.name && formik.errors.name}
+                
                 />
         <TextField
                   // label="Birthdate"
                   margin="normal"
-                  value={userData.birthdate}
-                  onChange={(e) =>
-                    setUserData({ ...userData, birthdate: e.target.value })
-                  }
+                  // value={userData.birthdate}
+              
                   disabled={!editMode}
                   sx={{ width: "405px" }}
+                  id="birthdate"
+                  name="birthdate"
+                  value={formik.values.birthdate}
+                  onChange={(e) => handleFieldChange(e, 'birthdate')} 
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.birthdate && Boolean(formik.errors.birthdate)}
+                  helperText={formik.touched.birthdate && formik.errors.birthdate}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -335,7 +373,6 @@ export default function ProfileCard() {
 
                         >
                           <CalendarIcon />
-
                         </IconButton>
                       </InputAdornment>
                     )
@@ -348,16 +385,18 @@ export default function ProfileCard() {
                 <TextField
 
                   margin="normal"
-                  value={userData.email}
-                  onChange={(e) =>
-                    setUserData({ ...userData, email: e.target.value })
-                  }
                   disabled={!editMode}
                   sx={{ width: "100%" }}
-                />
+                  id="email"
+                  name="email"
 
-
-                {editMode ? (
+                  value={formik.values.email}
+                  onChange={(e) => handleFieldChange(e, 'email')} 
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
+          />
+         {editMode ? (
                   <FormControl sx={{ width: "100%", marginTop: '16px' }}>
 
                     <Select
@@ -383,21 +422,15 @@ export default function ProfileCard() {
                     sx={{ width: "100%" }}
                   />
                 )}
-
-
-
-
-              </RightColumn>
+</RightColumn>
 
             </div>
             <TextField
-
-              margin="normal"
+  margin="normal"
               value={userData.phone}
               disabled
               sx={{ width: "405px" }}
-
-            />
+          />
 
             {editMode && (
               <>
@@ -409,7 +442,7 @@ export default function ProfileCard() {
                   }}
                 >
                   {changePhoneMode ? (
-                    <CheckCircleIcon onClick={handleChangePhoneNumber} style={{ marginRight: "10px", color: "rgb(0, 0, 139)", }} />
+                    <CheckCircleIcon  onClick={handleChangePhoneNumber} style={{ marginRight: "10px", color: "rgb(0, 0, 139)", }} />
                   ) : (
                     <CircleOutlinedIcon onClick={handleChangePhoneNumber} style={{ marginRight: "10px", color: "rgb(0, 0, 139)", }} />
                   )}
@@ -426,22 +459,28 @@ export default function ProfileCard() {
                 </div>
                 {changePhoneMode && (
                   <>
-                    <TextField
+                  <TextField
                       label="Change number"
                       margin="normal"
-                      value={newPhoneNumber}
-                      onChange={(e) => setNewPhoneNumber(e.target.value)}
+                 
+                      value={formik.values.newPhoneNumber}
+                      onChange={(e) => handleFieldChange(e, "newPhoneNumber")}
+                      id="newPhoneNumber"
+                      name="newPhoneNumber"
+                      disabled={!editMode || !changePhoneMode}
+                  
                       style={{ width: "405px", marginRight: '25px' }}
                     />
                     <TextField
                       label="Confirm Change Number"
                       margin="normal"
-                      value={confirmPhoneNumber}
-                      onChange={(e) =>
-                        setConfirmPhoneNumber(e.target.value)
-                      }
+                      value={formik.values.confirmPhoneNumber}
+                      onChange={(e) => handleFieldChange(e, "confirmPhoneNumber")}
+                    
+                      disabled={!editMode || !changePhoneMode}
+                   
                       style={{ width: "420px" }}
-                    />
+                    /> 
                   </>
                 )}
               </>
@@ -457,10 +496,7 @@ export default function ProfileCard() {
                   width: "150px",
                   height: "45px",
                   justifyContent: "center",
-                  // alignItems: "center",
-                  // textAlign: "center",
-                  // marginLeft: "auto",
-
+               
                 }}
               >
                 <LoopIcon />
@@ -473,4 +509,4 @@ export default function ProfileCard() {
       </Wrapper>
     </>
   );
-              }
+  }}

@@ -69,6 +69,7 @@ const MainSidebar = () => {
         ))}
       </List>
       <Divider />
+    
       <List>
         <LogoutButton onClick={(e) => onLogoutClick(e)} />
       </List>
