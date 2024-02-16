@@ -1,27 +1,3 @@
-<<<<<<< HEAD
-"use client";
-import React, { useState, useEffect } from "react";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import Image from "next/image";
-import Button from "@mui/material/Button";
-import * as yup from "yup";
-import { TextField, useMediaQuery } from "@mui/material";
-import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
-import ScrollDialog from "@/components/Auth/ScrollDialog";
-import { postRequest } from "@/services/ApiRequestService";
-
-// Styled components
-const BasicGridStyles = {
-  image: {
-    display: "block",
-    maxWidth: "100%",
-  },
-};
-=======
 'use client';
 import React, { useState, useEffect} from 'react';
 import { styled } from '@mui/material/styles';
@@ -41,7 +17,6 @@ import 'react-phone-input-2/lib/style.css';
  
 // Styled components
 const BasicGridStyles = {
->>>>>>> 3886ddf46da425623b2830c58a0229c3ae761191
 
 container: {
   flexGrow: 1,
@@ -159,11 +134,7 @@ export default function Signin() {
 
   const formik = useFormik({
     initialValues: {
-<<<<<<< HEAD
-      phone: "9808426215",
-=======
       phone: '',
->>>>>>> 3886ddf46da425623b2830c58a0229c3ae761191
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -258,23 +229,7 @@ export default function Signin() {
               onSubmit={formik.handleSubmit}
               style={{ width: '250px' }}
             >
-<<<<<<< HEAD
-              <TextField
-                fullWidth
-                id="phone"
-                label="Phone Number"
-                placeholder="+977 9841234567"
-                name="phone"
-                type="tel"
-                onChange={formik.handleChange}
-                value={formik.values.phone}
-                error={formik.touched.phone && Boolean(formik.errors.phone)}
-                helperText={formik.touched.phone && formik.errors.phone}
-                style={{ marginTop: "20px" }}
-              />
-=======
  
->>>>>>> 3886ddf46da425623b2830c58a0229c3ae761191
 
 
 

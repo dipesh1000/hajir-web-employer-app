@@ -59,7 +59,8 @@ const MainSidebar = () => {
       <ProfileCard />
       <List>
         {LINKS.map(({ text, href, icon: Icon }) => (
-          <ListItem key={href} disablePadding>
+    
+    <ListItem key={href} disablePadding>
             <ListItemButton component={Link} href={href}>
               <ListItemIcon>
                 <Icon />
