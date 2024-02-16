@@ -1,7 +1,7 @@
-"use client";
 import * as React from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
+import { useFormik } from "formik";
 import { useFormik } from "formik";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -24,6 +24,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import styles from "styled-components";
 import { CalendarIcon } from "@mui/x-date-pickers";
@@ -48,7 +49,10 @@ const NewBootstrapDialog = styled(Dialog)(() => ({
 
 const Wrapper = styles.div`
   width: "100%";
+  width: "100%";
   display: flex;
+  flex-direction:row,
+  gap: 5px,
   flex-direction:row,
   gap: 5px,
 `;
@@ -57,8 +61,13 @@ const LeftColumn = styles.div`
   flex: 1;
 justify-content: space-evenly,
 align-items: center,
+const LeftColumn = styles.div`
+  flex: 1;
+justify-content: space-evenly,
+align-items: center,
 `;
 
+const RightColumn = styles.div`
 const RightColumn = styles.div`
   flex: 1;
 `;

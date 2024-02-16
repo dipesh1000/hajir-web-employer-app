@@ -11,7 +11,7 @@ const DRAWER_WIDTH = 250;
 export default function DashboardLayout({ children }) {
   return (
     <>
-      <Header />
+      <Header  />
       <MainSidebar />
       <Box
         component="main"

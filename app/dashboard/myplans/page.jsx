@@ -3,6 +3,20 @@ import React from "react";
 import { Box } from '@mui/material';
 import styled from "styled-components";
 import BasicTabs, { CustomTabPanel } from "@/components/plansTab/PlansTab";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 960,
+      lg: 1280,
+      xl: 1920,
+    },
+  },
+  // other theme customizations...
+});
 
 const Top=styled.div`
 margin-top:-40px;
@@ -21,7 +35,9 @@ justify-content: center;
 
 `
 const page = () => {
-  return <div>
+  return (
+  <ThemeProvider theme={theme}>
+  <div>
  <Box>
   <Top>
   <h1 style={{fontWeight:"500"}}> My Plans</h1>
@@ -38,7 +54,9 @@ const page = () => {
   <CustomTabPanel></CustomTabPanel>
   </Planss>
  </Box>
-  </div>;
-};
+  </div>
+  </ThemeProvider>
+  )
+}
 
 export default page;
