@@ -16,24 +16,24 @@ import {
   DialogActions,
   Button,
   DialogContentText,
+  TablePagination,
+  TextField,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel, // Added TablePagination import
 } from "@mui/material";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
-import UpdateIcon from "@mui/icons-material/Update";
 import StatusChangeIcon from "@mui/icons-material/TrackChanges";
 import {
-  useDeleteCandidateMutation,
+  useDeleteCandidateQuery,
   useInviteCandidateMutation,
 } from "@/services/api";
 import { useParams } from "next/navigation";
 
 const EmployeeTable = ({ candidateData, statusFilter }) => {
-  const [inviteCandidate] = useInviteCandidateMutation();
-  const [deleteCandidate] = useDeleteCandidateMutation();
-  const [selectedCandidateId, setSelectedCandidateId] = useState();
-  const { companyId } = useParams();
-
   const candidates =
     statusFilter === "active"
       ? candidateData?.data?.active_candidates
@@ -50,6 +50,43 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
   const openInviteDialog = (candidate) => {
     setSelectedCandidate(candidate);
     setOpenDialog(true);
+  };
+  const [filteredData, setFilteredData] = useState(candidates);
+  console.log("candidateData", candidateData);
+  const [searchText, setSearchText] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [inviteCandidate] = useInviteCandidateMutation();
+  const deleteCandidate = useDeleteCandidateQuery();
+  const [selectedCandidateId, setSelectedCandidateId] = useState();
+  const { companyId } = useParams();
+
+  const handleSearchTextChange = (event) => {
+    const text = event.target.value.toLowerCase();
+    setSearchText(text);
+    filterData(text, selectedTab);
+  };
+
+  const handleTabChange = (event, newValue) => {
+    setSelectedTab(newValue);
+    filterData(searchText, newValue);
+  };
+
+  const filterData = (searchText) => {
+    const filtered = companies.filter((candidates) =>
+      candidates.name.toLowerCase().includes(searchText)
+    );
+    setFilteredData(filtered);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   const handleInvite = async () => {
@@ -69,6 +106,16 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
     }
   };
 
+  const handleConfirmDelete = async () => {
+    try {
+      await deleteCandidate({ candidate_id: selectedCandidateId, companyId });
+      console.log("Candidate deleted successfully");
+      setIsConfirmationDialogOpen(false);
+    } catch (error) {
+      console.error("Error deleting candidate:", error);
+    }
+  };
+
   const handleCloseConfirmationDialog = () => {
     setIsConfirmationDialogOpen(false);
   };
@@ -82,21 +129,8 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
   };
 
   const handleDeleteClick = (candidate_id) => {
-    console.log("Candidate ID:", candidate_id);
     setSelectedCandidateId(candidate_id);
     setIsConfirmationDialogOpen(true);
-  };
-
-  const handleConfirmDelete = async () => {
-    const candidate_id = selectedCandidateId;
-    console.log("Candidate deleted successfully");
-
-    try {
-      await deleteCandidate(companyId, candidate_id);
-      setIsConfirmationDialogOpen(false);
-    } catch (error) {
-      console.error("Error deleting candidate:", error);
-    }
   };
 
   const handleUpdate = () => {
@@ -108,11 +142,40 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", height: 1000, mt: 3 }}>
+      <Box sx={{ mb: 2 }}>
+        <TextField
+          label="Search by Employee Name"
+          variant="outlined"
+          size="small"
+          onChange={handleSearchTextChange}
+          value={searchText}
+        />
+
+        <FormControl variant="outlined" size="small" sx={{ ml: 2, width: 200 }}>
+          <InputLabel>Department</InputLabel>
+          <Select
+            // value={selectedDepartment}
+            // onChange={handleDepartmentChange}
+            label="Department"
+            autoWidth={false}
+          >
+            <MenuItem value="">All Departments</MenuItem>
+            {/* {departments.map((dept) => (
+              <MenuItem key={dept} value={dept}>
+                {dept}
+              </MenuItem>
+            ))} */}
+          </Select>
+        </FormControl>
+        <br />
+      </Box>
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Employee ID</TableCell>
               <TableCell>Employee Name</TableCell>
               <TableCell>Designation</TableCell>
               <TableCell>Phone</TableCell>
@@ -124,47 +187,61 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {candidates &&
-              candidates.map((candidate) => (
-                <TableRow key={candidate.id}>
-                  <TableCell>{candidate.name}</TableCell>
-                  <TableCell>{candidate.designation}</TableCell>
-                  <TableCell>{candidate.phone}</TableCell>
-                  <TableCell>{candidate.status}</TableCell>
-                  <TableCell>{candidate.code}</TableCell>
-                  <TableCell>{candidate.marriage_status}</TableCell>
-                  <TableCell>{candidate.candidate_id}</TableCell>
-
-                  <TableCell>
-                    <IconButton
-                      aria-label="invite"
-                      onClick={() => openInviteDialog(candidate)}
-                    >
-                      <InsertInvitationIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="update"
-                      onClick={() => setIsUpdateDialogOpen(true)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => handleDeleteClick(candidate.candidate_id)}
-                    >
-                      <DeleteOutlineIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="status change"
-                      onClick={() => setIsStatusChangeDialogOpen(true)}
-                    >
-                      <StatusChangeIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+            {filteredData &&
+              filteredData.length > 0 &&
+              filteredData
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((candidate) => (
+                  <TableRow key={candidate.id}>
+                    <TableCell>{candidate.id}</TableCell>
+                    <TableCell>{candidate.name}</TableCell>
+                    <TableCell>{candidate.designation}</TableCell>
+                    <TableCell>{candidate.phone}</TableCell>
+                    <TableCell>{candidate.status}</TableCell>
+                    <TableCell>{candidate.code}</TableCell>
+                    <TableCell>{candidate.marriage_status}</TableCell>
+                    <TableCell>{candidate.candidate_id}</TableCell>
+                    <TableCell>
+                      <IconButton
+                        aria-label="invite"
+                        onClick={() => openInviteDialog(candidate)}
+                      >
+                        <InsertInvitationIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="update"
+                        onClick={() => setIsUpdateDialogOpen(true)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() =>
+                          handleDeleteClick(candidate.candidate_id)
+                        }
+                      >
+                        <DeleteOutlineIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="status change"
+                        onClick={() => setIsStatusChangeDialogOpen(true)}
+                      >
+                        <StatusChangeIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={filteredData?.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </TableContainer>
 
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
@@ -213,7 +290,7 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
           <Button onClick={handleCloseUpdateDialog} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleConfirmDelete} color="primary">
+          <Button onClick={handleUpdate} color="primary">
             Update
           </Button>
         </DialogActions>

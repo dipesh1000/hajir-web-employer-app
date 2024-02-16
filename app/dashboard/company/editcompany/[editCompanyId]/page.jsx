@@ -23,12 +23,12 @@ import { useState } from "react";
 
 const EditCompany = () => {
   const router = useRouter();
-  const { editCompanyId } = useParams();
-
-  const getActiveCompany = useGetActiveCompanyQuery();
-  const UpdateCompanyId = useUpdateCompanyMutation();
-  const mutateAsync = UpdateCompanyId.mutateAsync;
   const [file, setFile] = useState(null);
+
+  const { editCompanyId } = useParams();
+  const getActiveCompany = useGetActiveCompanyQuery();
+  const [updateCompany] = useUpdateCompanyMutation();
+
   const [isLoading, setIsLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -67,7 +67,10 @@ const EditCompany = () => {
         formData.append("custom_holiday_file", file);
 
         // Call the mutation function directly
-        await mutateAsync({ company_id: editCompanyId, companyData: formData });
+        const { data } = await updateCompany({
+          company_id: editCompanyId,
+          companyData: formData,
+        });
 
         console.log("Company updated successfully:", data);
 
@@ -204,8 +207,6 @@ const EditCompany = () => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                // value={formik.values.name}
-                // onChange={formik.handleChange}
                 {...formik.getFieldProps("name")}
                 error={formik.touched.name && Boolean(formik.errors.name)}
                 helperText={formik.touched.name && formik.errors.name}

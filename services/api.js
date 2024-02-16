@@ -135,10 +135,10 @@ export const api = createApi({
     }),
 
     // deletecompany
-    deleteCandidate: builder.mutation({
-      query: (companyId, candidate_id) => ({
+    deleteCandidate: builder.query({
+      query: ({ companyId, candidate_id }) => ({
         url: `/employer/candidate/destroy/${companyId}/${candidate_id}`,
-        method: "GET",
+        method: "GET", // Change method to GET
       }),
     }),
   }),
@@ -151,7 +151,7 @@ export const {
   useUpdateProfileMutation,
   useChangePhoneNumberMutation,
   useGetProfileQuery,
-  useDeleteCandidateMutation,
+  useDeleteCandidateQuery,
   useCreateCompanyMutation,
   useUpdateCompanyMutation,
   useDeleteCompanyMutation,

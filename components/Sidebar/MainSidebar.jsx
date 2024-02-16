@@ -19,6 +19,7 @@ import Link from "next/link";
 import { getRequest, postRequest } from "@/services/ApiRequestService";
 import Snackbar from "@mui/material/Snackbar";
 import { useRouter } from "next/navigation";
+import TestProfileCard from "../testprofile/TestProfileCard";
 
 const MainSidebar = () => {
   const router = useRouter();
@@ -72,6 +73,7 @@ const MainSidebar = () => {
       <List>
         <LogoutButton onClick={(e) => onLogoutClick(e)} />
       </List>
+      <TestProfileCard />
     </Drawer>
   );
 };

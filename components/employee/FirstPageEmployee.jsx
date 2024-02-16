@@ -84,7 +84,10 @@ const FirstPageEmployee = () => {
                   height: "100%",
                 }}
               >
-                <EmployeeTable candidateData={candidateData} />{" "}
+                <EmployeeTable
+                  candidateData={candidateData}
+                  // statusFilter={allEmployee}
+                />{" "}
               </Box>
               <Box
                 sx={{
