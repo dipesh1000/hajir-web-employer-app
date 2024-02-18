@@ -56,7 +56,7 @@ const MainSidebar = () => {
       }}
     >
       <Divider />
-      <ProfileCard />
+      <TestProfileCard />
       <List>
         {LINKS.map(({ text, href, icon: Icon }) => (
           <ListItem key={href} disablePadding>
@@ -73,7 +73,6 @@ const MainSidebar = () => {
       <List>
         <LogoutButton onClick={(e) => onLogoutClick(e)} />
       </List>
-      <TestProfileCard />
     </Drawer>
   );
 };

@@ -9,119 +9,233 @@ import {
   FormControl,
   Select,
   MenuItem,
+  Avatar,
 } from "@mui/material";
 import { useFormik } from "formik";
 import {
   useChangePhoneNumberMutation,
   useUpdateProfileMutation,
 } from "@/services/api";
+import LoopIcon from "@mui/icons-material/Loop";
+import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const EditProfileDialog = ({ open, handleClose, profileData }) => {
-  const updateProfile = useUpdateProfileMutation();
+  const [updateProfile] = useUpdateProfileMutation();
   const changePhoneNumber = useChangePhoneNumberMutation();
+  const [changePhoneMode, setChangePhoneMode] = React.useState(false);
 
   const formikEdit = useFormik({
     initialValues: {
       name: profileData?.name || "",
       email: profileData?.email || "",
-      gender: profileData?.gender || "Mr",
-      birthdate: profileData?.birthdate || "",
-      maritalStatus: profileData?.maritalStatus || "married",
-      phone: profileData?.phone || "",
-      photo: "",
+      title: profileData?.title || "Mr",
+      dob: profileData?.dob || "",
+      marital_status: profileData?.marital_status || "Married",
+      uploadfile: profileData?.profile_image || null,
     },
     onSubmit: async (values) => {
-      console.log("Edit Form submitted:", values);
-      // Add your submission logic here
+      try {
+        console.log("Form submitted:", values);
+        console.log("Form name:", values.name);
+
+        const { data } = await updateProfile(values);
+        console.log("Profile updated successfully:", data);
+        alert("Profile updated successfully!");
+      } catch (error) {
+        console.error("Error updating profile:", error);
+        alert("Error updating profile. Please try again.");
+      }
     },
   });
 
+  const handleChangePhoneNumber = () => {
+    setChangePhoneMode(!changePhoneMode);
+  };
+
+  const handlePhotoChange = (event) => {
+    formikEdit.setFieldValue("uploadfile", event.target.files[0]);
+  };
+
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Edit Profile</DialogTitle>
+    <Dialog open={open} onClose={handleClose} maxWidth="md">
+      <DialogTitle sx={{ textAlign: "center" }}>Edit Profile</DialogTitle>
+
       <DialogContent>
         <form onSubmit={formikEdit.handleSubmit} encType="multipart/form-data">
+          <input
+            id="photo"
+            name="uploadfile"
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handlePhotoChange}
+          />
+          <label htmlFor="photo">
+            <Avatar
+              src={
+                formikEdit.values.uploadfile instanceof File
+                  ? URL.createObjectURL(formikEdit.values.uploadfile)
+                  : profileData?.profile_image || ""
+              }
+              sx={{
+                width: 100,
+                height: 100,
+                marginLeft: "400px",
+                cursor: "pointer",
+              }}
+              alt="Profile Avatar"
+            />
+          </label>
+          <FormControl style={{ width: "120px", marginBottom: "20px" }}>
+            <Select
+              id="title"
+              name="title"
+              variant="outlined"
+              value={formikEdit.values.title}
+              onChange={formikEdit.handleChange}
+              sx={{
+                "& .MuiSelect-icon": {
+                  color: "rgb(0, 0, 139)",
+                },
+                marginTop: "5px",
+              }}
+            >
+              <MenuItem value="Mr">Mr</MenuItem>
+              <MenuItem value="Miss">Miss</MenuItem>
+            </Select>
+          </FormControl>
           <TextField
-            fullWidth
             id="name"
             name="name"
             label="Name"
             variant="outlined"
             value={formikEdit.values.name}
             onChange={formikEdit.handleChange}
+            sx={{
+              width: "310px",
+              marginLeft: "20px",
+              marginBottom: "20px",
+              marginTop: "5px",
+            }}
           />
           <TextField
-            fullWidth
             id="email"
             name="email"
             label="Email"
             variant="outlined"
             value={formikEdit.values.email}
             onChange={formikEdit.handleChange}
+            sx={{
+              marginTop: "5px",
+
+              width: "380px",
+              marginLeft: "20px",
+              marginBottom: "20px",
+            }}
           />
           <TextField
-            fullWidth
-            id="birthdate"
-            name="birthdate"
-            label="Birthdate"
+            id="dob"
+            name="dob"
+            label="Date of birth"
             variant="outlined"
             type="date"
-            value={formikEdit.values.birthdate}
+            value={formikEdit.values.dob}
             onChange={formikEdit.handleChange}
             InputLabelProps={{
               shrink: true,
             }}
+            sx={{ width: "450px", marginBottom: "20px" }}
           />
-          <FormControl fullWidth>
+          <FormControl>
             <Select
-              id="gender"
-              name="gender"
-              label="Gender"
+              id="marital_status"
+              name="marital_status"
               variant="outlined"
-              value={formikEdit.values.gender}
+              value={formikEdit.values.marital_status}
               onChange={formikEdit.handleChange}
+              sx={{
+                "& .MuiSelect-icon": {
+                  color: "rgb(0, 0, 139)",
+                },
+                width: "380px",
+                marginLeft: "20px",
+              }}
             >
-              <MenuItem value="Mr">Mr</MenuItem>
-              <MenuItem value="Miss">Miss</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <Select
-              id="maritalStatus"
-              name="maritalStatus"
-              label="Marital Status"
-              variant="outlined"
-              value={formikEdit.values.maritalStatus}
-              onChange={formikEdit.handleChange}
-            >
-              <MenuItem value="married">Married</MenuItem>
+              <MenuItem value="Married">Married</MenuItem>
               <MenuItem value="unmarried">Unmarried</MenuItem>
             </Select>
           </FormControl>
           <TextField
-            fullWidth
             id="phone"
             name="phone"
             label="Phone Number"
             variant="outlined"
             value={formikEdit.values.phone}
             onChange={formikEdit.handleChange}
+            sx={{ width: "450px" }}
+            disabled
           />
-          <div>
-            <label> Upload File</label>
-            <input
-              type="file"
-              name="photo"
-              accept="image/*"
-              onChange={formikEdit.handleChange} // Change this line
-            />{" "}
+
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {changePhoneMode ? (
+              <CheckCircleIcon
+                onClick={handleChangePhoneNumber}
+                style={{ marginRight: "10px", color: "rgb(0, 0, 139)" }}
+              />
+            ) : (
+              <CircleOutlinedIcon
+                onClick={handleChangePhoneNumber}
+                style={{ marginRight: "10px", color: "rgb(0, 0, 139)" }}
+              />
+            )}
+            <h1
+              onClick={handleChangePhoneNumber}
+              style={{
+                fontWeight: "100",
+                fontSize: "17px",
+                width: "200px",
+              }}
+            >
+              Change Phone number
+            </h1>
           </div>
+          {changePhoneMode && (
+            <>
+              <TextField
+                label="Change number"
+                margin="normal"
+                style={{ width: "450px", marginRight: "20px" }}
+              />
+              <TextField
+                label="Confirm Change Number"
+                margin="normal"
+                style={{ width: "380px" }}
+              />
+            </>
+          )}
         </form>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Close</Button>
-        <Button type="submit" onClick={formikEdit.handleSubmit}>
-          Save
+
+      <DialogActions
+        sx={{
+          justifyContent: "center",
+          marginBottom: "5px",
+          marginTop: "-10px",
+        }}
+      >
+        <Button
+          variant="contained"
+          type="submit"
+          onClick={formikEdit.handleSubmit}
+          sx={{
+            width: "150px",
+            height: "45px",
+            justifyContent: "center",
+          }}
+        >
+          <LoopIcon />
+          Update
         </Button>
       </DialogActions>
     </Dialog>

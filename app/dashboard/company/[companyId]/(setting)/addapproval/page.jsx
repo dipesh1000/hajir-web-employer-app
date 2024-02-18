@@ -1,29 +1,75 @@
 "use client";
-import { useGetCandidatesQuery } from "@/services/api";
-import { Autocomplete, Box, TextField, Typography } from "@mui/material";
-import Image from "next/image";
-import Link from "next/link";
-import { useParams } from "next/navigation";
 import React, { useState } from "react";
+import { useParams } from "next/navigation";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Typography,
+  TextField,
+} from "@mui/material";
+import Image from "next/image";
+import {
+  useAssignApprovalMutation,
+  useGetApprovalQuery,
+  useGetCandidatesQuery,
+  useRemoveApprovalMutation,
+} from "@/services/api";
 
 const AddApproval = () => {
   const { companyId } = useParams();
-  console.log("companyId:", companyId); // Log the companyId
-  const {
-    data: candidateData,
-    isLoading,
-    refetch,
-  } = useGetCandidatesQuery(companyId); // Pass companyId to the query
-  // console.log("use client", candidateData, isLoading);
-  console.log(candidateData?.data?.active_candidates, "active_candidates");
-
+  const { data: candidateData, isLoading: candidatesLoading } =
+    useGetCandidatesQuery(companyId);
+  const { data: approvalData } = useGetApprovalQuery(companyId);
+  const [assignApproval] = useAssignApprovalMutation();
+  const removeApprovalMutation = useRemoveApprovalMutation();
   const [approvalName, setApprovalName] = useState("");
   const [approvals, setApprovals] = useState([]);
 
-  const handleAddApproval = () => {
-    if (approvalName.trim() !== "") {
-      setApprovals([...approvals, approvalName]);
-      setApprovalName("");
+  const handleAddApproval = async () => {
+    if (typeof approvalName === "string" && approvalName.trim() !== "") {
+      const selectedCandidate = candidateData?.data?.active_candidates.find(
+        (candidate) => candidate.name === approvalName
+      );
+      if (selectedCandidate) {
+        const { id: candidateId } = selectedCandidate;
+        console.log("candidateId", candidateId);
+        try {
+          const status = "Active";
+          await assignApproval({
+            candidateId,
+            status,
+            companyId,
+          });
+
+          setApprovals([...approvals, approvalName]);
+          setApprovalName("");
+
+          console.log("Approval added successfully:", approvalName);
+          alert("Approval added successfully!");
+        } catch (error) {
+          console.error("Error adding approval:", error);
+          alert(
+            "Error adding approval. Please try again. Error: " + error.message
+          );
+        }
+      } else {
+        alert("Selected candidate not found.");
+      }
+    } else {
+      alert("Approval name cannot be empty.");
+    }
+  };
+
+  const handleDeleteApproval = async (approval) => {
+    try {
+      await removeApprovalMutation.mutateAsync({
+        companyId,
+        approvalId: approval.id,
+      });
+      setApprovals(approvals.filter((item) => item !== approval));
+    } catch (error) {
+      console.error("Error deleting approval:", error);
     }
   };
 
@@ -49,42 +95,71 @@ const AddApproval = () => {
         Add Approval
       </Typography>
 
-      {/* breadcrumb area */}
-      <div style={{ display: "flex", gap: "20px" }}>
-        {/* Breadcrumb links */}
-      </div>
-
       <div style={{ display: "flex", alignItems: "center" }}>
         <div style={{ flex: 1 }}>
-          {isLoading ? (
-            // Render loading indicator or placeholder while data is loading
+          <div>
+            <Typography variant="h6">List of candidates:</Typography>
+            {candidateData?.data?.active_candidates.map((candidate, index) => (
+              <Typography key={index}>
+                Name: {candidate.name}, Candidate ID: {candidate.id}
+              </Typography>
+            ))}
+          </div>
+
+          {candidatesLoading ? (
             <Typography>Loading...</Typography>
           ) : (
             <Autocomplete
               disablePortal
               id="combo-box-demo"
               options={
-                candidateData?.data?.active_candidates?.name
-                  ? candidateData.data.active_candidates.name.map((name) => ({
-                      label: name,
-                      value: name,
-                    }))
-                  : []
+                candidateData?.data?.active_candidates?.map((candidate) => ({
+                  label: candidate.name,
+                  value: candidate.id,
+                })) || []
               }
               sx={{ width: 300 }}
               renderInput={(params) => (
                 <TextField {...params} label="Add Approval" />
               )}
+              value={approvalName}
+              onChange={(event, newValue) => {
+                setApprovalName(newValue?.label || "");
+              }}
             />
           )}
-
-          <button onClick={handleAddApproval}>Add</button>
-          {approvals.map((approval, index) => (
-            <div key={index}>{approval}</div>
+          <Button variant="contained" onClick={handleAddApproval}>
+            Add
+          </Button>
+          {approvalData?.data?.map((approval, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: "10px",
+                padding: "10px",
+                borderRadius: "5px",
+                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                backgroundColor: "#ffffff",
+              }}
+            >
+              <Typography sx={{ flex: 1, marginRight: "10px" }}>
+                ID: {approval.id}, Name: {approval.name}
+              </Typography>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => handleDeleteApproval(approval)}
+              >
+                Delete
+              </Button>
+            </Box>
           ))}
         </div>
+
         <div style={{ flex: 1 }}>
-          {/* Replace 'imageUrl' with the URL of your image */}
           <Image
             width="600"
             height="500"

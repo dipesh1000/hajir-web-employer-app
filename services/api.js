@@ -1,5 +1,6 @@
 // api.js
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { prepareDataForValidation } from "formik";
 
 const hardcodedToken = JSON.parse(localStorage.getItem("token"));
 
@@ -46,6 +47,7 @@ export const api = createApi({
         url: "employer/profile-update",
         method: "POST",
         body: profileData,
+        formData: true,
       }),
     }),
 
@@ -141,6 +143,41 @@ export const api = createApi({
         method: "GET", // Change method to GET
       }),
     }),
+    //aproval list
+    getApproval: builder.query({
+      query: (companyId) => `employer/approver/list/${companyId}`,
+    }),
+    //approval assign
+    assignApproval: builder.mutation({
+      query: ({ companyId, candidate_id, status }) => ({
+        url: `/employer/approver/store/${companyId}/${candidate_id}`,
+        method: "POST",
+        body: { companyId, candidate_id, status },
+      }),
+    }),
+    //approval remove
+    removeApproval: builder.mutation({
+      query: ({ company_id, candidate_id }) => ({
+        url: `/employer/approver/destroy/${company_id}/${candidate_id}`,
+        method: "POST",
+      }),
+    }),
+
+    // all gov holiday prepareDataForValidation
+    getGovHoliday: builder.query({
+      query: () => "employer/get-government-holiday-PDF",
+    }),
+    // all department
+    getDepartment: builder.query({
+      query: () => "/employer/all-departments",
+    }),
+    // generate qr code
+
+    generateQrCode: builder.query({
+      query: (company_id) => ({
+        url: `employer/company/generate-new-qr/${company_id}`,
+      }),
+    }),
   }),
 });
 
@@ -162,4 +199,10 @@ export const {
   useGetActiveCompanyQuery,
   useGetInactiveCompanyQuery,
   useGetEmployerCompaniesQuery,
+  useGetApprovalQuery,
+  useAssignApprovalMutation,
+  useRemoveApprovalMutation,
+  useGetGovHolidayQuery,
+  useGetDepartmentQuery,
+  useGenerateQrCodeQuery,
 } = api;

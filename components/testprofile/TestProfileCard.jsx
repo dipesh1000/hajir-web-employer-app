@@ -22,6 +22,7 @@ const TestProfileCard = () => {
   const profileData = getProfileQuery?.data;
 
   console.log("profilename new", profileData?.name);
+  console.log("profilename new", profileData?.profile_image);
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -38,14 +39,17 @@ const TestProfileCard = () => {
   return (
     <div>
       <ProfileContainer onClick={handleOpenDialog}>
-        <Avatar
-          src={profileData?.avatar || "/avatar.svg"}
-          sx={{
-            width: 100,
-            height: 100,
-          }}
-          alt="Profile Avatar"
-        />
+        <label htmlFor="photo">
+          <Avatar
+            src={profileData?.profile_image || "/default-avatar.png"}
+            sx={{
+              width: 100,
+              height: 100,
+              cursor: "pointer", // Add cursor pointer for clickable effect
+            }}
+            alt="Profile Avatar"
+          />
+        </label>
         <Typography
           variant="h6"
           align="center"

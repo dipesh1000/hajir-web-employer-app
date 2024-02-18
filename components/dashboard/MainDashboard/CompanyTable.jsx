@@ -22,6 +22,7 @@ import {
   Select,
   InputLabel,
   MenuItem,
+  Typography,
 } from "@mui/material";
 import { DeleteOutline, Edit, UpdateSharp } from "@mui/icons-material";
 import Link from "next/link";
@@ -32,6 +33,7 @@ import {
   useGetActiveCompanyQuery,
   useGetInactiveCompanyQuery,
   useUpdateCompanyStatusMutation,
+  useGenerateQrCodeQuery,
 } from "@/services/api";
 
 const CompanyTable = ({ companies, statusFilter }) => {
@@ -54,13 +56,29 @@ const CompanyTable = ({ companies, statusFilter }) => {
   const inactiveCompaniesData = useGetInactiveCompanyQuery();
   const [updateCompanyStatus] = useUpdateCompanyStatusMutation();
   const [deleteCompanyMutation] = useDeleteCompanyMutation();
-
+  const [openQrCodeModal, setOpenQrCodeModal] = useState(false);
+  const [qrCodeContent, setQrCodeContent] = useState(""); // State to hold QR code content
+  const [companyIdForQrCode, setCompanyIdForQrCode] = useState(null);
+  const generateQrCode = useGenerateQrCodeQuery();
   const handleSearchTextChange = (event) => {
     const text = event.target.value.toLowerCase();
     setSearchText(text);
     filterData(text);
   };
-
+  const generateNewQrCode = async (selectedCompanyId) => {
+    try {
+      const response = await generateQrCode(selectedCompanyId);
+      if (response.data && response.data.qrCode) {
+        setQrCodeContent(response.data.qrCode);
+        setOpenQrCodeModal(true);
+        setCompanyIdForQrCode(companyId);
+      } else {
+        console.error("Error: Invalid QR code response");
+      }
+    } catch (error) {
+      console.error("Error generating QR code:", error);
+    }
+  };
   const filterData = (searchText) => {
     const filtered = companies.filter((company) =>
       company.name.toLowerCase().includes(searchText)
@@ -124,6 +142,10 @@ const CompanyTable = ({ companies, statusFilter }) => {
       console.error("Error updating company status:", error);
     }
   };
+  const handleQrCodeClick = (content) => {
+    setQrCodeContent(content);
+    setOpenQrCodeModal(true);
+  };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: 1000, mt: 3 }}>
@@ -150,6 +172,8 @@ const CompanyTable = ({ companies, statusFilter }) => {
               <TableCell>Company Name</TableCell>
               <TableCell>Employee Count</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell>OQ COde</TableCell>
+
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -172,6 +196,19 @@ const CompanyTable = ({ companies, statusFilter }) => {
                       )
                         ? "Active"
                         : "Inactive"}
+                    </TableCell>
+                    <TableCell>
+                      {useImage({
+                        src: company.qr_path,
+                        height: 50,
+                        width: 50,
+                        style: {
+                          // border: "1px solid black",
+                          // borderRadius: "5px",
+                        },
+                        alt: "QR Code",
+                        onClick: () => handleQrCodeClick(company.qr_path),
+                      })}
                     </TableCell>
                     <TableCell>
                       <IconButton
@@ -259,6 +296,42 @@ const CompanyTable = ({ companies, statusFilter }) => {
           <Button onClick={handleConfirmStatusUpdate} color="primary">
             Confirm
           </Button>
+        </DialogActions>
+      </Dialog>
+      {/* QR Code Modal */}
+      <Dialog open={openQrCodeModal} onClose={() => setOpenQrCodeModal(false)}>
+        <DialogTitle>QR Code</DialogTitle>
+        <DialogContent>
+          {/* Display QR code image */}
+          <Button onClick={() => generateNewQrCode(selectedCompanyId)}>
+            <Typography
+              sx={{
+                fontSize: "24px",
+                fontStyle: "normal",
+                fontWeight: 500,
+              }}
+            >
+              Generate New QR Code
+            </Typography>
+          </Button>{" "}
+          {useImage({
+            src: qrCodeContent,
+            height: 250,
+            width: 250,
+            style: {
+              margin: "auto",
+            },
+            alt: "QR Code",
+          })}
+          {/* Display company name */}
+          <Typography variant="body2">Name:</Typography>
+          {/* Share button to download the QR code image as PDF */}
+          <Button onClick={() => downloadQrCodeAsPdf()}>
+            <Typography variant="body2">Share</Typography>
+          </Button>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenQrCodeModal(false)}>Close</Button>
         </DialogActions>
       </Dialog>
     </Box>
