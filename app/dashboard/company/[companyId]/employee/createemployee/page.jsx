@@ -43,9 +43,8 @@ const validationSchemaStep1 = Yup.object({
 });
 
 const validationSchemaStep2 = Yup.object({
-  basicSalary: Yup.string().required("Basic Salary is required"),
-  allowance: Yup.string().required("Allowance is required"),
-  salaryAmount: Yup.string().required("Salary Amount is required"),
+  allowance_amount: Yup.string().required("Allowance is required"),
+  salary_amount: Yup.string().required("Salary Amount is required"),
 });
 
 const validationSchemaStep3 = Yup.object({
@@ -81,7 +80,7 @@ const HorizontalLinearStepper = () => {
   const formik = useFormik({
     initialValues: {
       name_holder: "Mr", //required string
-      name: "", // required
+      name: "BIraj Karki", // required
       code: "CAAA", // required
       contact: "9845971897", // required
       designation: "CEO", // required
@@ -95,7 +94,7 @@ const HorizontalLinearStepper = () => {
       duty_time: "08:00", // required - time
       probation_period: 1, // required - unsignedBigInt
       break_duration: "300", // required - min/hr to seconds - string
-      departments: [1], // required - array - api:{{globalLiveUrl}}/employer/all-departments
+      departments: 1, // required - array - api:{{globalLiveUrl}}/employer/all-departments
       allow_late_attendance: "30", // nullable -time
       casual_leave: 0, //required - unsignedInteger
       sick_leave: 0, //required - unsignedInteger
@@ -103,7 +102,7 @@ const HorizontalLinearStepper = () => {
       overtime_hrs: 2, // float(2.2)
       week_days_off: [1, 7], // array
       allow_network_access: "All Net", // required - enum['All Net', 'QR']
-      confirmPhoneNumber: "9898981586",
+      confirmPhoneNumber: "9845971897 ",
     },
     validationSchema: validationSchemas[activeStep],
     onSubmit: async (values, { resetForm }) => {

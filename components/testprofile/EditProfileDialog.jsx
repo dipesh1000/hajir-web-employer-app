@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -14,6 +14,7 @@ import {
 import { useFormik } from "formik";
 import {
   useChangePhoneNumberMutation,
+  useGetOtpChangeNumberMutation,
   useUpdateProfileMutation,
 } from "@/services/api";
 import LoopIcon from "@mui/icons-material/Loop";
@@ -22,8 +23,9 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const EditProfileDialog = ({ open, handleClose, profileData }) => {
   const [updateProfile] = useUpdateProfileMutation();
-  const changePhoneNumber = useChangePhoneNumberMutation();
-  const [changePhoneMode, setChangePhoneMode] = React.useState(false);
+  const [getOtpChangeNumber] = useGetOtpChangeNumberMutation();
+  const [changePhoneMode, setChangePhoneMode] = useState(false);
+  const [otpValue, setOtpValue] = useState(null);
 
   const formikEdit = useFormik({
     initialValues: {
@@ -33,25 +35,11 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
       dob: profileData?.dob || "",
       marital_status: profileData?.marital_status || "Married",
       uploadfile: profileData?.profile_image || null,
+      phone: profileData?.phone || null,
+      new_phone: "", // Add new_phone field
     },
-    // onSubmit: async (values) => {
-    //   try {
-    //     console.log("Form submitted:", values);
-    //     console.log("Form name:", values.name);
-
-    //     const { data } = await updateProfile(values);
-    //     console.log("Profile updated successfully:", data);
-    //     alert("Profile updated successfully!");
-    //   } catch (error) {
-    //     console.error("Error updating profile:", error);
-    //     alert("Error updating profile. Please try again.");
-    //   }
-    // },
     onSubmit: async (values) => {
       try {
-        console.log("Form submitted:", values);
-        console.log("Form name:", values.name);
-
         const formData = new FormData();
         formData.append("name", values.name);
         formData.append("email", values.email);
@@ -59,20 +47,22 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
         formData.append("dob", values.dob);
         formData.append("marital_status", values.marital_status);
         formData.append("uploadfile", values.uploadfile);
-        //
-        console.log("Form data:", formData);
-        console.log("Form data:", formData.get("name"));
 
-        // Iterate through entries
-        for (const [key, value] of formData.entries()) {
-          console.log(key, ":", value);
-        }
-        // Upload image separately if it's changed
-
-        // const { data } = await updateProfile(formData);
         await updateProfile(formData);
-        console.log("Profile updated successfully:", data);
-        alert("Profile updated successfully!");
+
+        if (changePhoneMode) {
+          const { data } = await getOtpChangeNumber({
+            new_phone: values.new_phone,
+          });
+          setOtpValue(data);
+          localStorage.removeItem("token");
+
+          router.push(`/otp?phone=${values.phone}&otp=${data.data.otp}`);
+
+          alert(`OTP sent successfully: ${data.data.otp}`);
+        } else {
+          alert("Profile updated successfully!");
+        }
       } catch (error) {
         console.error("Error updating profile:", error);
         alert("Error updating profile. Please try again.");
@@ -87,11 +77,9 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
   const handlePhotoChange = (event) => {
     formikEdit.setFieldValue("uploadfile", event.target.files[0]);
   };
-
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md">
       <DialogTitle sx={{ textAlign: "center" }}>Edit Profile</DialogTitle>
-
       <DialogContent>
         <form onSubmit={formikEdit.handleSubmit} encType="multipart/form-data">
           <input
@@ -159,7 +147,6 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
             onChange={formikEdit.handleChange}
             sx={{
               marginTop: "5px",
-
               width: "380px",
               marginLeft: "20px",
               marginBottom: "20px",
@@ -205,7 +192,7 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
             value={formikEdit.values.phone}
             onChange={formikEdit.handleChange}
             sx={{ width: "450px" }}
-            disabled
+            disabled={changePhoneMode}
           />
 
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -236,6 +223,8 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
               <TextField
                 label="Change number"
                 margin="normal"
+                id="new_phone"
+                // value={formikEdit.values.new_phone}
                 style={{ width: "450px", marginRight: "20px" }}
               />
               <TextField

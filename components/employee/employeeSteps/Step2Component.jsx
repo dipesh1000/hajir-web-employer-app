@@ -20,7 +20,7 @@ import { useFormik } from "formik";
 const Step2Component = ({ formik }) => {
   const handleSalaryTypeChange = (event) => {
     formik.handleChange(event);
-    formik.setFieldValue("basicSalary", "");
+    // formik.setFieldValue("basicSalary", "");
     formik.setFieldValue("allowance_amount", "");
   };
 
@@ -154,13 +154,14 @@ const Step2Component = ({ formik }) => {
               variant="outlined"
               margin="normal"
               sx={{ width: "700px" }}
-              name="basicSalary"
-              {...formik.getFieldProps("basicSalary")}
+              name="salary_amount"
+              {...formik.getFieldProps("salary_amount")}
               error={
-                formik.touched.basicSalary && Boolean(formik.errors.basicSalary)
+                formik.touched.salary_amount &&
+                Boolean(formik.errors.salary_amount)
               }
               helperText={
-                formik.touched.basicSalary && formik.errors.basicSalary
+                formik.touched.salary_amount && formik.errors.salary_amount
               }
             />
           ) : (
@@ -170,14 +171,14 @@ const Step2Component = ({ formik }) => {
                 variant="outlined"
                 sx={{ width: "700px" }}
                 margin="normal"
-                name="basicSalary"
-                {...formik.getFieldProps("basicSalary")}
+                name="salary_amount"
+                {...formik.getFieldProps("salary_amount")}
                 error={
-                  formik.touched.basicSalary &&
-                  Boolean(formik.errors.basicSalary)
+                  formik.touched.salary_amount &&
+                  Boolean(formik.errors.salary_amount)
                 }
                 helperText={
-                  formik.touched.basicSalary && formik.errors.basicSalary
+                  formik.touched.salary_amount && formik.errors.salary_amount
                 }
               />
               <TextField
@@ -305,8 +306,9 @@ const Step2Component = ({ formik }) => {
                 formik.handleChange(e);
               }}
               name="probation_period"
+              id="probation_period"
             >
-              <MenuItem value="1 month">1 month</MenuItem>
+              <MenuItem value="1">1 month</MenuItem>
               <MenuItem value="3 months">3 months</MenuItem>
               <MenuItem value="6 months">6 months</MenuItem>
               <MenuItem value="12 months">12 months</MenuItem>

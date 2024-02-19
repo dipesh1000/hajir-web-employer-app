@@ -20,6 +20,7 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import Collapse from "@mui/material/Collapse";
 import { useParams } from "next/navigation";
 import { Button } from "@mui/material";
+import TestProfileCard from "../testprofile/TestProfileCard";
 
 const CompanySidebar = () => {
   const [openSettings, setOpenSettings] = useState(false);
@@ -130,7 +131,7 @@ const CompanySidebar = () => {
       }}
     >
       <Divider />
-      <ProfileCard />
+      <TestProfileCard />
       <List sx={{ flexGrow: 1 }}>
         {LINKS.map(({ text, href, icon: Icon, sublinks }) => (
           <div key={href || text}>

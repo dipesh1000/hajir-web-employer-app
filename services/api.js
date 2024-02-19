@@ -27,22 +27,22 @@ export const api = createApi({
     //******************AUTH ***********************
 
     // Employee Registration
-    // registerEmployee: builder.mutation({
-    //   query: (employeeData) => ({
-    //     url: "employer/register",
-    //     method: "POST",
-    //     body: employeeData,
-    //   }),
-    // }),
+    registerEmployee: builder.mutation({
+      query: (employeeData) => ({
+        url: "employer/register",
+        method: "POST",
+        body: employeeData,
+      }),
+    }),
 
     // Verify Employee OTP
-    // verifyEmployeeOpt: builder.mutation({
-    //   query: (otpData) => ({
-    //     url: "employer/verify-opt",
-    //     method: "POST",
-    //     body: otpData,
-    //   }),
-    // }),
+    verifyEmployeeOpt: builder.mutation({
+      query: (otpData) => ({
+        url: "employer/verify-opt",
+        method: "POST",
+        body: otpData,
+      }),
+    }),
 
     // Profile Update
     updateProfile: builder.mutation({
@@ -54,18 +54,29 @@ export const api = createApi({
       }),
     }),
 
-    // Change Phone Number
-    changePhoneNumber: builder.mutation({
-      query: (phoneNumberData) => ({
-        url: "employer/change-phonenumber",
-        method: "POST",
-        body: phoneNumberData,
-      }),
-    }),
-
     // Get Profile
     getProfile: builder.query({
       query: () => "employer/get-profile",
+    }),
+
+    // ***************change number********************
+
+    // getOtp to change Phone number
+    getOtpChangeNumber: builder.mutation({
+      query: (new_phone) => ({
+        url: "employer/change-phone",
+        method: "POST",
+        body: new_phone,
+      }),
+    }),
+
+    // /employer/phone-change-verify-otp
+    verifyOtpChangeNumber: builder.mutation({
+      query: ({ otp, new_phone }) => ({
+        url: "employer/phone-change-verify-otp",
+        method: "POST",
+        body: { otp, new_phone },
+      }),
     }),
     //****************** Company ***********************
 
@@ -198,7 +209,8 @@ export const {
   useRegisterEmployeeMutation,
   useVerifyEmployeeOptMutation,
   useUpdateProfileMutation,
-  useChangePhoneNumberMutation,
+  useGetOtpChangeNumberMutation,
+  useVerifyOtpChangeNumberMutation,
   useGetProfileQuery,
   useDeleteCandidateQuery,
   useCreateCompanyMutation,
