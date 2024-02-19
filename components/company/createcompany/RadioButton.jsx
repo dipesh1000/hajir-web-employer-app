@@ -30,12 +30,16 @@ const CustomRadioGroup = ({
             border: "1px solid #ccc",
             borderRadius: "4px",
             padding: "16px",
+        
             display: "flex",
-            width: "330px",
+          height:'80px',
             alignItems: "center",
+            textAlign:'center',
+            justifyContent:'center',
+backgroundColor:'#C1FFC1',
             paddingRight: "50px",
-            paddingLeft: "50px",
-            marginRight: "38px",
+            // paddingLeft: "50px",
+            marginRight: "18px",
             cursor: "pointer",
             flexDirection: "column",
             transition: "background 0.3s, border 0.3s",
@@ -49,13 +53,17 @@ const CustomRadioGroup = ({
           onClick={() => handleChange(option.value)}
         >
           <FormControlLabel
+          sx={{width:'180px'}}
             value={option.value}
             control={<Radio sx={{ width: "50%", color: "transparent" }} />}
             label={
+              
               <Box
                 sx={{
                   display: "flex",
+           
                   alignItems: "center",
+            
                   color: value === option.value ? "#2196F3" : "#000",
                 }}
               >
@@ -66,7 +74,7 @@ const CustomRadioGroup = ({
           <Typography
             variant="caption"
             sx={{
-              marginLeft: "8px",
+              marginLeft: "38px",
               color: "#777",
             }}
           >

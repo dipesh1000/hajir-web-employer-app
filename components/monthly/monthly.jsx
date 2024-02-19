@@ -223,9 +223,7 @@ Add 99 employee
 </li>
   </Content>
   <Button variant="outlined" style={{borderColor:"green", marginTop:"120px"}}>Upgrade to Premium</Button>
-
       </Paper>
-    
     </Box>
     </>
   );

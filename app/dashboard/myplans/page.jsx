@@ -25,8 +25,11 @@ const page = () => {
  <Box>
   <Top>
   <h1 style={{fontWeight:"500"}}> My Plans</h1>
-  <h2 style={{marginTop:"-20px", color:"gray", fontWeight:"300"}}>My Plans</h2>
   </Top>
+  <div style={{display:'flex', flexDirection:'row'}}>
+  <h2 style={{marginTop:"-20px", color:"gray", fontWeight:"300", marginRight:'18px'}}>Home</h2>
+  <h2 style={{marginTop:"-20px", color:"gray", fontWeight:"300"}}>My Plans</h2>
+  </div>
   <Mid>
 <h1 style={{fontWeight:"500"}}>Choose the plan that is right for you</h1>
 <h2 style={{ color:"gray", fontWeight:"300", marginTop:"-15px"}}>Unlock your endless opportunities</h2>

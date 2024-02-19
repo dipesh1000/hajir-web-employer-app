@@ -30,6 +30,9 @@ const DashboardDetailedbottom = () => {
         display: "flex",
         width: "100%",
         flexDirection: "column",
+        marginTop:'80px',
+        marginLeft:'16px',
+        marginRight:'50px'
       }}
     >
       <Stack
@@ -38,9 +41,8 @@ const DashboardDetailedbottom = () => {
         sx={{ width: "100%", marginTop: "10px" }}
         spacing={{ xs: 1, sm: 2, md: 1 }}
       >
-        z``
         <Item
-          sx={{ backgroundColor: "rgba(34, 64, 139, 0.08)", height: "120px" }}
+          sx={{ backgroundColor: "rgba(34, 64, 139, 0.08)", height: "120px" , width:'470px'}}
         >
           <Typography variant="body1" sx={{ color: "black", fontSize: "20px" }}>
             Total Company
@@ -50,7 +52,7 @@ const DashboardDetailedbottom = () => {
           </Typography>
         </Item>
         <Item
-          sx={{ backgroundColor: "rgba(34, 64, 139, 0.09)", height: "120px" }}
+          sx={{ backgroundColor: "rgba(34, 64, 139, 0.09)", height: "120px", width:'470px' }}
         >
           <Typography variant="body1" sx={{ color: "black", fontSize: "20px" }}>
             Total Employee
@@ -60,7 +62,7 @@ const DashboardDetailedbottom = () => {
           </Typography>
         </Item>
         <Item
-          sx={{ backgroundColor: "rgba(0, 128, 0, 0.08)", height: "120px" }}
+          sx={{ backgroundColor: "rgba(0, 128, 0, 0.08)", height: "120px", width:'470px' }}
         >
           <Typography variant="body1" sx={{ color: "black", fontSize: "20px" }}>
             Active Employee
@@ -70,7 +72,7 @@ const DashboardDetailedbottom = () => {
           </Typography>
         </Item>
         <Item
-          sx={{ backgroundColor: "rgba(255, 80, 80, 0.08)", height: "120px" }}
+          sx={{ backgroundColor: "rgba(255, 80, 80, 0.08)", height: "120px" , width:'470px'}}
         >
           <Typography variant="body1" sx={{ color: "black", fontSize: "20px" }}>
             InActive Employee

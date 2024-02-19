@@ -51,7 +51,7 @@ const CompanyList = () => {
               }}
             >
               <Box>
-                <h2>Company</h2>
+                <h2 style={{fontWeight:'500'}}>Company</h2>
               </Box>
               <Box>
                 <Button
@@ -66,7 +66,7 @@ const CompanyList = () => {
               </Box>
             </Box>
             <h4>
-              <span>Dashboard</span> / <span>Company</span>
+              <span style={{fontWeight:'400'}}>Dashboard</span>      <span style={{fontWeight:'400', marginLeft:'20px'}}>Company</span>
             </h4>
             <Box sx={{ flexGrow: 1 }}>
               <TabsActiveInactive

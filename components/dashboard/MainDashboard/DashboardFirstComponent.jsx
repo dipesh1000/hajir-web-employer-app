@@ -18,11 +18,12 @@ const Img = styled("img")({
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
-  // margin: "-20px",
-  width: "100%",
+ 
+  width: "102%",
   flexGrow: 1,
   backgroundColor: "rgba(34, 64, 139, 0.15)",
   elevation: "0",
+  height:"355px",
 }));
 
 export default function DashboardFirstComponent() {

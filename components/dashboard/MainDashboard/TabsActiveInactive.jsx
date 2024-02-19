@@ -3,7 +3,6 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Badge from "@mui/material/Badge";
-
 export default function TabsActiveInactive({
   value,
   handleChange,
@@ -11,10 +10,6 @@ export default function TabsActiveInactive({
   activeCount,
   inactiveCount,
 }) {
-  // console.log("TabsActiveInactive - Total Count:", totalCount);
-  // console.log("TabsActiveInactive - Active Count:", activeCount);
-  // console.log("TabsActiveInactive - Inactive Count:", inactiveCount);
-
   return (
     <Box sx={{ width: "100%" }}>
       <Tabs
@@ -26,11 +21,6 @@ export default function TabsActiveInactive({
         <Tab
           label={
             <div
-            // style={{
-            //   fontSize: "1rem",
-            //   marginBottom: "4px",
-            //   marginRight: "6px",
-            // }}
             >
               All
               <span
@@ -53,11 +43,7 @@ export default function TabsActiveInactive({
         <Tab
           label={
             <div
-            // style={{
-            //   fontSize: "1rem",
-            //   marginBottom: "4px",
-            //   marginRight: "6px",
-            // }}
+           
             >
               Active{" "}
               <span

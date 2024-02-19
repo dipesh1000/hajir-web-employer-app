@@ -143,7 +143,7 @@ const CompanyTable = ({ companies, statusFilter }) => {
         </FormControl>
         <br />
       </Box>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} >
         <Table>
           <TableHead>
             <TableRow>
@@ -175,6 +175,7 @@ const CompanyTable = ({ companies, statusFilter }) => {
                     </TableCell>
                     <TableCell>
                       <IconButton
+                      
                         aria-label="delete"
                         onClick={() => handleDeleteClick(company.id)}
                       >

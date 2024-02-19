@@ -7,10 +7,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { TabPanel } from '@mui/lab';
 import styled from 'styled-components';
-import SimplePaper from '../PlansPaper/PlansPaper';
+import SimplePaper from '../YearlyPaper/YearlyPaper';
 import Monthly from '../monthly/monthly';
-
-// Styled components for the custom styles
 const Top = styled.div`
   height: 120px;
 `;

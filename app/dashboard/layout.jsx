@@ -17,7 +17,7 @@ export default function DashboardLayout({ children }) {
         component="main"
         sx={{
           flexGrow: 1,
-          // bgcolor: "#f2f2f2",
+   
           ml: `${DRAWER_WIDTH}px`,
           mt: ["48px", "56px", "64px"],
           p: 3,
