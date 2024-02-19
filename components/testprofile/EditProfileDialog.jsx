@@ -34,12 +34,43 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
       marital_status: profileData?.marital_status || "Married",
       uploadfile: profileData?.profile_image || null,
     },
+    // onSubmit: async (values) => {
+    //   try {
+    //     console.log("Form submitted:", values);
+    //     console.log("Form name:", values.name);
+
+    //     const { data } = await updateProfile(values);
+    //     console.log("Profile updated successfully:", data);
+    //     alert("Profile updated successfully!");
+    //   } catch (error) {
+    //     console.error("Error updating profile:", error);
+    //     alert("Error updating profile. Please try again.");
+    //   }
+    // },
     onSubmit: async (values) => {
       try {
         console.log("Form submitted:", values);
         console.log("Form name:", values.name);
 
-        const { data } = await updateProfile(values);
+        const formData = new FormData();
+        formData.append("name", values.name);
+        formData.append("email", values.email);
+        formData.append("title", values.title);
+        formData.append("dob", values.dob);
+        formData.append("marital_status", values.marital_status);
+        formData.append("uploadfile", values.uploadfile);
+        //
+        console.log("Form data:", formData);
+        console.log("Form data:", formData.get("name"));
+
+        // Iterate through entries
+        for (const [key, value] of formData.entries()) {
+          console.log(key, ":", value);
+        }
+        // Upload image separately if it's changed
+
+        // const { data } = await updateProfile(formData);
+        await updateProfile(formData);
         console.log("Profile updated successfully:", data);
         alert("Profile updated successfully!");
       } catch (error) {

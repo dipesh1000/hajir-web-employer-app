@@ -32,12 +32,13 @@ const AddApproval = () => {
         (candidate) => candidate.name === approvalName
       );
       if (selectedCandidate) {
-        const { id: candidateId } = selectedCandidate;
-        console.log("candidateId", candidateId);
+        const { id: candidate_id } = selectedCandidate;
+        console.log("candidate_id", candidate_id);
+
         try {
           const status = "Active";
           await assignApproval({
-            candidateId,
+            candidate_id,
             status,
             companyId,
           });
@@ -46,6 +47,7 @@ const AddApproval = () => {
           setApprovalName("");
 
           console.log("Approval added successfully:", approvalName);
+
           alert("Approval added successfully!");
         } catch (error) {
           console.error("Error adding approval:", error);

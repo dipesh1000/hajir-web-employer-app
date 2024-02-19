@@ -2,7 +2,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { prepareDataForValidation } from "formik";
 
-const hardcodedToken = JSON.parse(localStorage.getItem("token"));
+const hardcodedToken =
+  typeof window !== "undefined"
+    ? JSON.parse(localStorage.getItem("token"))
+    : null;
 
 export const api = createApi({
   reducerPath: "api",
@@ -12,7 +15,7 @@ export const api = createApi({
     prepareHeaders: (headers) => {
       const newHeaders = new Headers(headers);
       newHeaders.set("Authorization", `Bearer ${hardcodedToken}`);
-      newHeaders.set("Content-Type", "application/json");
+      // newHeaders.set("Content-Type", "application/json");
       return newHeaders;
     },
   }),
@@ -152,7 +155,7 @@ export const api = createApi({
       query: ({ companyId, candidate_id, status }) => ({
         url: `/employer/approver/store/${companyId}/${candidate_id}`,
         method: "POST",
-        body: { companyId, candidate_id, status },
+        body: { status },
       }),
     }),
     //approval remove
@@ -176,6 +179,15 @@ export const api = createApi({
     generateQrCode: builder.query({
       query: (company_id) => ({
         url: `employer/company/generate-new-qr/${company_id}`,
+      }),
+    }),
+    // update custom holiday
+    updateCustomHoliday: builder.mutation({
+      query: ({ company_id, formData }) => ({
+        url: `/employer/company/update-special-holiday/${company_id}`,
+        method: "POST",
+        body: formData,
+        formData: true,
       }),
     }),
   }),
@@ -205,4 +217,5 @@ export const {
   useGetGovHolidayQuery,
   useGetDepartmentQuery,
   useGenerateQrCodeQuery,
+  useUpdateCustomHolidayMutation,
 } = api;

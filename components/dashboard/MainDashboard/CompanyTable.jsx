@@ -38,7 +38,7 @@ import {
 
 const CompanyTable = ({ companies, statusFilter }) => {
   const router = useRouter();
-  const [filteredData, setFilteredData] = useState(companies); // Initialize filteredData state
+  const [filteredData, setFilteredData] = useState(companies);
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [isDeleteConfirmationDialogOpen, setDeleteConfirmationDialogOpen] =
     useState(false);
@@ -50,35 +50,21 @@ const CompanyTable = ({ companies, statusFilter }) => {
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
   const activeCompaniesData = useGetActiveCompanyQuery();
   const activeCompanies = activeCompaniesData.data?.companies || [];
-  const inactiveCompaniesData = useGetInactiveCompanyQuery();
   const [updateCompanyStatus] = useUpdateCompanyStatusMutation();
   const [deleteCompanyMutation] = useDeleteCompanyMutation();
   const [openQrCodeModal, setOpenQrCodeModal] = useState(false);
-  const [qrCodeContent, setQrCodeContent] = useState(""); // State to hold QR code content
+  const [qrCodeContent, setQrCodeContent] = useState("");
   const [companyIdForQrCode, setCompanyIdForQrCode] = useState(null);
-  const generateQrCode = useGenerateQrCodeQuery();
+  const generateQrCode = useGenerateQrCodeQuery(); // This line initializes the hook
+
   const handleSearchTextChange = (event) => {
     const text = event.target.value.toLowerCase();
     setSearchText(text);
     filterData(text);
   };
-  const generateNewQrCode = async (selectedCompanyId) => {
-    try {
-      const response = await generateQrCode(selectedCompanyId);
-      if (response.data && response.data.qrCode) {
-        setQrCodeContent(response.data.qrCode);
-        setOpenQrCodeModal(true);
-        setCompanyIdForQrCode(companyId);
-      } else {
-        console.error("Error: Invalid QR code response");
-      }
-    } catch (error) {
-      console.error("Error generating QR code:", error);
-    }
-  };
+
   const filterData = (searchText) => {
     const filtered = companies.filter((company) =>
       company.name.toLowerCase().includes(searchText)
@@ -142,9 +128,32 @@ const CompanyTable = ({ companies, statusFilter }) => {
       console.error("Error updating company status:", error);
     }
   };
+
   const handleQrCodeClick = (content) => {
     setQrCodeContent(content);
     setOpenQrCodeModal(true);
+  };
+  const generateQrCodeClick = (companyId) => {
+    setCompanyIdForQrCode(companyId); // Set the companyIdForQrCode
+    setOpenQrCodeModal(true); // Open the QR code modal
+  };
+
+  const generateNewQrCode = async () => {
+    console.log("Generating new QR code for company:", companyIdForQrCode);
+
+    try {
+      // Fetch QR code data using useGenerateQrCodeQuery
+      const response = await generateQrCode(companyIdForQrCode);
+
+      // Check if the response is successful
+      if (response.data) {
+        // Handle the response data here, maybe set it to state or display it
+      } else {
+        console.error("Error: Invalid QR code response");
+      }
+    } catch (error) {
+      console.error("Error generating QR code:", error);
+    }
   };
 
   return (
@@ -172,8 +181,7 @@ const CompanyTable = ({ companies, statusFilter }) => {
               <TableCell>Company Name</TableCell>
               <TableCell>Employee Count</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>OQ COde</TableCell>
-
+              <TableCell>OQ Code</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -202,10 +210,7 @@ const CompanyTable = ({ companies, statusFilter }) => {
                         src: company.qr_path,
                         height: 50,
                         width: 50,
-                        style: {
-                          // border: "1px solid black",
-                          // borderRadius: "5px",
-                        },
+                        style: {},
                         alt: "QR Code",
                         onClick: () => handleQrCodeClick(company.qr_path),
                       })}
@@ -244,6 +249,7 @@ const CompanyTable = ({ companies, statusFilter }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </TableContainer>
+      {/* Delete Confirmation Dialog */}
       <Dialog
         open={isDeleteConfirmationDialogOpen}
         onClose={handleCloseConfirmationDialog}
@@ -263,6 +269,7 @@ const CompanyTable = ({ companies, statusFilter }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      {/* Update Dialog */}
       <Dialog open={isUpdateDialogOpen} onClose={handleCloseConfirmationDialog}>
         <DialogTitle>Edit Company</DialogTitle>
         <DialogContent>
@@ -279,6 +286,7 @@ const CompanyTable = ({ companies, statusFilter }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      {/* Status Update Confirmation Dialog */}
       <Dialog
         open={isStatusUpdateConfirmationDialogOpen}
         onClose={handleCloseConfirmationDialog}
@@ -303,7 +311,7 @@ const CompanyTable = ({ companies, statusFilter }) => {
         <DialogTitle>QR Code</DialogTitle>
         <DialogContent>
           {/* Display QR code image */}
-          <Button onClick={() => generateNewQrCode(selectedCompanyId)}>
+          <Button onClick={generateNewQrCode}>
             <Typography
               sx={{
                 fontSize: "24px",

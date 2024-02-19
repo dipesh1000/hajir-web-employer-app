@@ -1,18 +1,51 @@
 "use client";
-
+import { useState } from "react";
 import { Box, Button, LinearProgress, Typography } from "@mui/material";
 import Image from "next/image";
-import { useState } from "react";
+import { useUpdateCustomHolidayMutation } from "@/services/api";
+import { useParams } from "next/navigation"; // Assuming this is the correct import for useParams
+import { useFormik } from "formik";
 
-const updateHoliday = () => {
-  const [file, setFile] = useState(null);
+const UpdateHoliday = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
+  const [updateCustomHoliday] = useUpdateCustomHolidayMutation();
+  const { companyId } = useParams(); // Corrected variable name to match the parameter name in the route
+
+  // Initialize useFormik hook
+  const formik = useFormik({
+    initialValues: {
+      custom_holiday_file: null,
+    },
+    onSubmit: async (values) => {
+      try {
+        setIsLoading(true);
+
+        const formData = new FormData();
+        formData.append("custom_holiday_file", values.custom_holiday_file);
+
+        const { data } = await updateCustomHoliday({
+          company_id: companyId, // Corrected variable name to match the parameter name in the mutation
+          formData: formData,
+        });
+        console.log("Company id ", companyId); // Corrected variable name to match the parameter name in the route
+        console.log("File successfully uploaded:", data);
+
+        alert("File uploaded successfully!");
+      } catch (error) {
+        console.error("Error uploading holiday file:", error);
+        alert("Error uploading holiday file!");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+  });
+
+  // Function to handle file change
   const handleFileChange = (event) => {
-    const uploadedFile = event.target.files[0];
-    setFile(uploadedFile);
-    console.log(uploadedFile);
+    formik.setFieldValue("custom_holiday_file", event.target.files[0]);
   };
+
+  // Function to handle file download
   const handleDownload = (fileName) => {
     const filePath = `/${fileName}`;
 
@@ -43,23 +76,11 @@ const updateHoliday = () => {
           letterSpacing: "0.25px",
         }}
       >
-        Add Approval
+        Update Holiday
       </Typography>
 
       <div style={{ display: "flex", alignItems: "center" }}>
         <div style={{ flex: 1 }}>
-          <Button onClick={() => handleDownload("SpecialHoliday.xls")}>
-            <Typography
-              variant="body2"
-              sx={{
-                marginTop: "8px",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              Click to download sample file (.xlsx)
-            </Typography>
-          </Button>{" "}
           <Box
             sx={{
               display: "flex",
@@ -70,14 +91,17 @@ const updateHoliday = () => {
           >
             <Button variant="contained" component="label">
               Upload File
-              <input type="file" onChange={handleFileChange} hidden />
+              <input
+                type="file"
+                onChange={handleFileChange}
+                hidden
+                accept=".xls,.xlsx"
+              />
             </Button>
-            {isLoading && <LinearProgress value={uploadProgress} />}
-
-            {/* Conditionally render the file name if uploadedFile is not null */}
-            {file && (
+            {isLoading && <LinearProgress value={0} />}
+            {formik.values.custom_holiday_file && (
               <Typography variant="body2" sx={{ marginTop: "8px" }}>
-                Uploaded File: {file.name}
+                Uploaded File: {formik.values.custom_holiday_file.name}
               </Typography>
             )}
           </Box>
@@ -93,10 +117,15 @@ const updateHoliday = () => {
               backgroundColor: "#ffffff",
             }}
           >
-            <Typography sx={{ flex: 1, marginRight: "10px" }}></Typography>
-            <Button>Delete</Button>
+            <Typography sx={{ flex: 1, marginRight: "10px" }}>
+              <Button onClick={() => handleDownload("SpecialHoliday.xls")}>
+                Download Current Holiday File (.pdf)
+              </Button>
+            </Typography>
+            <Button type="submit" onClick={formik.handleSubmit}>
+              Submit
+            </Button>
           </Box>
-          ={" "}
         </div>
 
         <div style={{ flex: 1 }}>
@@ -112,4 +141,4 @@ const updateHoliday = () => {
   );
 };
 
-export default updateHoliday;
+export default UpdateHoliday;
