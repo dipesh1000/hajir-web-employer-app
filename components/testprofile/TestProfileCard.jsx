@@ -38,7 +38,7 @@ const TestProfileCard = () => {
 
   return (
     <div>
-      <ProfileContainer onClick={handleOpenDialog}>
+      <ProfileContainer onClick={handleOpenDialog} style={{marginLeft:'-10px'}}>
         <label htmlFor="photo">
           <Avatar
             src={profileData?.profile_image || "/default-avatar.png"}

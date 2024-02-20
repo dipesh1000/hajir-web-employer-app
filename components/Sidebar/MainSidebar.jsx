@@ -52,7 +52,7 @@ const MainSidebar = () => {
       }}
     >
       <div style={{marginLeft:'50px'}}>
-      <TestProfileCard/>
+      <TestProfileCard />
       </div>
       <List>
         {LINKS.map(({ text, href, icon: Icon }) => (

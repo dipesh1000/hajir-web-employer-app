@@ -10,7 +10,10 @@ import {
   Select,
   MenuItem,
   Avatar,
+  IconButton,
+  Typography,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { useFormik } from "formik";
 import {
   useChangePhoneNumberMutation,
@@ -19,12 +22,15 @@ import {
 import LoopIcon from "@mui/icons-material/Loop";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import Image from "next/image";
 
 const EditProfileDialog = ({ open, handleClose, profileData }) => {
   const [updateProfile] = useUpdateProfileMutation();
   const changePhoneNumber = useChangePhoneNumberMutation();
   const [changePhoneMode, setChangePhoneMode] = React.useState(false);
-
+  const handleCloseDialog = () => {
+    handleClose();
+  };
   const formikEdit = useFormik({
     initialValues: {
       name: profileData?.name || "",
@@ -34,19 +40,6 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
       marital_status: profileData?.marital_status || "Married",
       uploadfile: profileData?.profile_image || null,
     },
-    // onSubmit: async (values) => {
-    //   try {
-    //     console.log("Form submitted:", values);
-    //     console.log("Form name:", values.name);
-
-    //     const { data } = await updateProfile(values);
-    //     console.log("Profile updated successfully:", data);
-    //     alert("Profile updated successfully!");
-    //   } catch (error) {
-    //     console.error("Error updating profile:", error);
-    //     alert("Error updating profile. Please try again.");
-    //   }
-    // },
     onSubmit: async (values) => {
       try {
         console.log("Form submitted:", values);
@@ -91,7 +84,19 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md">
       <DialogTitle sx={{ textAlign: "center" }}>Edit Profile</DialogTitle>
-
+      <IconButton
+          aria-label="close"
+          onClick={handleCloseDialog}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      
       <DialogContent>
         <form onSubmit={formikEdit.handleSubmit} encType="multipart/form-data">
           <input
@@ -112,12 +117,31 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
               sx={{
                 width: 100,
                 height: 100,
-                marginLeft: "400px",
+                marginLeft: "380px",
                 cursor: "pointer",
               }}
               alt="Profile Avatar"
             />
           </label>
+          <Image
+        src="/imageUpload.png"
+        alt="Upload Image"
+        layout="fixed"
+        width={30}
+        height={30}
+     
+        onClick={() => document.getElementById('photo').click()}
+        style={{
+          position: "absolute",
+          top: changePhoneMode ? "26%" : "30%",
+          left: "53%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 2,
+        }}
+      />
+      <Typography sx={{ marginLeft: "25px", marginTop: "25px" }}>
+        Personal Details
+      </Typography>
           <FormControl style={{ width: "120px", marginBottom: "20px" }}>
             <Select
               id="title"

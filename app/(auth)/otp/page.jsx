@@ -234,7 +234,7 @@ const Otp = () => {
                       value={digit}
                       onChange={(e) => handleInputChange(index, e.target.value)}
                       variant="outlined"
-                      size="large"
+                      size="small"
                       sx={{
                         width: "50px", // Adjust the width as needed
                         height: "40px", // Adjust the height as needed
