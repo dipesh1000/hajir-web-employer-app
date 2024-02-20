@@ -1,26 +1,7 @@
-"use client";
-
 import React, { useState } from "react";
 import { Box, Checkbox, Grid, Typography } from "@mui/material";
-import { useFormik } from "formik";
-import * as yup from "yup";
+
 const Step3Component = () => {
-  const validationSchema = yup.object({
-    week_days_off: yup.array().required("Week Days Off is required"),
-    // half_day_off: yup.boolean().required("Half Day Off is required"),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      week_days_off: [1, 7],
-      // half_day_off: false,
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-    },
-  });
-
   const days = [
     "Sunday",
     "Monday",
@@ -30,22 +11,27 @@ const Step3Component = () => {
     "Friday",
     "Saturday",
   ];
-  const [expandedDay, setExpandedDay] = useState(null);
+
+  const [selectedDays, setSelectedDays] = useState([]);
   const [halfDaySelected, setHalfDaySelected] = useState({});
 
   const handleDayClick = (day) => {
-    setExpandedDay(day);
-    setHalfDaySelected((prevSelections) => ({
-      ...prevSelections,
-      [day]: prevSelections[day] || false,
-    }));
+    if (selectedDays.includes(day)) {
+      setSelectedDays(selectedDays.filter((selectedDay) => selectedDay !== day));
+    } else {
+      setSelectedDays([...selectedDays, day]);
+    }
   };
 
   const handleHalfDayClick = (day) => {
     setHalfDaySelected((prevSelections) => ({
       ...prevSelections,
-      [day]: !prevSelections[day],
+      [day]: !prevSelections[day], 
     }));
+
+    if (!halfDaySelected[day]) {
+      setSelectedDays((prevSelectedDays) => [...prevSelectedDays, day]);
+    }
   };
 
   return (
@@ -59,7 +45,7 @@ const Step3Component = () => {
               alignItems: "center",
               justifyContent: "space-between",
               width: "90%",
-              border: expandedDay === day ? "2px solid red" : "2px solid black",
+              border: selectedDays.includes(day) ? "2px solid red" : "2px solid black",
               borderRadius: "4px",
               padding: "8px",
               cursor: "pointer",
@@ -68,14 +54,16 @@ const Step3Component = () => {
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Checkbox
-                checked={expandedDay === day}
+                checked={selectedDays.includes(day)}
+                onChange={() => handleDayClick(day)}
                 sx={{
-                  color: expandedDay === day ? "red" : "black",
+                  color: selectedDays.includes(day) ? "red" : "black",
+                  borderRadius: "50%",
                 }}
               />
               <Typography variant="body2">{day}</Typography>
             </Box>
-            {expandedDay === day && (
+            {selectedDays.includes(day) && (
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Checkbox
                   checked={halfDaySelected[day]}

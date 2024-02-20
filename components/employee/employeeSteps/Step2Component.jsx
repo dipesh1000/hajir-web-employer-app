@@ -20,50 +20,47 @@ import { useFormik } from "formik";
 const Step2Component = ({ formik }) => {
   const handleSalaryTypeChange = (event) => {
     formik.handleChange(event);
-    formik.setFieldValue("basicSalary", "");
+    // formik.setFieldValue("basicSalary", "");
     formik.setFieldValue("allowance_amount", "");
   };
 
-  const handleworking_hoursChange = (increase) => {
+  const handleworking_hoursChange = (decrease) => {
     const [hours, minutes] = formik.values.working_hours.split(":").map(Number);
-
-    // Increase or decrease by 10 minutes
-    const newMinutes = increase ? minutes + 10 : minutes - 30;
-    const newHours = newMinutes < 0 ? hours - 1 : hours + 1;
-
-    // Format the new time
+    let totalMinutes = hours * 60 + minutes;
+    totalMinutes = decrease ? totalMinutes + 10 : totalMinutes -10;
+    totalMinutes = (totalMinutes + 1440) % 1440;
+    const newHours = Math.floor(totalMinutes / 60);
+    const newMinutes = totalMinutes % 60;
     const formattedHours = String(newHours).padStart(2, "0");
-    const formattedMinutes = String(
-      newMinutes < 0 ? 60 + newMinutes : newMinutes
-    ).padStart(2, "0");
+    const formattedMinutes = String(newMinutes).padStart(2, "0");
+formik.setFieldValue("working_hours", `${formattedHours}:${formattedMinutes}`);
+};
 
-    formik.setFieldValue(
-      "working_hours",
-      `${formattedHours}:${formattedMinutes}`
-    );
-  };
-
-  const handlebreak_durationChange = (increase) => {
+const handlebreak_durationChange = (decrease) => {
     const break_duration = formik.values.break_duration;
     if (!break_duration) return; // Null check
 
     const [hours, minutes] = break_duration.split(":").map(Number);
 
-    // Increase or decrease by 10 minutes
-    const newMinutes = increase ? minutes + 30 : minutes - 30;
-    const newHours = newMinutes < 0 ? hours - 1 : hours + 1;
+    // Convert hours and minutes to total minutes
+    let totalMinutes = hours * 60 + minutes;
+
+    // Increase or decrease by 30 minutes
+    totalMinutes = decrease ? totalMinutes + 10 : totalMinutes -10;
+
+    // Ensure totalMinutes remain in range [0, 1439] (24 hours)
+    totalMinutes = (totalMinutes + 1440) % 1440;
+
+    // Calculate new hours and minutes
+    const newHours = Math.floor(totalMinutes / 60);
+    const newMinutes = totalMinutes % 60;
 
     // Format the new time
     const formattedHours = String(newHours).padStart(2, "0");
-    const formattedMinutes = String(
-      newMinutes < 0 ? 60 + newMinutes : newMinutes
-    ).padStart(2, "0");
+    const formattedMinutes = String(newMinutes).padStart(2, "0");
 
-    formik.setFieldValue(
-      "break_duration",
-      `${formattedHours}:${formattedMinutes}`
-    );
-  };
+    formik.setFieldValue("break_duration", `${formattedHours}:${formattedMinutes}`);
+};
 
   const handleAmPmChange = () => {
     const duty_time = formik.values.duty_time;
@@ -74,16 +71,21 @@ const Step2Component = ({ formik }) => {
 
     let newHours = hours;
     if (period === "pm" && hours !== 12) {
-      newHours += 12;
+        newHours += 12;
     } else if (period === "am" && hours === 12) {
-      newHours = 0;
+        newHours = 0;
     }
 
+    // Ensure minutes are formatted with leading zeros
+    const formattedMinutes = String(minutes).padStart(2, "0");
+
+    // Format the new time with leading zeros for hours and minutes
     const formattedHours = String(newHours).padStart(2, "0");
-    const formattedTime = `${formattedHours}:${minutes}`;
+    const formattedTime = `${formattedHours}:${formattedMinutes}`;
 
     formik.setFieldValue("duty_time", formattedTime);
-  };
+};
+
 
   return (
     <Grid container spacing={2}>
@@ -154,13 +156,14 @@ const Step2Component = ({ formik }) => {
               variant="outlined"
               margin="normal"
               sx={{ width: "700px" }}
-              name="basicSalary"
-              {...formik.getFieldProps("basicSalary")}
+              name="salary_amount"
+              {...formik.getFieldProps("salary_amount")}
               error={
-                formik.touched.basicSalary && Boolean(formik.errors.basicSalary)
+                formik.touched.salary_amount &&
+                Boolean(formik.errors.salary_amount)
               }
               helperText={
-                formik.touched.basicSalary && formik.errors.basicSalary
+                formik.touched.salary_amount && formik.errors.salary_amount
               }
             />
           ) : (
@@ -170,14 +173,14 @@ const Step2Component = ({ formik }) => {
                 variant="outlined"
                 sx={{ width: "700px" }}
                 margin="normal"
-                name="basicSalary"
-                {...formik.getFieldProps("basicSalary")}
+                name="salary_amount"
+                {...formik.getFieldProps("salary_amount")}
                 error={
-                  formik.touched.basicSalary &&
-                  Boolean(formik.errors.basicSalary)
+                  formik.touched.salary_amount &&
+                  Boolean(formik.errors.salary_amount)
                 }
                 helperText={
-                  formik.touched.basicSalary && formik.errors.basicSalary
+                  formik.touched.salary_amount && formik.errors.salary_amount
                 }
               />
               <TextField
@@ -305,8 +308,9 @@ const Step2Component = ({ formik }) => {
                 formik.handleChange(e);
               }}
               name="probation_period"
+              id="probation_period"
             >
-              <MenuItem value="1 month">1 month</MenuItem>
+              <MenuItem value="1">1 month</MenuItem>
               <MenuItem value="3 months">3 months</MenuItem>
               <MenuItem value="6 months">6 months</MenuItem>
               <MenuItem value="12 months">12 months</MenuItem>

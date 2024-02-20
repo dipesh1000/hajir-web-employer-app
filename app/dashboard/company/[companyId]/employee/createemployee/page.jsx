@@ -19,7 +19,7 @@ import * as Yup from "yup";
 import { useCreateCandidateMutation } from "@/services/api";
 import { useParams, useRouter } from "next/navigation";
 
-const steps = ["Step 1", "Step 2", "Step 3", "Step 4"];
+const steps = ["Personal Details", "Salary & Time", "Weekly off  Days", "Other days"];
 const stepComponents = [
   <Step1Component key="step1" />,
   <Step2Component key="step2" />,
@@ -42,10 +42,10 @@ const validationSchemaStep1 = Yup.object({
   departments: Yup.string().required("Departments is required"),
 });
 
+
 const validationSchemaStep2 = Yup.object({
-  basicSalary: Yup.string().required("Basic Salary is required"),
-  allowance: Yup.string().required("Allowance is required"),
-  salaryAmount: Yup.string().required("Salary Amount is required"),
+  allowance_amount: Yup.string().required("Allowance is required"),
+  salary_amount: Yup.string().required("Salary Amount is required"),
 });
 
 const validationSchemaStep3 = Yup.object({
@@ -62,6 +62,7 @@ const validationSchemaStep4 = Yup.object({
   ),
   overTimeRatioChecked: Yup.number().required("Over Time Ratio is required"),
 });
+
 
 const HorizontalLinearStepper = () => {
   const { companyId } = useParams();
@@ -81,29 +82,31 @@ const HorizontalLinearStepper = () => {
   const formik = useFormik({
     initialValues: {
       name_holder: "Mr", //required string
-      name: "", // required
+      name: "krishna", // required
       code: "CAAA", // required
       contact: "9845971897", // required
       designation: "CEO", // required
       marriage_status: "Unmarried", //required enum['Married', 'Unmarried']
       salary_type: "Weekly", // required - enum ['Weekly', 'Monthly']
       salary: "Fixed", // required - enum ['Fixed', 'Breakdown']
-      salary_amount: 2000.0, // required - double
-      allowance_amount: 2000.0, // nullable - double
+      salary_amount: "2000.0", // required - double
+      // allowance_amount: "2000.0", // nullable - double
       joining_date: "2023-02-11", // required - date
       working_hours: "8:00", // required
       duty_time: "08:00", // required - time
       probation_period: 1, // required - unsignedBigInt
-      break_duration: "300", // required - min/hr to seconds - string
-      departments: [1], // required - array - api:{{globalLiveUrl}}/employer/all-departments
+      break_duration: "8:00", // required - min/hr to seconds - string
+      departments: 1, // required - array - api:{{globalLiveUrl}}/employer/all-departments
       allow_late_attendance: "30", // nullable -time
       casual_leave: 0, //required - unsignedInteger
       sick_leave: 0, //required - unsignedInteger
       overtime_ratio: 2.2, // double(2.2)
       overtime_hrs: 2, // float(2.2)
       week_days_off: [1, 7], // array
+      half_days: [1, 7], // array
+
       allow_network_access: "All Net", // required - enum['All Net', 'QR']
-      confirmPhoneNumber: "9898981586",
+      confirmPhoneNumber:  "9845971897",
     },
     validationSchema: validationSchemas[activeStep],
     onSubmit: async (values, { resetForm }) => {
@@ -167,13 +170,17 @@ const HorizontalLinearStepper = () => {
         sx={{
           fontSize: "5rem",
           padding: "50px",
+   
         }}
       >
+  
         {steps.map((label, index) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+          <Step key={label} >
+     
+            <StepLabel sx={{display:'flex', flexDirection:'column'}}>{label}</StepLabel>
           </Step>
         ))}
+   
       </Stepper>
 
       <Box

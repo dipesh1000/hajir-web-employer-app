@@ -92,13 +92,16 @@ const ProfileDialog = ({ open, handleClose, profileData }) => {
                 textAlign: "center",
                 alignItems: "center",
                 justifyContent: "center",
+                marginTop:'-240px',
               }}
             >
               {" "}
               <EditIcon />
               Edit Profile
             </Button>
+      
           </DialogActions>
+          <span>Personal details</span>
           <form onSubmit={formikView.handleSubmit}>
             <FormControl style={{ width: "120px", marginBottom: "20px" }}>
               <Select
