@@ -1,18 +1,19 @@
-// messaging/components/MessageBox.js
-import { Typography } from '@mui/material';
-import { Box } from '@mui/system';
+
 import Image from 'next/image';
 import React from 'react';
 
+import attached3 from './attached3.png'
+
+
 const MessageBox = ({ img,name, timeAgo, reason, message , onClick}) => {
-    
+  
   return (
    <>
     <div style={{ display: 'flex', alignItems: 'center', overflow:'auto'}} onClick={onClick} >
  
     {img && (
       <div>
-        <Image src={img} alt="User" width={50} height={50} />
+        <Image src={attached3} alt="User" width={50} height={45}   style={{ borderRadius: "30%" }} />
       </div>
     )}
 

@@ -14,8 +14,7 @@ import ScrollDialog from '@/components/Auth/ScrollDialog';
 import { postRequest } from '@/services/ApiRequestService';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css';
- 
-// Styled components
+
 const BasicGridStyles = {
 
 container: {
@@ -23,7 +22,7 @@ container: {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  height: "100vh", // Adjusted minHeight instead of maxHeight
+  height: "100vh", 
   objectFit: "cover",
   overflow: "hidden",
  
@@ -31,7 +30,7 @@ container: {
 image: {
   display: "block",
   maxWidth: "100%",
-  height: "auto", // Ensuring the image maintains aspect ratio
+  height: "auto", 
 },
 };
 const Item = styled(Paper)(({ theme }) => ({
@@ -49,12 +48,9 @@ const Item = styled(Paper)(({ theme }) => ({
   elevation: 0,
   background: "transparent",
 }));
-
 const LogoContainer = styled("div")({
   marginBottom: "16px",
 });
-
-// Validation schema
 const validationSchema = yup.object({
   phone: yup
     .string()
@@ -65,46 +61,43 @@ const validationSchema = yup.object({
     ),
 });
 
-// Main component
 export default function Signin() {
-  // const [phoneNumber, setPhoneNumber] = useState('');
-  // const [valid, setValid] = useState(true);
-
-  // const handleChange = (event) => {
-  //   const input = event.target.value;
-  //   setPhoneNumber(input);
-  //   setValid(validatePhoneNumber(input));
-  // };
-
-  // const validatePhoneNumber = (phoneNumber) => {
-  //   const phoneNumberPattern = /^\d{10}$/; // Validates a 10-digit phone number
-
-  //   return phoneNumberPattern.test(phoneNumber);
-  // };
   const images = [
     {
-      src: "/auth/otp1111.png",
+      src: '/auth/otp1111.png',
       width: 175,
       height: 190,
-      alt: "First Image",
-      paragraph:
-        "Login with employer will help you to track your <br/> all the staff activities from your smart devices.",
+      alt: 'First Image',
+      content: (
+        <>
+          <p>Login with employer will help you to track your</p>
+          <p>all the staff activities from your smart devices.</p>
+        </>
+      ),
     },
     {
-      src: "/auth/otp2222.png",
+      src: '/auth/otp2222.png',
       width: 175,
       height: 190,
-      alt: "Second Image",
-      paragraph:
-        "You can manage your employee attendance, <br/> salary, overtime and payroll anywhere in the world.",
+      alt: 'Second Image',
+      content: (
+        <>
+          <p>You can manage your employee attendance, salary,</p>
+          <p>overtime and payroll anywhere in the world.</p>
+        </>
+      ),
     },
     {
-      src: "/auth/otp3333.png",
+      src: '/auth/otp3333.png',
       width: 175,
       height: 190,
-      alt: "Third Image",
-      paragraph:
-        "Live attendance, quick reports, allowance & overtime <br/> expense calculation and export reports in csv/excel/pdf.",
+      alt: 'Third Image',
+      content: (
+        <>
+          <p>Live attendance, quick reports, allowance & overtime</p>
+          <p>expense calculation and export reports in csv/excel/pdf.</p>
+        </>
+      ),
     },
   ];
   // commment
@@ -170,22 +163,11 @@ export default function Signin() {
     BasicGridStyles.container
       }
     >
-      {/* <Grid container> */}
-        {/* <Grid item xs={12} md={6}> */}
+ 
         <Grid container spacing={3} justifyContent="center" alignItems="center">
         <Grid item xs={12} md={6}>
          
-          {/* Apply styles to the image */}
-          {/* <Image
-            src="/auth/login.png"
-            width={950}
-            height={925}
-            alt="Logo"
-            style={{
-              ...BasicGridStyles.image,
-              display: useMediaQuery("(max-width:900px)") ? "none" : "block",
-            }}
-          /> */}
+        
   {!isScreenSmall && ( 
           <Image    src="/auth/login.png"
               alt="login image"
@@ -203,11 +185,10 @@ export default function Signin() {
             </LogoContainer>
 
             <h2>Authentication</h2>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: images[selectedImageIndex].paragraph,
-              }}
-            />
+          
+               <div style={{ marginBottom: '10px' }}>
+              {images[selectedImageIndex].content}
+            </div>
 
             <Image
               src={images[selectedImageIndex].src}
@@ -229,44 +210,19 @@ export default function Signin() {
               onSubmit={formik.handleSubmit}
               style={{ width: '250px' }}
             >
- 
-
-
-
-    <PhoneInput
-      country={'np'} // Set Nepal as the default country
-      inputExtraProps={{
-        placeholder: '977', // Placeholder for the country code
-      }}
-      
-    
-      value={formik.values.phone}
-      onChange={(phone) => formik.setFieldValue('phone', phone)}
-    
-      inputStyle={{
-        width: '100%',
-        padding: '12px 14px', // Adjust padding as needed
-        fontSize: 'inherit',
-      }}
-      inputProps={{
-        style: { paddingRight: '0px' }, // Remove right padding to align with button
-      }}
-    />
-
-{/* // <TextField
-//                 fullWidth
-//                 id="phone"
-//                 label="Phone Number"
-//                 placeholder="+977 9841234567"
-//                 name="phone"
-//                 type="tel"
-//                 onChange={formik.handleChange}
-//                 value={formik.values.phone}
-//                 error={formik.touched.phone && Boolean(formik.errors.phone)}
-//                 helperText={formik.touched.phone && formik.errors.phone}
-//                 style={{"marginTop":"20px"}} */}
-             
-  
+ <TextField
+                fullWidth
+                id="phone"
+                label="Phone Number"
+                placeholder="+977 9841234567"
+                name="phone"
+                type="tel"
+                onChange={formik.handleChange}
+                value={formik.values.phone}
+                error={formik.touched.phone && Boolean(formik.errors.phone)}
+                helperText={formik.touched.phone && formik.errors.phone}
+                style={{"marginTop":"20px", width:'300px', marginLeft:'56px'}}     
+   />
               <Button
                 variant="contained"
                 type="submit"
