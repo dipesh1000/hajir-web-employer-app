@@ -27,12 +27,14 @@ const CompanySidebar = () => {
   const [openReport, setOpenReport] = useState(false); // Add this line
   const { companyId } = useParams();
 
-  const onLogoutClick = (e) => {
-    console.log(e, "click in 29");
-    // const response = await postRequest(`/api/employer/logout`);
-    // if (response) {
-    //   localStorage.clear('token');
-    // }
+  const onLogoutClick = async (e) => {
+    const logout = await getRequest(`/employer/logout`);
+    if (logout) {
+      localStorage.setItem("token", null);
+      localStorage.setItem("user", null);
+
+      return router.push("/login");
+    }
   };
 
   const LINKS = [

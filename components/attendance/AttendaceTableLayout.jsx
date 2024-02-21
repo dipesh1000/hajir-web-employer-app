@@ -17,6 +17,13 @@ import TableCell from "@mui/material/TableCell";
 import Image from "next/image";
 import TablePagination from "@mui/material/TablePagination";
 import { Badge, Tab, Tabs } from "@mui/material";
+import {
+  useGetAllCandidateTodayQuery,
+  useGetAttendanceReportTodayQuery,
+  useGetInactivecandidateTodayQuery,
+  useGetActivecandidateTodayQuery,
+} from "@/services/api";
+import { useParams } from "next/navigation";
 
 const mockData = [
   {
@@ -86,6 +93,36 @@ const mockData = [
 const departments = ["Software", "Management", "Manager"];
 
 export default function AttendanceTableLayout() {
+  const { companyId } = useParams();
+
+  const {
+    data: getAllCandidateToday,
+    isLoading: isLoading1,
+    refetch: refetch1,
+  } = useGetAllCandidateTodayQuery(companyId);
+  const {
+    data: getAttendaceReportToday,
+    isLoading: isLoading2,
+    refetch: refetch2,
+  } = useGetAttendanceReportTodayQuery(companyId);
+  const {
+    data: getInactiveCandidateToday,
+    isLoading: isLoading3,
+    refetch: refetch3,
+  } = useGetInactivecandidateTodayQuery(companyId);
+  const {
+    data: getActiveCandidateToday,
+    isLoading: isLoading4,
+    refetch: refetch4,
+  } = useGetActivecandidateTodayQuery(companyId);
+
+  // console.log(getAllCandidateToday, "getAllCandidateToday");
+  // console.log(getAttendaceReportToday, "getAttendaceReportToday");
+  // console.log(getInactiveCandidateToday, "getInactiveCandidateToday");
+  // console.log(getActiveCandidateToday, "getActiveCandidateToday");
+
+  // const activeCompanies = activeCompaniesData.data?.companies || [];
+
   const [filteredData, setFilteredData] = React.useState(mockData);
   const [searchText, setSearchText] = React.useState("");
   const [selectedDepartment, setSelectedDepartment] = React.useState("");

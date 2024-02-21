@@ -21,7 +21,8 @@ import {
   FormControl,
   Select,
   MenuItem,
-  InputLabel, // Added TablePagination import
+  InputLabel,
+  Avatar, // Added TablePagination import
 } from "@mui/material";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -176,6 +177,7 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
           <TableHead>
             <TableRow>
               <TableCell>Employee ID</TableCell>
+              <TableCell>Employee photo</TableCell>
               <TableCell>Employee Name</TableCell>
               <TableCell>Designation</TableCell>
               <TableCell>Phone</TableCell>
@@ -194,6 +196,20 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
                 .map((candidate) => (
                   <TableRow key={candidate.id}>
                     <TableCell>{candidate.id}</TableCell>
+                    <TableCell>
+                      <label htmlFor="photo">
+                        <Avatar
+                          src={candidate.profile_image || "/default-avatar.png"}
+                          sx={{
+                            width: 50,
+                            height: 50,
+                            cursor: "pointer", // Add cursor pointer for clickable effect
+                          }}
+                          alt="Profile Avatar"
+                        />
+                      </label>
+                    </TableCell>
+
                     <TableCell>{candidate.name}</TableCell>
                     <TableCell>{candidate.designation}</TableCell>
                     <TableCell>{candidate.phone}</TableCell>

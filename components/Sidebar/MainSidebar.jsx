@@ -35,6 +35,8 @@ const MainSidebar = () => {
     const logout = await getRequest(`/employer/logout`);
     if (logout) {
       localStorage.setItem("token", null);
+      localStorage.setItem("user", null);
+
       return router.push("/login");
     }
   };

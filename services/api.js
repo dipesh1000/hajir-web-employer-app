@@ -201,6 +201,37 @@ export const api = createApi({
         formData: true,
       }),
     }),
+
+    // ************* ATTENDACE REPORT ***************
+    // candidate today report
+    getAllCandidateToday: builder.query({
+      query: (company_id) => ({
+        url: `employer/report/today/all-candidate/${company_id}`,
+      }),
+    }),
+
+    // attendance report today
+    getAttendanceReportToday: builder.query({
+      query: (company_id) => ({
+        url: `employer/report/today/${company_id}`,
+      }),
+    }),
+
+    // inactive-candidate today
+    // {{v2}}/employer/report/today/inactive-candidate/95
+
+    getInactivecandidateToday: builder.query({
+      query: (company_id) => ({
+        url: `employer/report/today/inactive-candidate/${company_id}`,
+      }),
+    }),
+
+    // active-candidate today
+    getActivecandidateToday: builder.query({
+      query: (company_id) => ({
+        url: `employer/report/today/active-candidate/${company_id}`,
+      }),
+    }),
   }),
 });
 
@@ -230,4 +261,8 @@ export const {
   useGetDepartmentQuery,
   useGenerateQrCodeQuery,
   useUpdateCustomHolidayMutation,
+  useGetAllCandidateTodayQuery,
+  useGetAttendanceReportTodayQuery,
+  useGetInactivecandidateTodayQuery,
+  useGetActivecandidateTodayQuery,
 } = api;

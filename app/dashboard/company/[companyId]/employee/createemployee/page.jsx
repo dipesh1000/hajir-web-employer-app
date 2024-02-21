@@ -101,6 +101,8 @@ const HorizontalLinearStepper = () => {
       overtime_ratio: 2.2, // double(2.2)
       overtime_hrs: 2, // float(2.2)
       week_days_off: [1, 7], // array
+      half_days: [1, 2],
+
       allow_network_access: "All Net", // required - enum['All Net', 'QR']
       confirmPhoneNumber: "9845971897 ",
     },

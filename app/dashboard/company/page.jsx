@@ -1,13 +1,10 @@
 "use client";
 import React from "react";
-import { useDispatch } from "react-redux";
 import { useGetEmployerCompaniesQuery } from "@/services/api";
-import { setCompanies } from "@/redux/employerSlice";
 import CreateCompanyCard from "@/components/company/CreateCompanyCard";
 import CompanyList from "@/components/company/CompanyList";
 
 export default function MainDashboard() {
-  const dispatch = useDispatch();
   const {
     data: companiesData,
     isLoading,

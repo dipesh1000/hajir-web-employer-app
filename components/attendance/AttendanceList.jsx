@@ -1,36 +1,37 @@
+// CompanyList.js
+
 import React, { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
 import { Box, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
-import { useGetCandidatesQuery } from "@/services/api";
-import TabsActiveInactive from "../dashboard/MainDashboard/TabsActiveInactive";
-import EmployeeTable from "./employeetable.jsx/EmployeeTable";
+import { useRouter } from "next/navigation";
+import { useGetEmployerCompaniesQuery } from "@/services/api";
+import TabsActiveInactive from "@/components/dashboard/MainDashboard/TabsActiveInactive";
+import CompanyTable from "../dashboard/MainDashboard/CompanyTable";
 
-const FirstPageEmployee = () => {
+const CompanyList = () => {
   const router = useRouter();
-  const { companyId } = useParams();
-
   const {
-    data: candidateData,
+    data: companiesData,
     isLoading,
     refetch,
-  } = useGetCandidatesQuery(companyId);
+  } = useGetEmployerCompaniesQuery();
 
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleChangeTab = (event, newValue) => {
     refetch();
+
     setSelectedTab(newValue);
   };
 
-  const activeEmployee = candidateData?.data?.active_candidates || [];
-  const inactiveEmployee = candidateData?.data?.inactive_candidates || [];
-  const allEmployee = [...activeEmployee, ...inactiveEmployee];
+  const activeCompanies = companiesData?.data?.active_companies || [];
+  const inactiveCompanies = companiesData?.data?.inactive_companies || [];
+  const allCompanies = [...activeCompanies, ...inactiveCompanies];
 
-  const totalCountEmployee = allEmployee.length;
-  const activeCountEmployee = activeEmployee.length;
-  const inactiveCountEmployee = inactiveEmployee.length;
+  const totalCount = allCompanies.length;
+  const activeCount = activeCompanies.length;
+  const inactiveCount = inactiveCompanies.length;
 
   return (
     <>
@@ -50,33 +51,30 @@ const FirstPageEmployee = () => {
               }}
             >
               <Box>
-                <h2>Employee</h2>
+                <h2>Company</h2>
               </Box>
               <Box>
                 <Button
                   variant="contained"
                   onClick={() =>
-                    router.push(
-                      `/dashboard/company/${companyId}/employee/createemployee`
-                    )
+                    router.push("/dashboard/company/createcompany")
                   }
                   startIcon={<AddIcon />}
                 >
-                  Create Employee
+                  Create Company
                 </Button>
               </Box>
             </Box>
             <h4>
-              <span>Dashboard</span> / <span>Company</span> /{" "}
-              <span>Employee</span>
+              <span>Dashboard</span> / <span>Company</span>
             </h4>
             <Box sx={{ flexGrow: 1 }}>
               <TabsActiveInactive
                 value={selectedTab}
                 handleChange={handleChangeTab}
-                totalCount={totalCountEmployee}
-                activeCount={activeCountEmployee}
-                inactiveCount={inactiveCountEmployee}
+                totalCount={totalCount}
+                activeCount={activeCount}
+                inactiveCount={inactiveCount}
               />
               <Box
                 sx={{
@@ -84,10 +82,7 @@ const FirstPageEmployee = () => {
                   height: "100%",
                 }}
               >
-                <EmployeeTable
-                  candidateData={candidateData}
-                  // statusFilter={all}
-                />{" "}
+                <CompanyTable companies={allCompanies} statusFilter="all" />
               </Box>
               <Box
                 sx={{
@@ -95,8 +90,8 @@ const FirstPageEmployee = () => {
                   height: "100%",
                 }}
               >
-                <EmployeeTable
-                  candidateData={candidateData}
+                <CompanyTable
+                  companies={activeCompanies}
                   statusFilter="active"
                 />
               </Box>
@@ -106,8 +101,8 @@ const FirstPageEmployee = () => {
                   height: "100%",
                 }}
               >
-                <EmployeeTable
-                  candidateData={candidateData}
+                <CompanyTable
+                  companies={inactiveCompanies}
                   statusFilter="inactive"
                 />
               </Box>
@@ -120,4 +115,4 @@ const FirstPageEmployee = () => {
   );
 };
 
-export default FirstPageEmployee;
+export default CompanyList;

@@ -55,9 +55,9 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
             new_phone: values.new_phone,
           });
           setOtpValue(data);
-          localStorage.removeItem("token");
-
           router.push(`/otp?phone=${values.phone}&otp=${data.data.otp}`);
+
+          localStorage.removeItem("token");
 
           alert(`OTP sent successfully: ${data.data.otp}`);
         } else {
@@ -77,6 +77,7 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
   const handlePhotoChange = (event) => {
     formikEdit.setFieldValue("uploadfile", event.target.files[0]);
   };
+
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md">
       <DialogTitle sx={{ textAlign: "center" }}>Edit Profile</DialogTitle>
@@ -224,7 +225,8 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
                 label="Change number"
                 margin="normal"
                 id="new_phone"
-                // value={formikEdit.values.new_phone}
+                value={formikEdit.values.new_phone} // Capture new_phone value
+                onChange={formikEdit.handleChange} // Update form state
                 style={{ width: "450px", marginRight: "20px" }}
               />
               <TextField
