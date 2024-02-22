@@ -100,11 +100,11 @@ const HorizontalLinearStepper = () => {
       sick_leave: 0, //required - unsignedInteger
       overtime_ratio: 2.2, // double(2.2)
       overtime_hrs: 2, // float(2.2)
-      week_days_off: [1, 7], // array
-      half_days: [1, 2],
+      week_days_off: [], // array
+      half_days: [], // array
 
       allow_network_access: "All Net", // required - enum['All Net', 'QR']
-      confirmPhoneNumber: "9845971897 ",
+      confirmPhoneNumber: "9845971897",
     },
     validationSchema: validationSchemas[activeStep],
     onSubmit: async (values, { resetForm }) => {

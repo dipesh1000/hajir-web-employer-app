@@ -5,6 +5,8 @@ import { experimentalStyled as styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import { Stack } from "@mui/system";
+import { useParams } from "next/navigation";
+import { useGetEmployerCompaniesQuery } from "@/services/api";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -13,7 +15,7 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
 
-  width: "100vh", // Set the height to 100% of the viewport height
+  width: "100vh",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
@@ -22,6 +24,22 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const DashboardDetailedbottom = () => {
+  const { companyId } = useParams();
+  console.log("companyId:", companyId);
+
+  const {
+    data: companyData,
+    isLoading,
+    refetch,
+  } = useGetEmployerCompaniesQuery(companyId);
+  // console.log("use client", candidateData, isLoading);
+  console.log(companyData?.data?.active_companies, "active_companies");
+  console.log(companyData?.data?.inactive_companies, "inactive_companies");
+
+  const totalCompany =
+    companyData?.data?.active_companies?.length +
+    companyData?.data?.inactive_companies?.length;
+
   return (
     <Box
       style={{
@@ -46,7 +64,7 @@ const DashboardDetailedbottom = () => {
             Total Company
           </Typography>
           <Typography sx={{ color: "#22408B", fontSize: "28px" }} variant="h6">
-            0
+            {totalCompany}
           </Typography>
         </Item>
         <Item

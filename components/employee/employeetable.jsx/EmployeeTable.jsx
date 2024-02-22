@@ -35,10 +35,10 @@ import {
 import { useParams } from "next/navigation";
 
 const EmployeeTable = ({ candidateData, statusFilter }) => {
-  const candidates =
-    statusFilter === "active"
-      ? candidateData?.data?.active_candidates
-      : candidateData?.data?.inactive_candidates;
+  // const candidates =
+  //   statusFilter === "active"
+  //     ? candidateData?.data?.active_candidates
+  //     : candidateData?.data?.inactive_candidates;
 
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
@@ -52,7 +52,7 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
     setSelectedCandidate(candidate);
     setOpenDialog(true);
   };
-  const [filteredData, setFilteredData] = useState(candidates);
+  const [filteredData, setFilteredData] = useState(candidateData);
   console.log("candidateData", candidateData);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(0);

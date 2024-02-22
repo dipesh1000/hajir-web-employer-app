@@ -30,6 +30,7 @@ const ProfileDialog = ({ open, handleClose, profileData }) => {
       birthdate: profileData?.birthdate || "",
       maritalStatus: profileData?.maritalStatus || "married",
       phone: profileData?.phone || "",
+      uploadfile: profileData?.profile_image || null,
     },
     onSubmit: async (values) => {
       console.log("View Form submitted:", values);
@@ -72,13 +73,29 @@ const ProfileDialog = ({ open, handleClose, profileData }) => {
           <CloseIcon />
         </IconButton>
         <DialogContent>
-          <Avatar
+          {/* <Avatar
             src={"/avatar.svg"}
             sx={{
               width: 100,
               height: 100,
               margin: "auto",
               marginBottom: 20,
+            }}
+            alt="Profile
+            Avatar"
+          /> */}
+          <Avatar
+            src={
+              formikView.values.uploadfile instanceof File
+                ? URL.createObjectURL(formikView.values.uploadfile)
+                : profileData?.profile_image || ""
+            }
+            sx={{
+              width: 110,
+              height: 110,
+              marginLeft: "380px",
+              marginTop: "-10px",
+              cursor: "pointer",
             }}
             alt="Profile Avatar"
           />
@@ -92,6 +109,7 @@ const ProfileDialog = ({ open, handleClose, profileData }) => {
                 textAlign: "center",
                 alignItems: "center",
                 justifyContent: "center",
+                marginTop: "20px",
               }}
             >
               {" "}
@@ -99,6 +117,7 @@ const ProfileDialog = ({ open, handleClose, profileData }) => {
               Edit Profile
             </Button>
           </DialogActions>
+          <span>Personal details</span>
           <form onSubmit={formikView.handleSubmit}>
             <FormControl style={{ width: "120px", marginBottom: "20px" }}>
               <Select

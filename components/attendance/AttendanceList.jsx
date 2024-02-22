@@ -1,5 +1,4 @@
-// CompanyList.js
-
+// AttendaceList.js
 import React, { useState } from "react";
 import { Box, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";

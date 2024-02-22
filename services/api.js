@@ -79,7 +79,7 @@ export const api = createApi({
       }),
     }),
     //****************** Company ***********************
-
+    // createcompany
     createCompany: builder.mutation({
       query: (companyData) => ({
         url: "employer/company/store",
@@ -88,7 +88,7 @@ export const api = createApi({
         formData: true,
       }),
     }),
-
+    //update company
     updateCompany: builder.mutation({
       query: ({ company_id, companyData }) => ({
         url: `employer/company/update/${company_id}`,
@@ -104,6 +104,7 @@ export const api = createApi({
         method: "POST",
       }),
     }),
+
     // update company status
     updateCompanyStatus: builder.mutation({
       query: ({ company_id, status }) => ({
@@ -232,6 +233,8 @@ export const api = createApi({
         url: `employer/report/today/active-candidate/${company_id}`,
       }),
     }),
+
+    // ************** LEAVE ******************
   }),
 });
 

@@ -1,177 +1,64 @@
 "use client";
-
-import * as React from "react";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import TableContainer from "@mui/material/TableContainer";
-import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
-import TableBody from "@mui/material/TableBody";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Image from "next/image";
-import TablePagination from "@mui/material/TablePagination";
-import { Badge, Tab, Tabs } from "@mui/material";
+import React, { useState } from "react";
 import {
-  useGetAllCandidateTodayQuery,
-  useGetAttendanceReportTodayQuery,
-  useGetInactivecandidateTodayQuery,
-  useGetActivecandidateTodayQuery,
-} from "@/services/api";
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Box,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+  TablePagination,
+  TextField,
+  FormControl,
+  Select,
+  InputLabel,
+  MenuItem,
+  Typography,
+} from "@mui/material";
+import { DeleteOutline, Edit, UpdateSharp } from "@mui/icons-material";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useGetAttendanceReportTodayQuery } from "@/services/api";
 import { useParams } from "next/navigation";
 
-const mockData = [
-  {
-    id: 1,
-    name: "John Doe",
-    clockIn: "08:00 AM",
-    clockOut: "05:00 PM",
-    department: "Software",
-    attendanceStatus: "Present",
-    email: "john.doe@example.com",
-  },
-  {
-    id: 2,
-    name: "BIraj Doe",
-    clockIn: "09:30 AM",
-    clockOut: "06:30 PM",
-    department: "Management",
-    attendanceStatus: "Present",
-    email: "jane.doe@example.com",
-  },
-  {
-    id: 3,
-    name: "Pooja Smith",
-    clockIn: "10:15 AM",
-    clockOut: "07:45 PM",
-    department: "Software",
-    attendanceStatus: "Absent",
-    email: "bob.smith@example.com",
-  },
-  {
-    id: 4,
-    name: "Alice Johnson",
-    clockIn: "08:45 AM",
-    clockOut: "05:15 PM",
-    department: "Management",
-    attendanceStatus: "Present",
-    email: "alice.johnson@example.com",
-  },
-  {
-    id: 5,
-    name: "David Brown",
-    clockIn: "09:00 AM",
-    clockOut: "06:00 PM",
-    department: "Manager",
-    attendanceStatus: "Absent",
-    email: "david.brown@example.com",
-  },
-  {
-    id: 6,
-    name: "Laura White",
-    clockIn: "10:30 AM",
-    clockOut: "07:30 PM",
-    department: "Software",
-    attendanceStatus: "Present",
-    email: "laura.white@example.com",
-  },
-  {
-    id: 7,
-    name: "Michael Miller",
-    clockIn: "08:15 AM",
-    clockOut: "05:45 PM",
-    department: "Management",
-    attendanceStatus: "Present",
-    email: "michael.miller@example.com",
-  },
-];
-const departments = ["Software", "Management", "Manager"];
-
-export default function AttendanceTableLayout() {
+const AttendaceTable = ({ companies, statusFilter }) => {
   const { companyId } = useParams();
 
-  const {
-    data: getAllCandidateToday,
-    isLoading: isLoading1,
-    refetch: refetch1,
-  } = useGetAllCandidateTodayQuery(companyId);
+  const router = useRouter();
+  const [filteredData, setFilteredData] = useState(companies);
+  const [selectedCompanyId, setSelectedCompanyId] = useState(null);
+
+  const [searchText, setSearchText] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const {
     data: getAttendaceReportToday,
     isLoading: isLoading2,
     refetch: refetch2,
   } = useGetAttendanceReportTodayQuery(companyId);
-  const {
-    data: getInactiveCandidateToday,
-    isLoading: isLoading3,
-    refetch: refetch3,
-  } = useGetInactivecandidateTodayQuery(companyId);
-  const {
-    data: getActiveCandidateToday,
-    isLoading: isLoading4,
-    refetch: refetch4,
-  } = useGetActivecandidateTodayQuery(companyId);
-
-  // console.log(getAllCandidateToday, "getAllCandidateToday");
-  // console.log(getAttendaceReportToday, "getAttendaceReportToday");
-  // console.log(getInactiveCandidateToday, "getInactiveCandidateToday");
-  // console.log(getActiveCandidateToday, "getActiveCandidateToday");
-
   // const activeCompanies = activeCompaniesData.data?.companies || [];
-
-  const [filteredData, setFilteredData] = React.useState(mockData);
-  const [searchText, setSearchText] = React.useState("");
-  const [selectedDepartment, setSelectedDepartment] = React.useState("");
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [selectedTab, setSelectedTab] = React.useState(0);
+  const [openQrCodeModal, setOpenQrCodeModal] = useState(false);
 
   const handleSearchTextChange = (event) => {
     const text = event.target.value.toLowerCase();
     setSearchText(text);
-    filterData(text, selectedDepartment, selectedTab);
+    filterData(text);
   };
 
-  const handleDepartmentChange = (event) => {
-    const department = event.target.value;
-    setSelectedDepartment(department);
-    setPage(0); // Reset page when changing the department
-    filterData(searchText, department, selectedTab);
-  };
-
-  const handleTabChange = (event, newValue) => {
-    setSelectedTab(newValue);
-    filterData(searchText, selectedDepartment, newValue);
-  };
-
-  const filterData = (searchText, department, tabValue) => {
-    const filtered = mockData.filter(
-      (person) =>
-        person.name.toLowerCase().includes(searchText) &&
-        (department === "" || person.department === department) &&
-        (tabValue === 0 ||
-          person.attendanceStatus.toLowerCase() === getTabLabel(tabValue))
+  const filterData = (searchText) => {
+    const filtered = companies.filter((company) =>
+      company.name.toLowerCase().includes(searchText)
     );
     setFilteredData(filtered);
-  };
-
-  const getTabLabel = (index) => {
-    switch (index) {
-      case 0:
-        return "";
-      case 1:
-        return "present";
-      case 2:
-        return "absent";
-      case 3:
-        return "leave";
-      default:
-        return "";
-    }
   };
 
   const handleChangePage = (event, newPage) => {
@@ -183,110 +70,9 @@ export default function AttendanceTableLayout() {
     setPage(0);
   };
 
-  const notificationsCount = {
-    all: 10,
-    present: 5,
-    absent: 3,
-    leave: 2,
-  };
-
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", height: 500 }}>
+    <Box sx={{ display: "flex", flexDirection: "column", height: 1000, mt: 3 }}>
       <Box sx={{ mb: 2 }}>
-        <Tabs
-          value={selectedTab}
-          onChange={handleTabChange}
-          indicatorColor="primary"
-          textColor="primary"
-        >
-          <Tab
-            label={
-              <div>
-                All
-                <span
-                  style={{
-                    backgroundColor: "#22408B",
-                    color: "white",
-                    padding: "2px 8px",
-                    borderRadius: "4px",
-                    fontSize: "1rem",
-                    marginBottom: "4px",
-                    marginRight: "6px",
-                    marginLeft: "6px",
-                  }}
-                >
-                  {notificationsCount.all}
-                </span>
-              </div>
-            }
-          />
-          <Tab
-            label={
-              <div>
-                Present
-                <span
-                  style={{
-                    backgroundColor: "#00800033",
-                    color: "#008000",
-                    padding: "2px 8px",
-                    borderRadius: "4px",
-                    fontSize: "1rem",
-                    marginBottom: "4px",
-                    marginRight: "6px",
-                    marginLeft: "6px",
-                  }}
-                >
-                  {notificationsCount.present}
-                </span>
-              </div>
-            }
-          />
-          <Tab
-            label={
-              <div>
-                Absent
-                <span
-                  style={{
-                    backgroundColor: "#FF505033",
-                    color: "#FF5050",
-                    padding: "2px 8px",
-                    borderRadius: "4px",
-                    fontSize: "1rem",
-                    marginBottom: "4px",
-                    marginRight: "6px",
-                    marginLeft: "6px",
-                  }}
-                >
-                  {notificationsCount.absent}
-                </span>
-              </div>
-            }
-          />
-          <Tab
-            label={
-              <div>
-                Leave
-                <span
-                  style={{
-                    backgroundColor: "#FFA50033",
-                    color: "#FFA500",
-                    padding: "2px 8px",
-                    borderRadius: "4px",
-                    fontSize: "1rem",
-                    marginBottom: "4px",
-                    marginRight: "6px",
-                    marginLeft: "6px",
-                  }}
-                >
-                  {notificationsCount.leave}
-                </span>
-              </div>
-            }
-          />
-        </Tabs>
-
-        <br />
-
         <TextField
           label="Search by Employee Name"
           variant="outlined"
@@ -296,92 +82,72 @@ export default function AttendanceTableLayout() {
         />
         <FormControl variant="outlined" size="small" sx={{ ml: 2, width: 200 }}>
           <InputLabel>Department</InputLabel>
-          <Select
-            value={selectedDepartment}
-            onChange={handleDepartmentChange}
-            label="Department"
-            autoWidth={false}
-          >
+          <Select label="Department" autoWidth={false}>
             <MenuItem value="">All Departments</MenuItem>
-            {departments.map((dept) => (
-              <MenuItem key={dept} value={dept}>
-                {dept}
-              </MenuItem>
-            ))}
           </Select>
         </FormControl>
+        <br />
       </Box>
-      <TableContainer component={Paper} sx={{ width: "100%" }}>
+      <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
+              <TableCell>Candidate Id</TableCell>
               <TableCell>Employee Name</TableCell>
-              <TableCell>Clock In</TableCell>
-              <TableCell>Clock Out</TableCell>
-              <TableCell>Attendance Status</TableCell>
+              <TableCell>CLock In</TableCell>
+              <TableCell>ClOCK out </TableCell>
+              <TableCell>Attendace</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((person) => (
-                <TableRow key={person.id}>
-                  <TableCell>{person.id}</TableCell>
-                  <TableCell>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      {/* Add your image component here */}
-                      <Image
-                        src="/hajir-logo.png"
-                        alt="Employee"
-                        width={30}
-                        height={30}
-                        style={{
-                          marginRight: "8px",
-                          borderRadius: "50%",
-                          width: "30px",
-                          height: "30px",
-                        }}
-                      />
-                      <Box>
-                        <div>{person.name}</div>
-                        <div style={{ fontSize: "0.8em", color: "gray" }}>
-                          {person.email}
-                        </div>
-                      </Box>
-                    </Box>
-                  </TableCell>
-                  <TableCell>{person.clockIn}</TableCell>
-                  <TableCell>{person.clockOut}</TableCell>
-                  <TableCell>
-                    <Box>
-                      <span
-                        sx={{
-                          color:
-                            person.attendanceStatus === "Present"
-                              ? "green"
-                              : "red",
-                          backgroundColor:
-                            person.attendanceStatus === "Present"
-                              ? "#e5f7e9"
-                              : "#fde5e5",
-                          padding: "6px 12px",
-                          borderRadius: "4px",
-                        }}
+            {filteredData &&
+              filteredData.length > 0 &&
+              filteredData
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((company) => (
+                  <TableRow key={company.id}>
+                    <TableCell>
+                      <Link href={`/dashboard/company/${company.id}`} passHref>
+                        <Button color="primary">{company.name}</Button>
+                      </Link>
+                    </TableCell>
+                    <TableCell>{company.employee_count}</TableCell>
+                    <TableCell>
+                      {activeCompanies.some(
+                        (activeCompany) => activeCompany.id === company.id
+                      )
+                        ? "Active"
+                        : "Inactive"}
+                    </TableCell>
+                    <TableCell></TableCell>
+                    <TableCell>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => handleDeleteClick(company.id)}
                       >
-                        {" "}
-                        {person.attendanceStatus}
-                      </span>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ))}
+                        <DeleteOutline />
+                      </IconButton>
+                      <IconButton
+                        aria-label="edit"
+                        onClick={() => handleUpdateClick(company)}
+                      >
+                        <Edit />
+                      </IconButton>
+                      <IconButton
+                        aria-label="status"
+                        onClick={() => handleUpdateStatusClick(company.id)}
+                      >
+                        <UpdateSharp />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
           </TableBody>
         </Table>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={filteredData.length}
+          count={filteredData?.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -390,4 +156,6 @@ export default function AttendanceTableLayout() {
       </TableContainer>
     </Box>
   );
-}
+};
+
+export default AttendaceTable;
