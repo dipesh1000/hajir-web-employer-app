@@ -58,7 +58,7 @@ const Messaging = () => {
           />
         ) :  (
           isScreenExtraSmall ? null : (
-            <Image src={Mailsent} alt="Default" height={700} layout="responsive" style={{ marginTop: '-80px' }} />
+            <Image src={Mailsent} alt="Default"  layout="responsive" style={{ marginTop: '-80px' }} />
           ))
         }
       </div>

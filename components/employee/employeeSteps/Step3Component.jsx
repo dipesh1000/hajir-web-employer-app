@@ -1,7 +1,13 @@
 import React, { useState } from "react";
-import { Box, Checkbox, Grid, Typography } from "@mui/material";
+import { Box, Checkbox, Grid, Typography, Button } from "@mui/material";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
-const Step3Component = () => {
+const Step3Component = ({ formik }) => {
+  onSubmit: (values) => {
+    console.log(values);
+  };
+
   const days = [
     "Sunday",
     "Monday",
@@ -12,63 +18,89 @@ const Step3Component = () => {
     "Saturday",
   ];
 
-  const [selectedDays, setSelectedDays] = useState([]);
-  const [halfDaySelected, setHalfDaySelected] = useState({});
-
-  const handleDayClick = (day) => {
-    if (selectedDays.includes(day)) {
-      setSelectedDays(selectedDays.filter((selectedDay) => selectedDay !== day));
+  const handleDayClick = (index) => {
+    if (!formik.values.week_days_off.includes(index + 1)) {
+      formik.setValues({
+        ...formik.values,
+        week_days_off: [...formik.values.week_days_off, index + 1],
+      });
     } else {
-      setSelectedDays([...selectedDays, day]);
+      formik.setValues({
+        ...formik.values,
+        week_days_off: formik.values.week_days_off.filter(
+          (day) => day !== index + 1
+        ),
+      });
     }
   };
 
-  const handleHalfDayClick = (day) => {
-    setHalfDaySelected((prevSelections) => ({
-      ...prevSelections,
-      [day]: !prevSelections[day], 
-    }));
-
-    if (!halfDaySelected[day]) {
-      setSelectedDays((prevSelectedDays) => [...prevSelectedDays, day]);
+  const handleHalfDayClick = (index) => {
+    if (!formik.values.half_days.includes(index + 1)) {
+      formik.setValues({
+        ...formik.values,
+        half_days: [...formik.values.half_days, index + 1],
+      });
+    } else {
+      formik.setValues({
+        ...formik.values,
+        half_days: formik.values.half_days.filter((day) => day !== index + 1),
+      });
     }
   };
 
   return (
     <Grid container spacing={2}>
-      {days.map((day) => (
-        <Grid item xs={4} key={day}>
+      {days.map((day, index) => (
+        <Grid item  sm={4}  key={day}>
           <Box
             sx={{
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              width: "90%",
-              border: selectedDays.includes(day) ? "2px solid red" : "2px solid black",
+              border: "1px solid #F0F0F0",
               borderRadius: "4px",
-              padding: "8px",
+              padding: "6px",
+              width: "93%",
+            
               cursor: "pointer",
+              marginBottom: "8px",
             }}
-            onClick={() => handleDayClick(day)}
+            onClick={() => handleDayClick(index)}
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Checkbox
-                checked={selectedDays.includes(day)}
-                onChange={() => handleDayClick(day)}
+                checked={formik.values.week_days_off.includes(index + 1)}
+                onChange={() => handleDayClick(index)}
+              
                 sx={{
-                  color: selectedDays.includes(day) ? "red" : "black",
-                  borderRadius: "50%",
+                  color: formik.values.week_days_off.includes(index + 1)
+                    ? "red"
+                    : "black",
+                
                 }}
               />
-              <Typography variant="body2">{day}</Typography>
+              <Typography variant="body2"  sx={{
+                  color: formik.values.week_days_off.includes(index + 1)
+                    ? "red"
+                    : "black",
+                }}>{day}</Typography>
             </Box>
-            {selectedDays.includes(day) && (
-              <Box sx={{ display: "flex", alignItems: "center" }}>
+            {formik.values.week_days_off.includes(index + 1) && (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  borderLeft: "1px solid #E0E0E0",
+                 marginLeft:'4px'
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <Checkbox
-                  checked={halfDaySelected[day]}
-                  sx={{ color: "red" }}
-                  onChange={() => handleHalfDayClick(day)}
+                  checked={formik.values.half_days.includes(index + 1)}
+                  onChange={() => handleHalfDayClick(index)}
+                  // sx={{ color: "red" }}
                 />
                 <Typography variant="body2">Half Day?</Typography>
               </Box>
@@ -76,8 +108,8 @@ const Step3Component = () => {
           </Box>
         </Grid>
       ))}
+  
     </Grid>
   );
 };
-
 export default Step3Component;

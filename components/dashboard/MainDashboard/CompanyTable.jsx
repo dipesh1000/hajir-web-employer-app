@@ -24,7 +24,7 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
-import { DeleteOutline, Edit, UpdateSharp } from "@mui/icons-material";
+import { DeleteOutline, Edit, MoreVert, UpdateSharp } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import useImage from "../../../hooks/useImage";
@@ -181,8 +181,8 @@ const CompanyTable = ({ companies, statusFilter }) => {
               <TableCell>Company Name</TableCell>
               <TableCell>Employee Count</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>OQ Code</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>QR Code</TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -191,19 +191,30 @@ const CompanyTable = ({ companies, statusFilter }) => {
               filteredData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((company) => (
-                  <TableRow key={company.id}>
+                  <TableRow key={company.id} sx={{ borderBottom: '0.7px dotted #ccc'}}>
                     <TableCell>
                       <Link href={`/dashboard/company/${company.id}`} passHref>
                         <Button color="primary">{company.name}</Button>
                       </Link>
                     </TableCell>
                     <TableCell>{company.employee_count}</TableCell>
-                    <TableCell>
-                      {activeCompanies.some(
-                        (activeCompany) => activeCompany.id === company.id
-                      )
-                        ? "Active"
-                        : "Inactive"}
+                    <TableCell
+                        sx={{
+                      backgroundColor: company.status === "active" ? "#FF505033" : "#00800033",
+                      color: company.status === "active" ? "red" : "green",
+                      padding: "7px",
+                      borderRadius: "4px",
+                      marginTop:'20px',
+                      textAlign:'center',
+                      justifyContent:'center',
+                      marginRight:'10px',
+                                            height: "34px", 
+                      display: "flex", 
+                      alignItems: "center",
+                     
+                   
+                      }}>
+                    {company.status}
                     </TableCell>
                     <TableCell>
                       {useImage({
@@ -216,12 +227,12 @@ const CompanyTable = ({ companies, statusFilter }) => {
                       })}
                     </TableCell>
                     <TableCell>
-                      <IconButton
+                      {/* <IconButton
                         aria-label="delete"
                         onClick={() => handleDeleteClick(company.id)}
                       >
                         <DeleteOutline />
-                      </IconButton>
+                      </IconButton> */}
                       <IconButton
                         aria-label="edit"
                         onClick={() => handleUpdateClick(company)}
@@ -232,7 +243,7 @@ const CompanyTable = ({ companies, statusFilter }) => {
                         aria-label="status"
                         onClick={() => handleUpdateStatusClick(company.id)}
                       >
-                        <UpdateSharp />
+                      <MoreVert></MoreVert>
                       </IconButton>
                     </TableCell>
                   </TableRow>
