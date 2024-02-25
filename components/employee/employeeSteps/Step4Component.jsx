@@ -13,10 +13,9 @@ import {
 } from "@mui/material";
 import DatePick from "./DatePick"; // Import DatePick component
 import { useFormik } from "formik";
-
 const Step4Component = ({ formik }) => {
   const handleAccessNetworkChange = (event) => {
-    formik.setFieldValue("allowAccessNetwork", event.target.value);
+    formik.setFieldValue("allow_network_access", event.target.value);
   };
 
   const handleHoursChange = (increase) => {
@@ -53,17 +52,20 @@ const Step4Component = ({ formik }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={formik.values.overtimeChecked}
-                  onChange={(e) => formik.setFieldValue("overtimeChecked", e.target.checked)}
-                  name="overtimeChecked"
+                checked={formik.values.overtime_checked === 1}
+                onChange={(e) => formik.setFieldValue("overtime_checked", e.target.checked ? 1 : 0)}
+               
+                  // checked={formik.values.overtime_checked}
+                  // onChange={(e) => formik.setFieldValue("overtime_checked", e.target.checked)}
+                  name="overtime_checked"
                 />
               }
             />
             <TextField
               sx={{ width: "540px", ml: 2 }}
               label="eg : 2 ,4 ,5 , 6"
-              disabled={!formik.values.overtimeChecked}
-              {...formik.getFieldProps("overtimeRatio")}
+              disabled={!formik.values.overtime_ratio}
+              {...formik.getFieldProps("overtime_ratio")}
             />
           </Box>
 
@@ -76,9 +78,11 @@ const Step4Component = ({ formik }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formik.values.sickLeaveChecked}
-                      onChange={(e) => formik.setFieldValue("sickLeaveChecked", e.target.checked)}
-                      name="sickLeaveChecked"
+                      
+                      checked={formik.values.sick_leave_checked === 1}
+                      onChange={(e) => formik.setFieldValue("sick_leave_checked", e.target.checked ? 1 : 0)}
+                     
+                      name="sick_leave_checked"
                     />
                   }
                 />
@@ -86,8 +90,8 @@ const Step4Component = ({ formik }) => {
                   fullWidth
                   label="eg : 2 ,4 ,5 , 6"
                   sx={{ ml: 2 }}
-                  {...formik.getFieldProps("sickLeave")}
-                  disabled={!formik.values.sickLeaveChecked}
+                  {...formik.getFieldProps("sick_leave")}
+                  disabled={!formik.values.sick_leave_checked}
                 />
               </Box>
             </Box>
@@ -99,9 +103,11 @@ const Step4Component = ({ formik }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formik.values.casualLeaveChecked}
-                      onChange={(e) => formik.setFieldValue("casualLeaveChecked", e.target.checked)}
-                      name="casualLeaveChecked"
+                
+                      checked={formik.values.casual_leave_checked === 1}
+                      onChange={(e) => formik.setFieldValue("casual_leave_checked", e.target.checked ? 1 : 0)}
+                     
+                      name="casual_leave_checked"
                       style={{marginLeft:'50px', marginRight:'-25px'}}
                     />
                   }
@@ -110,8 +116,8 @@ const Step4Component = ({ formik }) => {
                   fullWidth
                   label="eg : 2 ,4 ,5 , 6"
                   sx={{ ml: 2 }}
-                  {...formik.getFieldProps("casualLeave")}
-                  disabled={!formik.values.casualLeaveChecked}
+                  {...formik.getFieldProps("casual_leave")}
+                  disabled={!formik.values.casual_leave_checked}
                 />
               </Box>
             </Box>
@@ -128,9 +134,11 @@ const Step4Component = ({ formik }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={formik.values.allowLateAttendanceChecked}
-                  onChange={(e) => formik.setFieldValue("allowLateAttendanceChecked", e.target.checked)}
-                  name="allowLateAttendanceChecked"
+              
+                  checked={formik.values.allow_late_attendance_checked === 1}
+                  onChange={(e) => formik.setFieldValue("allow_late_attendance_checked", e.target.checked ? 1 : 0)}
+                 
+                  name="allow_late_attendance_checked"
                   style={{marginLeft:'45px'}}
                 />
               }
@@ -140,7 +148,7 @@ const Step4Component = ({ formik }) => {
                 sx={{ height: "55px", marginRight:  -1.25, marginTop: 0.9}}
                 variant="outlined"
                 onClick={() => handleHoursChange(false)}
-                disabled={!formik.values.allowLateAttendanceChecked}
+                disabled={!formik.values.allow_late_attendance_checked}
               >
                 -
               </Button>
@@ -152,13 +160,13 @@ const Step4Component = ({ formik }) => {
                 name="working_hours"
                 inputProps={{ style: { textAlign: "center" } }}
                 {...formik.getFieldProps("working_hours")}
-                InputProps={{ disabled: !formik.values.allowLateAttendanceChecked }}
+                InputProps={{ disabled: !formik.values.allow_late_attendance_checked }}
               />
               <Button
                 variant="outlined"
                 sx={{ height: "55px", marginLeft: -1.3, marginTop:0.9 }}
                 onClick={() => handleHoursChange(true)}
-                disabled={!formik.values.allowLateAttendanceChecked}
+                disabled={!formik.values.allow_late_attendance_checked}
               >
                 +
               </Button>
@@ -171,11 +179,11 @@ const Step4Component = ({ formik }) => {
           <Box>
             <TextField
               label="eg ratio: 2, 4, 5, 6"
-              value={formik.values.overtimeRatio}
+              value={formik.values.overtime_ratio}
               onChange={formik.handleChange}
-              name="overtimeRatio"
+              name="overtime_ratio"
               sx={{ mt: -0.2, mb: 2, ml:7, width:'480px' }}
-              disabled={!formik.values.overtimeChecked}
+              disabled={!formik.values.overtime_checked}
             />
           </Box>
           <Typography variant="body1" style={{marginLeft:'55px'}}>
@@ -198,18 +206,18 @@ const Step4Component = ({ formik }) => {
               value="all"
               control={<Radio />}
               label="All"
-              checked={formik.values.allowAccessNetwork === "all"}
+              checked={formik.values.allow_network_access === "all"}
               onChange={formik.handleChange}
-              name="allowAccessNetwork"
+              name="allow_network_access"
             />
              <Divider style={{height:'55px', marginTop:'-11px'}}orientation="vertical" flexItem /> 
             <FormControlLabel
               value="QR code"
               control={<Radio />}
               label="QR code"
-              checked={formik.values.allowAccessNetwork === "QR code"}
+              checked={formik.values.allow_network_access === "QR code"}
               onChange={formik.handleChange}
-              name="allowAccessNetwork"
+              name="allow_network_access"
             />
           </Box>
         </Box>
@@ -219,3 +227,5 @@ const Step4Component = ({ formik }) => {
 };
 
 export default Step4Component;
+
+
