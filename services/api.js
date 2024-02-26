@@ -151,11 +151,11 @@ export const api = createApi({
       }),
     }),
 
-    // deletecompany
+    // deleteCandidate
     deleteCandidate: builder.query({
       query: ({ companyId, candidate_id }) => ({
         url: `/employer/candidate/destroy/${companyId}/${candidate_id}`,
-        method: "GET", // Change method to GET
+        method: "GET",
       }),
     }),
     //aproval list
@@ -234,7 +234,63 @@ export const api = createApi({
       }),
     }),
 
-    // ************** LEAVE ******************
+    // ************** LEAVE message ******************
+
+    // get company candidate leaves
+    getCompanyCandidateLeaves: builder.query({
+      query: (company_id) => ({
+        url: `/employer/candidateLeave/all/${company_id}`,
+      }),
+    }),
+
+    // get leave details
+
+    getLeaveDetails: builder.query({
+      query: ({ leave_id, company_id }) => ({
+        url: `/employer/candidateLeave/detail/${company_id}/${leave_id}`,
+      }),
+    }),
+
+    // leave types
+
+    getAllLeaveTypes: builder.query({
+      query: (company_id) => ({
+        url: `/employer/leave-type/all/${company_id}`,
+      }),
+    }),
+    // updateCandidiateLeave
+
+    updateCandidiateLeave: builder.mutation({
+      query: ({ leave_id, payStatus, status }) => ({
+        url: `employer/candidateLeave/change-status/${leave_id}`,
+        method: "POST",
+        body: { status, payStatus },
+      }),
+    }),
+
+    // performance report
+    getDailyCompanyCandidateReport: builder.query({
+      query: ({ company_id, candidate_id }) => ({
+        url: `/employer/report/daily-report/${company_id}/${candidate_id}`,
+      }),
+    }),
+    //missing attendance
+    updateMissingAttendance: builder.mutation({
+      query: ({ MissingAttendanceData }) => ({
+        url: `employer/candidate/missing-attendance-submit`,
+        method: "POST",
+        body: MissingAttendanceData,
+      }),
+    }),
+    // missing leave
+
+    updateMissingLeave: builder.mutation({
+      query: ({ MissingLeaveData }) => ({
+        url: `/employer/candidate/missing-leave-submit`,
+        method: "POST",
+        body: MissingLeaveData,
+      }),
+    }),
   }),
 });
 
@@ -268,4 +324,11 @@ export const {
   useGetAttendanceReportTodayQuery,
   useGetInactivecandidateTodayQuery,
   useGetActivecandidateTodayQuery,
+  useGetCompanyCandidateLeavesQuery,
+  useGetLeaveDetailsQuery,
+  useUpdateCandidiateLeaveMutation,
+  useGetDailyCompanyCandidateReportQuery,
+  useUpdateMissingAttendanceMutation,
+  useUpdateMissingLeaveMutation,
+  useGetAllLeaveTypesQuery,
 } = api;

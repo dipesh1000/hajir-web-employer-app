@@ -35,6 +35,8 @@ import {
 import { useParams } from "next/navigation";
 
 const EmployeeTable = ({ candidateData, statusFilter }) => {
+  const { companyId } = useParams();
+
   // const candidates =
   //   statusFilter === "active"
   //     ? candidateData?.data?.active_candidates
@@ -60,8 +62,8 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [inviteCandidate] = useInviteCandidateMutation();
   const deleteCandidate = useDeleteCandidateQuery();
+  console.log(deleteCandidate, "sss");
   const [selectedCandidateId, setSelectedCandidateId] = useState();
-  const { companyId } = useParams();
 
   const handleSearchTextChange = (event) => {
     const text = event.target.value.toLowerCase();
@@ -108,9 +110,15 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
   };
 
   const handleConfirmDelete = async () => {
+    console.log("it is clicked");
     try {
-      await deleteCandidate({ candidate_id: selectedCandidateId, companyId });
+      await deleteCandidate({
+        candidate_id: selectedCandidate.candidate_id,
+        company_id: companyId,
+      });
+
       console.log("Candidate deleted successfully");
+
       setIsConfirmationDialogOpen(false);
     } catch (error) {
       console.error("Error deleting candidate:", error);
@@ -232,9 +240,7 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
                       </IconButton>
                       <IconButton
                         aria-label="delete"
-                        onClick={() =>
-                          handleDeleteClick(candidate.candidate_id)
-                        }
+                        onClick={() => handleDeleteClick(candidate)}
                       >
                         <DeleteOutlineIcon />
                       </IconButton>

@@ -75,7 +75,7 @@ const CompanySidebar = () => {
       sublinks: [
         {
           text: "Messenger Inbox",
-          href: `/dashboard/company/${companyId}/messenging/`,
+          href: `/dashboard/company/${companyId}/messaginginbox/`,
 
           icon: BusinessIcon,
         },
@@ -87,8 +87,8 @@ const CompanySidebar = () => {
           icon: ChecklistIcon,
         },
         {
-          text: "Leave",
-          href: `/dashboard/company/${companyId}/leave/`,
+          text: "Missing Leave",
+          href: `/dashboard/company/${companyId}/missingleave/`,
 
           icon: ChecklistIcon,
         },

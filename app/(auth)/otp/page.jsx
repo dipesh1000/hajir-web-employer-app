@@ -63,9 +63,17 @@ const Otp = () => {
   );
   const [loading, setLoading] = useState(false);
   const isScreenSmall = useMediaQuery("(max-width:900px)");
-
   async function getData(values) {
-    const apiResponse = await postRequest(`/employer/verify-opt`, values);
+    const apiResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/employer/verify-opt`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }
+    );
     if (!apiResponse.ok) {
       throw new Error("Network response was not ok");
     }
@@ -88,7 +96,6 @@ const Otp = () => {
           setIsLoggedIn(true);
           setAuthUser({ user: data.data.user, token: data.data.token });
           router.push("/dashboard");
-          refetch();
         } else {
           console.error("OTP verification failed. Message:", data.message);
           alert("Wrong OTP. Please enter the correct OTP.");

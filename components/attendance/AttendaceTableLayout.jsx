@@ -1,5 +1,4 @@
-"use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -9,55 +8,70 @@ import {
   TableRow,
   Paper,
   Box,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
   TablePagination,
   TextField,
   FormControl,
   Select,
   InputLabel,
   MenuItem,
-  Typography,
 } from "@mui/material";
-import { DeleteOutline, Edit, UpdateSharp } from "@mui/icons-material";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useGetAttendanceReportTodayQuery } from "@/services/api";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 
-const AttendaceTable = ({ companies, statusFilter }) => {
+const AttendanceTable = () => {
   const { companyId } = useParams();
 
-  const router = useRouter();
-  const [filteredData, setFilteredData] = useState(companies);
-  const [selectedCompanyId, setSelectedCompanyId] = useState(null);
-
+  const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const {
-    data: getAttendaceReportToday,
-    isLoading: isLoading2,
-    refetch: refetch2,
-  } = useGetAttendanceReportTodayQuery(companyId);
-  // const activeCompanies = activeCompaniesData.data?.companies || [];
-  const [openQrCodeModal, setOpenQrCodeModal] = useState(false);
+
+  const { data: attendanceData, isLoading: isLoading2 } =
+    useGetAttendanceReportTodayQuery(companyId);
+
+  useEffect(() => {
+    if (
+      attendanceData &&
+      attendanceData.data &&
+      attendanceData.data.candidates
+    ) {
+      setFilteredData(attendanceData.data.candidates);
+    }
+  }, [attendanceData]);
 
   const handleSearchTextChange = (event) => {
     const text = event.target.value.toLowerCase();
     setSearchText(text);
-    filterData(text);
+    filterData(text, selectedDepartment);
   };
 
-  const filterData = (searchText) => {
-    const filtered = companies.filter((company) =>
-      company.name.toLowerCase().includes(searchText)
-    );
+  const handleDepartmentChange = (event) => {
+    const department = event.target.value;
+    setSelectedDepartment(department);
+    filterData(searchText, department);
+  };
+
+  const filterData = (searchText, department) => {
+    if (
+      !attendanceData ||
+      !attendanceData.data ||
+      !attendanceData.data.candidates
+    )
+      return;
+
+    let filtered = attendanceData.data.candidates;
+    if (searchText) {
+      filtered = filtered.filter((candidate) =>
+        candidate.name.toLowerCase().includes(searchText)
+      );
+    }
+    if (department) {
+      filtered = filtered.filter((candidate) =>
+        candidate.departments.some((dept) => dept.name === department)
+      );
+    }
     setFilteredData(filtered);
   };
 
@@ -82,8 +96,21 @@ const AttendaceTable = ({ companies, statusFilter }) => {
         />
         <FormControl variant="outlined" size="small" sx={{ ml: 2, width: 200 }}>
           <InputLabel>Department</InputLabel>
-          <Select label="Department" autoWidth={false}>
+          <Select
+            label="Department"
+            autoWidth={false}
+            value={selectedDepartment}
+            onChange={handleDepartmentChange}
+          >
             <MenuItem value="">All Departments</MenuItem>
+            {/* Add options dynamically based on backend response */}
+            {attendanceData &&
+              attendanceData.data &&
+              attendanceData.data.departments.map((dept) => (
+                <MenuItem key={dept.id} value={dept.name}>
+                  {dept.name}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
         <br />
@@ -92,62 +119,40 @@ const AttendaceTable = ({ companies, statusFilter }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Candidate Id</TableCell>
-              <TableCell>Employee Name</TableCell>
-              <TableCell>CLock In</TableCell>
-              <TableCell>ClOCK out </TableCell>
-              <TableCell>Attendace</TableCell>
+              <TableCell>Candidate ID</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Departments</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData &&
-              filteredData.length > 0 &&
-              filteredData
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((company) => (
-                  <TableRow key={company.id}>
-                    <TableCell>
-                      <Link href={`/dashboard/company/${company.id}`} passHref>
-                        <Button color="primary">{company.name}</Button>
-                      </Link>
-                    </TableCell>
-                    <TableCell>{company.employee_count}</TableCell>
-                    <TableCell>
-                      {activeCompanies.some(
-                        (activeCompany) => activeCompany.id === company.id
-                      )
-                        ? "Active"
-                        : "Inactive"}
-                    </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell>
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => handleDeleteClick(company.id)}
-                      >
-                        <DeleteOutline />
-                      </IconButton>
-                      <IconButton
-                        aria-label="edit"
-                        onClick={() => handleUpdateClick(company)}
-                      >
-                        <Edit />
-                      </IconButton>
-                      <IconButton
-                        aria-label="status"
-                        onClick={() => handleUpdateStatusClick(company.id)}
-                      >
-                        <UpdateSharp />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
+            {filteredData
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((candidate) => (
+                <TableRow key={candidate.id}>
+                  <TableCell>{candidate.candidate_id}</TableCell>
+                  <Link
+                    href={`/dashboard/company/${companyId}/attendance/${candidate.id}`}
+                  >
+                    <TableCell>{candidate.name}</TableCell>
+                  </Link>
+
+                  <TableCell>{candidate.phone}</TableCell>
+                  <TableCell>{candidate.status}</TableCell>
+                  <TableCell>
+                    {candidate.departments.map((department) => (
+                      <div key={department.id}>{department.name}</div>
+                    ))}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={filteredData?.length}
+          count={filteredData.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -158,4 +163,4 @@ const AttendaceTable = ({ companies, statusFilter }) => {
   );
 };
 
-export default AttendaceTable;
+export default AttendanceTable;

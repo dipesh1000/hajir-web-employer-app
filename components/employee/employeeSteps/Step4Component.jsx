@@ -1,84 +1,46 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Button,
   Checkbox,
+  Divider,
   FormControlLabel,
   Grid,
   Radio,
-  RadioGroup,
   TextField,
   Typography,
 } from "@mui/material";
-import DatePick from "./DatePick";
+import DatePick from "./DatePick"; // Import DatePick component
 import { useFormik } from "formik";
-import * as yup from "yup";
-const Step4Component = () => {
-  const [workingHours, setWorkingHours] = useState("08:00");
-  const [overtimeRatio, setOvertimeRatio] = useState(""); // Add this line
-  const [allowAccessNetwork, setAllowAccessNetwork] = useState("all"); // Add this line
+const Step4Component = ({ formik }) => {
   const handleAccessNetworkChange = (event) => {
-    setAllowAccessNetwork(event.target.value);
-  };
-  const handleOvertimeRatioChange = (event) => {
-    setOvertimeRatio(event.target.value);
+    formik.setFieldValue("allow_network_access", event.target.value);
   };
 
-  const handleWorkingHoursChange = (increase) => {
-    const [hours, minutes] = workingHours.split(":").map(Number);
-    const newMinutes = increase ? minutes + 30 : minutes - 30;
-    const newHours = newMinutes < 0 ? hours - 1 : hours + 1;
+  const handleHoursChange = (increase) => {
+    const [hours, minutes] = formik.values.working_hours.split(":").map(Number);
+    let totalMinutes = hours * 60 + minutes;
+    totalMinutes = increase ? totalMinutes + 10 : totalMinutes - 10;
+    totalMinutes = (totalMinutes + 1440) % 1440;
+    const newHours = Math.floor(totalMinutes / 60);
+    const newMinutes = totalMinutes % 60;
     const formattedHours = String(newHours).padStart(2, "0");
-
-    const formattedMinutes = String(
-      newMinutes < 0 ? 60 + newMinutes : newMinutes
-    ).padStart(2, "0");
-    setWorkingHours(`${formattedHours}:${formattedMinutes}`);
+    const formattedMinutes = String(newMinutes).padStart(2, "0");
+    formik.setFieldValue(
+      "working_hours",
+      `${formattedHours}:${formattedMinutes}`
+    );
   };
 
-  const formik = useFormik({
-    initialValues: {
-      overtimeChecked: 1, // Assuming it's always checked
-      sickLeaveChecked: 1, // Assuming it's always checked
-      casualLeaveChecked: 1,
-      workingHours,
-      allowLateAttendanceChecked: 1, // Assuming it's always checked
-      overTimeRatioChecked: 1, // Assuming it's always checked
-    },
-  });
-
-  const validationSchema = yup.object({
-    overtimeChecked: yup.number().required("Overtime Hours is required"),
-    sickLeaveChecked: yup.number().required("Sick Leave is required"),
-    casualLeaveChecked: yup.number().required("Casual Leave is required"),
-    workingHours: yup.string().required("Working Hours is required"),
-    allowLateAttendanceChecked: yup
-      .number()
-      .required("Allow Late Attendance is required"),
-    overTimeRatioChecked: yup.number().required("Over Time Ratio is required"),
-
-    // Define validation schema for Step 4
-  });
-
-  const handleSubmit = () => {
-    // Form submission logic here, use checkbox states when needed.
-    const formData = {
-      overtimeChecked: 1, // Assuming it's always checked
-      sickLeaveChecked: 1, // Assuming it's always checked
-      casualLeaveChecked: 1,
-      workingHours,
-      allowLateAttendanceChecked: 1, // Assuming it's always checked
-      overTimeRatioChecked: 1, // Assuming it's always checked
-    };
-
-    // Do something with formData, like submitting to a server or updating state.
-    console.log(formData);
+  const handleOvertimeRatioFieldChange = (increase) => {
+    const currentValue = parseFloat(formik.values.overtime_ratio);
+    const newValue = increase ? currentValue + 0.1 : currentValue - 0.1;
+    formik.setFieldValue("overtime_ratio", newValue.toFixed(1));
   };
 
   return (
     <Grid container spacing={2}>
-      {/* Left Column */}
       <Grid item xs={6}>
         <Box
           sx={{
@@ -93,41 +55,47 @@ const Step4Component = () => {
           </Typography>
           <DatePick style={{ marginLeft: "23px" }} />
 
-          {/* Overtime Checkbox Container */}
           <Typography sx={{ marginTop: 2 }} variant="body1">
             Overtime Hours <span sx={{ color: "red" }}>(Optional)</span>
           </Typography>
           <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
+            sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
           >
-            <FormControlLabel control={<Checkbox checked={true} />} />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formik.values.overtime_checked === 1}
+                  onChange={(e) =>
+                    formik.setFieldValue(
+                      "overtime_checked",
+                      e.target.checked ? 1 : 0
+                    )
+                  }
+                  // checked={formik.values.overtime_checked}
+                  // onChange={(e) => formik.setFieldValue("overtime_checked", e.target.checked)}
+                  name="overtime_checked"
+                />
+              }
+            />
             <TextField
               sx={{ width: "540px", ml: 2 }}
               label="eg : 2 ,4 ,5 , 6"
+              disabled={!formik.values.overtime_ratio}
+              {...formik.getFieldProps("overtime_ratio")}
             />
           </Box>
 
-          {/* Sick Leave and Casual Leave Container */}
           <Box
             sx={{
               display: "flex",
               flexDirection: "row",
               marginTop: 2,
-              width: "605px", // Full width
+              width: "605px",
             }}
           >
-            {/* Sick Leave Container */}
-            <Box
-              sx={{
-                width: "50%", // 50% width
-              }}
-            >
+            <Box sx={{ width: "50%" }}>
               <Typography variant="body1">
-                Sick Leave <span sx={{ color: "red" }}>*</span>
+                Sick Leave <span style={{ color: "red" }}>*</span>
               </Typography>
               <Box
                 sx={{
@@ -136,20 +104,32 @@ const Step4Component = () => {
                   alignItems: "center",
                 }}
               >
-                <FormControlLabel control={<Checkbox checked={true} />} />
-                <TextField fullWidth label="eg : 2 ,4 ,5 , 6" sx={{ ml: 2 }} />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formik.values.sick_leave_checked === 1}
+                      onChange={(e) =>
+                        formik.setFieldValue(
+                          "sick_leave_checked",
+                          e.target.checked ? 1 : 0
+                        )
+                      }
+                      name="sick_leave_checked"
+                    />
+                  }
+                />
+                <TextField
+                  fullWidth
+                  label="eg : 2 ,4 ,5 , 6"
+                  sx={{ ml: 2 }}
+                  {...formik.getFieldProps("sick_leave")}
+                  disabled={!formik.values.sick_leave_checked}
+                />
               </Box>
             </Box>
-
-            {/* Casual Leave Container */}
-            <Box
-              sx={{
-                width: "50%", // 50% width
-                ml: 2, // Left margin
-              }}
-            >
-              <Typography variant="body1">
-                Casual Leave <span sx={{ color: "red" }}>*</span>
+            <Box sx={{ width: "50%", ml: 2 }}>
+              <Typography variant="body1" style={{ marginLeft: "50px" }}>
+                Casual Leave <span style={{ color: "red" }}>*</span>
               </Typography>
               <Box
                 sx={{
@@ -158,26 +138,45 @@ const Step4Component = () => {
                   alignItems: "center",
                 }}
               >
-                <FormControlLabel control={<Checkbox checked={true} />} />
-                <TextField fullWidth label="eg : 2 ,4 ,5 , 6" sx={{ ml: 2 }} />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formik.values.casual_leave_checked === 1}
+                      onChange={(e) =>
+                        formik.setFieldValue(
+                          "casual_leave_checked",
+                          e.target.checked ? 1 : 0
+                        )
+                      }
+                      name="casual_leave_checked"
+                      style={{ marginLeft: "50px", marginRight: "-25px" }}
+                    />
+                  }
+                />
+                <TextField
+                  fullWidth
+                  label="eg : 2 ,4 ,5 , 6"
+                  sx={{ ml: 2 }}
+                  {...formik.getFieldProps("casual_leave")}
+                  disabled={!formik.values.casual_leave_checked}
+                />
               </Box>
             </Box>
           </Box>
         </Box>
       </Grid>
 
-      {/* Right Column */}
       <Grid item xs={6}>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "start",
-            mt: 1,
+            mt: -0.7,
           }}
         >
-          <Typography variant="body1">
-            Allow Late Attendance <span sx={{ color: "red" }}>*</span>
+          <Typography variant="body1" style={{ marginLeft: "55px" }}>
+            Allow Late Attendance <span style={{ color: "red" }}>*</span>
           </Typography>
           <Box
             sx={{
@@ -187,79 +186,105 @@ const Step4Component = () => {
               gap: "10px",
             }}
           >
-            <FormControlLabel control={<Checkbox checked={true} />} />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formik.values.allow_late_attendance_checked === 1}
+                  onChange={(e) =>
+                    formik.setFieldValue(
+                      "allow_late_attendance_checked",
+                      e.target.checked ? 1 : 0
+                    )
+                  }
+                  name="allow_late_attendance_checked"
+                  style={{ marginLeft: "45px" }}
+                />
+              }
+            />
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <Button
-                sx={{ marginRight: 2 }}
+                sx={{ height: "55px", marginRight: -1.25, marginTop: 0.9 }}
                 variant="outlined"
-                onClick={() => handleWorkingHoursChange(false)}
+                onClick={() => handleHoursChange(false)}
+                disabled={!formik.values.allow_late_attendance_checked}
               >
                 -
               </Button>
               <TextField
-                label="Allow late attendance"
+                label="Working Hours"
                 variant="outlined"
-                fullWidth
+                sx={{ width: "333px", textAlign: "center" }}
                 margin="normal"
-                value={workingHours}
-                disabled
+                name="working_hours"
+                inputProps={{ style: { textAlign: "center" } }}
+                {...formik.getFieldProps("working_hours")}
+                InputProps={{
+                  disabled: !formik.values.allow_late_attendance_checked,
+                }}
               />
               <Button
-                sx={{ marginLeft: 2 }}
                 variant="outlined"
-                onClick={() => handleWorkingHoursChange(true)}
+                sx={{ height: "55px", marginLeft: -1.3, marginTop: 0.9 }}
+                onClick={() => handleHoursChange(true)}
+                disabled={!formik.values.allow_late_attendance_checked}
               >
                 +
               </Button>
             </div>
           </Box>
-          <Typography variant="body1">
+
+          <Typography
+            variant="body1"
+            style={{ marginTop: "7px", marginLeft: "60px" }}
+          >
             Over Time Ratio <span style={{ color: "red" }}>*</span>
           </Typography>
           <Box>
             <TextField
               label="eg ratio: 2, 4, 5, 6"
-              value={overtimeRatio}
-              onChange={handleOvertimeRatioChange}
-              sx={{ mt: 2, mb: 2 }}
+              value={formik.values.overtime_ratio}
+              onChange={formik.handleChange}
+              name="overtime_ratio"
+              sx={{ mt: -0.2, mb: 2, ml: 7, width: "480px" }}
+              disabled={!formik.values.overtime_checked}
             />
           </Box>
-          <Typography variant="body1">
+          <Typography variant="body1" style={{ marginLeft: "55px" }}>
             Allow access Network <span style={{ color: "red" }}>*</span>
           </Typography>
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              width: "470px",
-              gap: "10px",
-              marginTop: 2,
+              border: "1px solid #ccc",
+              borderRadius: "5px",
+              padding: "10px",
+              width: "50%",
+              ml: 7,
+              height: "55px",
             }}
           >
-            <Box
-              sx={{
-                border: "1px solid #ccc", // Border style
-                borderRadius: "5px", // Border radius
-                padding: "10px", // Padding
-                width: "50%", // 48% width to accommodate the border width
-              }}
-            >
-              <FormControlLabel value="all" control={<Radio />} label="All" />
-            </Box>
-            <Box
-              sx={{
-                border: "1px solid #ccc", // Border style
-                borderRadius: "5px", // Border radius
-                padding: "10px", // Padding
-                width: "50%", // 48% width to accommodate the border width
-              }}
-            >
-              <FormControlLabel
-                value="orCode"
-                control={<Radio />}
-                label="OR Code"
-              />
-            </Box>
+            <FormControlLabel
+              value="all"
+              control={<Radio />}
+              label="All"
+              checked={formik.values.allow_network_access === "all"}
+              onChange={formik.handleChange}
+              name="allow_network_access"
+            />
+            <Divider
+              style={{ height: "55px", marginTop: "-11px" }}
+              orientation="vertical"
+              flexItem
+            />
+            <FormControlLabel
+              value="QR code"
+              control={<Radio />}
+              label="QR code"
+              checked={formik.values.allow_network_access === "QR code"}
+              onChange={formik.handleChange}
+              name="allow_network_access"
+            />
           </Box>
         </Box>
       </Grid>

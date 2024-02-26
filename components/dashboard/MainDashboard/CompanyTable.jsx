@@ -199,11 +199,20 @@ const CompanyTable = ({ companies, statusFilter }) => {
                     </TableCell>
                     <TableCell>{company.employee_count}</TableCell>
                     <TableCell>
-                      {activeCompanies.some(
-                        (activeCompany) => activeCompany.id === company.id
-                      )
-                        ? "Active"
-                        : "Inactive"}
+                      <span
+                        style={{
+                          background:
+                            company.status === "Active"
+                              ? "#00800033"
+                              : "#FF505033",
+                          color:
+                            company.status === "Inactive" ? "red " : "green",
+                          padding: "7px",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        {company.status}
+                      </span>
                     </TableCell>
                     <TableCell>
                       {useImage({
