@@ -92,20 +92,20 @@ const HorizontalLinearStepper = () => {
       salary: "Fixed", // required - enum ['Fixed', 'Breakdown']
       salary_amount: 2000.0, // required - double
       allowance_amount: 2000.0, // nullable - double
-      joining_date: "2023-02-11", // required - date
+      joining_date: "", // required - date
       working_hours: "8:00", // required
       duty_time: "08:00", // required - time
       probation_period: 1, // required - unsignedBigInt
       break_duration: "8:00", // required - min/hr to seconds - string
       departments: 1, // required - array - api:{{globalLiveUrl}}/employer/all-departments
-      allow_late_attendance: "30", // nullable -time
-      casual_leave: 0, //required - unsignedInteger
-      sick_leave: 0, //required - unsignedInteger
-      overtime_ratio: 2, // double(2.2)
-      overtime_hrs: 2, // float(2.2)
+      allow_late_attendance: "", // nullable -time
+      casual_leave: "", //required - unsignedInteger
+      sick_leave: "", //required - unsignedInteger
+      overtime_ratio: "", // double(2.2)
+      overtime_hrs: "", // float(2.2)
       week_days_off: [], // array
       half_days: [], // array
-      allow_network_access: "All Net", // required - enum['All Net', 'QR']
+      allow_network_access: "", // required - enum['All Net', 'QR']
       confirmPhoneNumber: "9845971897",
       allow_late_attendance_checked: 0,
       casual_leave_checked: 0,
