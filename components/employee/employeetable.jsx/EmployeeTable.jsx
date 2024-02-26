@@ -70,7 +70,6 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
   const [inviteCandidate] = useInviteCandidateMutation();
   const deleteCandidate = useDeleteCandidateQuery();
   // const [selectedCandidateId, setSelectedCandidateId] = useState();
-  const { companyId } = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedCandidateId, setSelectedCandidateId] = useState(null);
   const handleClickMenu = (event, candidate_id) => {

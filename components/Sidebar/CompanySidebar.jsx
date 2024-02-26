@@ -21,6 +21,8 @@ import Collapse from "@mui/material/Collapse";
 import { useParams } from "next/navigation";
 import { Button } from "@mui/material";
 import TestProfileCard from "../testprofile/TestProfileCard";
+import { getRequest } from "@/services/ApiRequestService";
+import { useRouter } from "next/navigation";
 
 const CompanySidebar = () => {
   const [openSettings, setOpenSettings] = useState(false);
@@ -32,7 +34,6 @@ const CompanySidebar = () => {
     if (logout) {
       localStorage.setItem("token", null);
       localStorage.setItem("user", null);
-
       return router.push("/login");
     }
   };
@@ -194,7 +195,7 @@ const CompanySidebar = () => {
       </List>
       <Divider />
       <List>
-        <LogoutButton />
+        <LogoutButton onClick={(e) => onLogoutClick(e)} />
       </List>
     </Drawer>
   );

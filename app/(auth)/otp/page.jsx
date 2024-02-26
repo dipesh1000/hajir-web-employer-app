@@ -10,9 +10,7 @@ import TextField from "@mui/material/TextField";
 import { useAuth } from "@/context/AuthContext";
 import { useFormik } from "formik";
 import { useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
 import { useMediaQuery } from "@mui/material";
-import { postRequest } from "@/services/ApiRequestService";
 const styles = {
   container: {
     flexGrow: 1,
@@ -50,10 +48,23 @@ const LogoContainer = styled("div")({
 });
 
 const Otp = () => {
+  const router = useRouter(); // Define the router object using the useRouter hook
+
+  useEffect(() => {
+    const token =
+      typeof window !== "undefined" &&
+      JSON.parse(localStorage.getItem("token"));
+    const user =
+      typeof window !== "undefined" && JSON.parse(localStorage.getItem("user"));
+
+    if (token && user) {
+      // Redirect to dashboard if user is already logged in
+      router.push("/dashboard");
+    }
+  }, [router]);
   const query = useSearchParams();
   const otpnumber = query.get("otp");
   const phone = query.get("phone");
-  const router = useRouter();
 
   const { authUser, setAuthUser, setIsLoggedIn } = useAuth();
   const [otp, setOtp] = useState(

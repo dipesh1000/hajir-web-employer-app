@@ -331,4 +331,5 @@ export const {
   useUpdateMissingAttendanceMutation,
   useUpdateMissingLeaveMutation,
   useGetAllLeaveTypesQuery,
+  useChangePhoneNumberMutation,
 } = api;

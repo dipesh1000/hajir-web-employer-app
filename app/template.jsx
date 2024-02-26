@@ -1,7 +1,7 @@
-'use client';
-import { useAuth } from '@/context/AuthContext';
-import { useRouter, useParams } from 'next/navigation';
-import React, { useEffect } from 'react';
+"use client";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter, useParams } from "next/navigation";
+import React, { useEffect } from "react";
 
 const Template = ({ children }) => {
   const router = useRouter();
@@ -9,31 +9,32 @@ const Template = ({ children }) => {
   const { setAuthUser, isLoggedIn, setIsLoggedIn } = useAuth();
 
   useEffect(() => {
-    // If user is already logged in, redirect away from login, otp, and default routes
-    if (isLoggedIn) {
-      if (router === '/login') {
-        router.push('/dashboard'); // or any other route you want to redirect to
-      }
-    }
-  }, [isLoggedIn, router]);
-
-  console.log(isLoggedIn, 'from isLogged in');
-
-  useEffect(() => {
     const token =
-      typeof window !== 'undefined' &&
-      JSON.parse(localStorage.getItem('token'));
+      typeof window !== "undefined" &&
+      JSON.parse(localStorage.getItem("token"));
     const user =
-      typeof window !== 'undefined' && JSON.parse(localStorage.getItem('user'));
+      typeof window !== "undefined" && JSON.parse(localStorage.getItem("user"));
 
-    if (token) {
+    if (token && user) {
       setIsLoggedIn(true);
       setAuthUser({ user: user, token });
+
+      // Redirect to the dashboard if user is already logged in and trying to access /, /otp, or /login
+      if (
+        router.pathname === "/" ||
+        router.pathname === "/otp" ||
+        router.pathname === "/login"
+      ) {
+        router.push("/dashboard");
+      }
     } else {
       setIsLoggedIn(false);
       setAuthUser(null);
+
       // Redirect to the login page if there is no token
-      router.replace('/login');
+      if (router.pathname !== "/login" && router.pathname !== "/otp") {
+        router.replace("/login");
+      }
     }
   }, [router, setAuthUser, setIsLoggedIn]);
 
@@ -41,10 +42,3 @@ const Template = ({ children }) => {
 };
 
 export default Template;
-
-// still needs to do !!
-
-// - if user already has token and otp then he should be push to dashboard
-//   and should not access /login , /otp , / default
-
-// - if he doesnt have token then he should pushed to /login

@@ -1,11 +1,26 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import { Box, Paper, Grid, Button } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { useMediaQuery } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 export default function BasicGrid() {
+  const router = useRouter(); // Define the router object using the useRouter hook
+
+  useEffect(() => {
+    const token =
+      typeof window !== "undefined" &&
+      JSON.parse(localStorage.getItem("token"));
+    const user =
+      typeof window !== "undefined" && JSON.parse(localStorage.getItem("user"));
+
+    if (token && user) {
+      // Redirect to dashboard if user is already logged in
+      router.push("/dashboard");
+    }
+  }, [router]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const images = [
@@ -78,10 +93,11 @@ export default function BasicGrid() {
             <Image
               src="/auth/login-image-default.png"
               alt="login image"
-              layout="responsive"
+              // layout="responsive"
               width={isMobile ? 300 : 900}
               height={900}
               style={{ display: "block", maxWidth: "100%", height: "auto" }}
+              priority
             />
           )}
         </Grid>
