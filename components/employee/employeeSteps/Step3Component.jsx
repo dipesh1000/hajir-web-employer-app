@@ -1,7 +1,12 @@
 import React, { useState } from "react";
-import { Box, Checkbox, Grid, Typography, Button } from "@mui/material";
+import { Box, Checkbox, Grid, Typography, Button, Button } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
+
+const Step3Component = ({ formik }) => {
+  onSubmit: (values) => {
+    console.log(values);
+  };
 
 const Step3Component = ({ formik }) => {
   onSubmit: (values) => {
@@ -51,19 +56,18 @@ const Step3Component = ({ formik }) => {
   return (
     <Grid container spacing={2}>
       {days.map((day, index) => (
-        <Grid item xs={4} key={day}>
+        <Grid item  sm={4}  key={day}>
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "space-between",
-              border: formik.values.week_days_off.includes(index + 1)
-                ? "2px solid red"
-                : "2px solid black",
+              border: "1px solid #F0F0F0",
               borderRadius: "4px",
-              padding: "8px",
-              width: "90%",
+              padding: "6px",
+              width: "93%",
+
               cursor: "pointer",
               marginBottom: "8px",
             }}
@@ -73,13 +77,19 @@ const Step3Component = ({ formik }) => {
               <Checkbox
                 checked={formik.values.week_days_off.includes(index + 1)}
                 onChange={() => handleDayClick(index)}
+
                 sx={{
                   color: formik.values.week_days_off.includes(index + 1)
                     ? "red"
                     : "black",
+
                 }}
               />
-              <Typography variant="body2">{day}</Typography>
+              <Typography variant="body2"  sx={{
+                  color: formik.values.week_days_off.includes(index + 1)
+                    ? "red"
+                    : "black",
+                }}>{day}</Typography>
             </Box>
             {formik.values.week_days_off.includes(index + 1) && (
               <Box
@@ -87,13 +97,15 @@ const Step3Component = ({ formik }) => {
                   display: "flex",
                   alignItems: "center",
                   cursor: "pointer",
+                  borderLeft: "1px solid #E0E0E0",
+                 marginLeft:'4px'
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
                 <Checkbox
                   checked={formik.values.half_days.includes(index + 1)}
                   onChange={() => handleHalfDayClick(index)}
-                  sx={{ color: "red" }}
+                  // sx={{ color: "red" }}
                 />
                 <Typography variant="body2">Half Day?</Typography>
               </Box>
@@ -101,13 +113,8 @@ const Step3Component = ({ formik }) => {
           </Box>
         </Grid>
       ))}
-      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-        <Button variant="contained" onClick={formik.handleSubmit}>
-          Log Selection
-        </Button>
-      </Grid>
+
     </Grid>
   );
 };
-
 export default Step3Component;

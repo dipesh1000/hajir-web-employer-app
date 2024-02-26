@@ -16,6 +16,13 @@ const HeaderEmployeeSteps = () => {
       <Box>
         <Typography variant="h5">Add New Employee</Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Typography
+            variant="subtitle1"
+            color="textSecondary"
+            sx={{ marginRight: "8px" }}
+          >
+            Home
+          </Typography>
           <Typography
             variant="subtitle1"
             color="textSecondary"

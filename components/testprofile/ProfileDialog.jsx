@@ -31,6 +31,7 @@ const ProfileDialog = ({ open, handleClose, profileData }) => {
       maritalStatus: profileData?.maritalStatus || "married",
       phone: profileData?.phone || "",
       uploadfile: profileData?.profile_image || null,
+      uploadfile: profileData?.profile_image || null,
     },
     onSubmit: async (values) => {
       console.log("View Form submitted:", values);

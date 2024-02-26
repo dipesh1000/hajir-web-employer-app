@@ -38,6 +38,21 @@ const Step4Component = ({ formik }) => {
     const newValue = increase ? currentValue + 0.1 : currentValue - 0.1;
     formik.setFieldValue("overtime_ratio", newValue.toFixed(1));
   };
+  // const handleDateSelect = (selectedDate) => {
+  //   formik.setFieldValue("joining_date", selectedDate);
+  // };
+  const handleDateSelect = (selectedDate) => {
+    // const parsedDate = new Date(selectedDate); // Parse the selectedDate string into a Date object
+    // const formattedDate = parsedDate.toLocaleDateString('en-GB'); // Convert the Date object to the desired format
+    // formik.setFieldValue("joining_date", formattedDate);
+
+    const parsedDate = new Date(selectedDate); // Parse the selectedDate string into a Date object
+    const year = parsedDate.getFullYear();
+    const month = String(parsedDate.getMonth() + 1).padStart(2, "0"); // Add leading zero if necessary
+    const day = String(parsedDate.getDate()).padStart(2, "0"); // Add leading zero if necessary
+    const formattedDate = `${year}-${month}-${day}`;
+    formik.setFieldValue("joining_date", formattedDate);
+  };
 
   return (
     <Grid container spacing={2}>
@@ -53,7 +68,10 @@ const Step4Component = ({ formik }) => {
           <Typography variant="body1">
             Joining Date <span sx={{ color: "red" }}> *</span>
           </Typography>
-          <DatePick style={{ marginLeft: "23px" }} />
+          <DatePick
+            style={{ marginLeft: "23px" }}
+            onSelect={handleDateSelect}
+          />
 
           <Typography sx={{ marginTop: 2 }} variant="body1">
             Overtime Hours <span sx={{ color: "red" }}>(Optional)</span>
@@ -61,27 +79,22 @@ const Step4Component = ({ formik }) => {
           <Box
             sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
           >
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={formik.values.overtime_checked === 1}
-                  onChange={(e) =>
-                    formik.setFieldValue(
-                      "overtime_checked",
-                      e.target.checked ? 1 : 0
-                    )
-                  }
-                  // checked={formik.values.overtime_checked}
-                  // onChange={(e) => formik.setFieldValue("overtime_checked", e.target.checked)}
-                  name="overtime_checked"
-                />
-              }
+            <Checkbox
+              checked={formik.values.overtime_checked === 1}
+              onChange={(e) => {
+                formik.setFieldValue(
+                  "overtime_checked",
+                  e.target.checked ? 1 : 0
+                );
+                formik.setFieldValue("overtime_hrs", "");
+              }}
+              name="overtime_checked"
             />
             <TextField
               sx={{ width: "540px", ml: 2 }}
               label="eg : 2 ,4 ,5 , 6"
-              disabled={!formik.values.overtime_ratio}
-              {...formik.getFieldProps("overtime_ratio")}
+              disabled={!formik.values.overtime_checked}
+              {...formik.getFieldProps("overtime_hrs")}
             />
           </Box>
 

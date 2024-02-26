@@ -13,8 +13,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useMediaQuery } from "@mui/material";
 import { postRequest } from "@/services/ApiRequestService";
-
-// Styles for components
 const styles = {
   container: {
     flexGrow: 1,
@@ -109,13 +107,11 @@ const Otp = () => {
     },
     enableReinitialize: true,
   });
-
   if (otpnumber === "" || otpnumber === null) {
     console.error(
       "OTP is missing or empty. Please request a new OTP and verify."
     );
   }
-
   const handleInputChange = (index, value) => {
     const newOtp = [...otp];
     newOtp[index] = value;
@@ -125,13 +121,11 @@ const Otp = () => {
       if (nextIndex < newOtp.length) {
         document.getElementById(`otp-input-${nextIndex}`).focus();
       } else {
-        // Move the cursor to the right side of the input box
         const inputBox = document.getElementById(`otp-input-${index}`);
         const inputLength = inputBox.value.length;
         inputBox.setSelectionRange(inputLength, inputLength);
       }
     } else {
-      // Move to the left side of the previous input box if deleted
       const prevIndex = index - 1;
       if (prevIndex >= 0) {
         document.getElementById(`otp-input-${prevIndex}`).focus();
@@ -241,7 +235,7 @@ const Otp = () => {
                       value={digit}
                       onChange={(e) => handleInputChange(index, e.target.value)}
                       variant="outlined"
-                      size="large"
+                      size="small"
                       sx={{
                         width: "50px", // Adjust the width as needed
                         height: "40px", // Adjust the height as needed

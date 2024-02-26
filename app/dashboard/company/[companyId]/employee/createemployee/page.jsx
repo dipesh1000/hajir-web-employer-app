@@ -52,14 +52,14 @@ const validationSchemaStep3 = Yup.object({
 });
 
 const validationSchemaStep4 = Yup.object({
-  overtimeChecked: Yup.number().required("Overtime Hours is required"),
-  sickLeaveChecked: Yup.number().required("Sick Leave is required"),
-  casualLeaveChecked: Yup.number().required("Casual Leave is required"),
-  workingHours: Yup.string().required("Working Hours is required"),
-  allowLateAttendanceChecked: Yup.number().required(
+  overtime_checked: Yup.number().required("Overtime Hours is required"),
+  sick_leave_checked: Yup.number().required("Sick Leave is required"),
+  casual_leave_checked: Yup.number().required("Casual Leave is required"),
+  working_hours: Yup.string().required("Working Hours is required"),
+  allow_late_attendance_checked: Yup.number().required(
     "Allow Late Attendance is required"
   ),
-  overTimeRatioChecked: Yup.number().required("Over Time Ratio is required"),
+  overtime_ratio: Yup.number().required("Over Time Ratio is required"),
 });
 
 const HorizontalLinearStepper = () => {
@@ -89,22 +89,25 @@ const HorizontalLinearStepper = () => {
       salary: "Fixed", // required - enum ['Fixed', 'Breakdown']
       salary_amount: 2000.0, // required - double
       allowance_amount: 2000.0, // nullable - double
-      joining_date: "2023-02-11", // required - date
+      joining_date: "", // required - date
       working_hours: "8:00", // required
       duty_time: "08:00", // required - time
       probation_period: 1, // required - unsignedBigInt
-      break_duration: "300", // required - min/hr to seconds - string
+      break_duration: "8:00", // required - min/hr to seconds - string
       departments: 1, // required - array - api:{{globalLiveUrl}}/employer/all-departments
-      allow_late_attendance: "30", // nullable -time
-      casual_leave: 0, //required - unsignedInteger
-      sick_leave: 0, //required - unsignedInteger
-      overtime_ratio: 2.2, // double(2.2)
-      overtime_hrs: 2, // float(2.2)
+      allow_late_attendance: "", // nullable -time
+      casual_leave: "", //required - unsignedInteger
+      sick_leave: "", //required - unsignedInteger
+      overtime_ratio: "", // double(2.2)
+      overtime_hrs: "", // float(2.2)
       week_days_off: [], // array
       half_days: [], // array
-
-      allow_network_access: "All Net", // required - enum['All Net', 'QR']
+      allow_network_access: "", // required - enum['All Net', 'QR']
       confirmPhoneNumber: "9845971897",
+      allow_late_attendance_checked: 0,
+      casual_leave_checked: 0,
+      overtime_checked: 0,
+      sick_leave_checked: 0,
     },
     validationSchema: validationSchemas[activeStep],
     onSubmit: async (values, { resetForm }) => {
@@ -172,7 +175,9 @@ const HorizontalLinearStepper = () => {
       >
         {steps.map((label, index) => (
           <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+            <StepLabel sx={{ display: "flex", flexDirection: "column" }}>
+              {label}
+            </StepLabel>
           </Step>
         ))}
       </Stepper>

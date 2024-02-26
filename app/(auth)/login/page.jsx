@@ -1,26 +1,38 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import Image from "next/image";
-import Button from "@mui/material/Button";
-import * as yup from "yup";
-import { TextField, useMediaQuery } from "@mui/material";
-import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
-import ScrollDialog from "@/components/Auth/ScrollDialog";
-import { postRequest } from "@/services/ApiRequestService";
+'use client';
+import React, { useState, useEffect} from 'react';
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import Image from 'next/image';
+import Button from '@mui/material/Button';
+import * as yup from 'yup';
+import { TextField, useMediaQuery } from '@mui/material';
+import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
+import ScrollDialog from '@/components/Auth/ScrollDialog';
+import { postRequest } from '@/services/ApiRequestService';
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css';
 
-// Styled components
 const BasicGridStyles = {
-  image: {
-    display: "block",
-    maxWidth: "100%",
-  },
-};
 
+container: {
+  flexGrow: 1,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  height: "100vh", 
+  objectFit: "cover",
+  overflow: "hidden",
+ 
+},
+image: {
+  display: "block",
+  maxWidth: "100%",
+  height: "auto", 
+},
+};
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -36,12 +48,9 @@ const Item = styled(Paper)(({ theme }) => ({
   elevation: 0,
   background: "transparent",
 }));
-
 const LogoContainer = styled("div")({
   marginBottom: "16px",
 });
-
-// Validation schema
 const validationSchema = yup.object({
   phone: yup
     .string()
@@ -52,32 +61,43 @@ const validationSchema = yup.object({
     ),
 });
 
-// Main component
 export default function Signin() {
   const images = [
     {
-      src: "/auth/otp1111.png",
+      src: '/auth/otp1111.png',
       width: 175,
       height: 190,
-      alt: "First Image",
-      paragraph:
-        "Login with employer will help you to track your <br/> all the staff activities from your smart devices.",
+      alt: 'First Image',
+      content: (
+        <>
+          <p>Login with employer will help you to track your</p>
+          <p>all the staff activities from your smart devices.</p>
+        </>
+      ),
     },
     {
-      src: "/auth/otp2222.png",
+      src: '/auth/otp2222.png',
       width: 175,
       height: 190,
-      alt: "Second Image",
-      paragraph:
-        "You can manage your employee attendance, <br/> salary, overtime and payroll anywhere in the world.",
+      alt: 'Second Image',
+      content: (
+        <>
+          <p>You can manage your employee attendance, salary,</p>
+          <p>overtime and payroll anywhere in the world.</p>
+        </>
+      ),
     },
     {
-      src: "/auth/otp3333.png",
+      src: '/auth/otp3333.png',
       width: 175,
       height: 190,
-      alt: "Third Image",
-      paragraph:
-        "Live attendance, quick reports, allowance & overtime <br/> expense calculation and export reports in csv/excel/pdf.",
+      alt: 'Third Image',
+      content: (
+        <>
+          <p>Live attendance, quick reports, allowance & overtime</p>
+          <p>expense calculation and export reports in csv/excel/pdf.</p>
+        </>
+      ),
     },
   ];
   // commment
@@ -107,7 +127,7 @@ export default function Signin() {
 
   const formik = useFormik({
     initialValues: {
-      phone: "9808426215",
+      phone: '',
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -139,24 +159,25 @@ export default function Signin() {
 
   return (
     <Box
-      sx={{
-        flexGrow: 1,
-      }}
+      sx={
+    BasicGridStyles.container
+      }
     >
-      <Grid container>
+ 
+        <Grid container spacing={3} justifyContent="center" alignItems="center">
         <Grid item xs={12} md={6}>
-          {/* Apply styles to the image */}
-          <Image
-            src="/auth/login.png"
-            width={950}
-            height={925}
-            alt="Logo"
-            style={{
-              ...BasicGridStyles.image,
-              display: useMediaQuery("(max-width:900px)") ? "none" : "block",
-            }}
-          />
-        </Grid>
+         
+        
+  {!isScreenSmall && ( 
+          <Image    src="/auth/login.png"
+              alt="login image"
+              layout="responsive" // Making the image responsive
+              width={isScreenSmall ? 300 : 900} // Adjusted width based on screen size
+              height={900}
+              style={BasicGridStyles.image}  />
+      
+  )}
+              </Grid>
         <Grid item xs={12} md={6}>
           <Item>
             <LogoContainer>
@@ -164,11 +185,10 @@ export default function Signin() {
             </LogoContainer>
 
             <h2>Authentication</h2>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: images[selectedImageIndex].paragraph,
-              }}
-            />
+          
+               <div style={{ marginBottom: '10px' }}>
+              {images[selectedImageIndex].content}
+            </div>
 
             <Image
               src={images[selectedImageIndex].src}
@@ -188,8 +208,9 @@ export default function Signin() {
               noValidate
               autoComplete="off"
               onSubmit={formik.handleSubmit}
+              style={{ width: '250px' }}
             >
-              <TextField
+ <TextField
                 fullWidth
                 id="phone"
                 label="Phone Number"
@@ -200,15 +221,15 @@ export default function Signin() {
                 value={formik.values.phone}
                 error={formik.touched.phone && Boolean(formik.errors.phone)}
                 helperText={formik.touched.phone && formik.errors.phone}
-                style={{ marginTop: "20px" }}
-              />
-
+                style={{"marginTop":"20px", width:'300px', marginLeft:'56px'}}     
+   />
               <Button
                 variant="contained"
                 type="submit"
                 disabled={buttonClicked}
+                style={{width:'300px', marginLeft:'60px'}}
               >
-                Login
+                Get OTP
               </Button>
             </Box>
 

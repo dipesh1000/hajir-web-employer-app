@@ -10,7 +10,10 @@ import {
   Select,
   MenuItem,
   Avatar,
+  IconButton,
+  Typography,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { useFormik } from "formik";
 import {
   useChangePhoneNumberMutation,
@@ -20,13 +23,15 @@ import {
 import LoopIcon from "@mui/icons-material/Loop";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import Image from "next/image";
 
 const EditProfileDialog = ({ open, handleClose, profileData }) => {
   const [updateProfile] = useUpdateProfileMutation();
-  const [getOtpChangeNumber] = useGetOtpChangeNumberMutation();
-  const [changePhoneMode, setChangePhoneMode] = useState(false);
-  const [otpValue, setOtpValue] = useState(null);
-
+  const changePhoneNumber = useChangePhoneNumberMutation();
+  const [changePhoneMode, setChangePhoneMode] = React.useState(false);
+  const handleCloseDialog = () => {
+    handleClose();
+  };
   const formikEdit = useFormik({
     initialValues: {
       name: profileData?.name || "",
@@ -35,8 +40,6 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
       dob: profileData?.dob || "",
       marital_status: profileData?.marital_status || "Married",
       uploadfile: profileData?.profile_image || null,
-      phone: profileData?.phone || null,
-      new_phone: "", // Add new_phone field
     },
     onSubmit: async (values) => {
       try {
@@ -81,6 +84,19 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md">
       <DialogTitle sx={{ textAlign: "center" }}>Edit Profile</DialogTitle>
+      <IconButton
+        aria-label="close"
+        onClick={handleCloseDialog}
+        sx={{
+          position: "absolute",
+          right: 8,
+          top: 8,
+          color: (theme) => theme.palette.grey[500],
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
+
       <DialogContent>
         <form onSubmit={formikEdit.handleSubmit} encType="multipart/form-data">
           <input
@@ -101,7 +117,7 @@ const EditProfileDialog = ({ open, handleClose, profileData }) => {
               sx={{
                 width: 100,
                 height: 100,
-                marginLeft: "400px",
+                marginLeft: "380px",
                 cursor: "pointer",
               }}
               alt="Profile Avatar"

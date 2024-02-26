@@ -4,6 +4,9 @@ import React from "react";
 import TextField from "@mui/material/TextField";
 import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 import { Box } from "@mui/system";
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'; // Import the icon you want to use
+
+
 
 const Step1Component = ({ formik, validationErrors }) => {
   const isFormIncomplete =
@@ -31,7 +34,7 @@ const Step1Component = ({ formik, validationErrors }) => {
           <TextField
             label="Staff Code"
             variant="outlined"
-            sx={{ width: "700px" }}
+            sx={{ width: "500px" }}
             margin="normal"
             name="code"
             {...formik.getFieldProps("code")}
@@ -55,16 +58,21 @@ const Step1Component = ({ formik, validationErrors }) => {
           />
 
           {/* Name Holder */}
+          <div>
+            Candidate details <span style={{ color: "red" }}> *</span>
+          </div>
           <div style={{ display: "flex", alignItems: "baseline" }}>
-            <FormControl>
+            <FormControl sx={{width:'100px', marginTop:'15px'}}>
               <InputLabel htmlFor="demo-simple-select-label">
-                Name Holder <span style={{ color: "red" }}> *</span>
+                {/* Name Holder <span style={{ color: "red" }}> *</span> */}
               </InputLabel>
               <Select
                 value={formik.values.name_holder}
-                label="Name Holder"
+                // label="Name Holder"
                 onChange={formik.handleChange}
                 name="name_holder"
+                IconComponent={ArrowDropDownIcon} // Use ArrowDropDownIcon as the icon component
+                sx={{ '& .MuiSvgIcon-root': { color: 'darkblue' } }}
               >
                 <MenuItem value="Mr">Mr</MenuItem>
                 <MenuItem value="Mrs">Mrs</MenuItem>
@@ -75,7 +83,7 @@ const Step1Component = ({ formik, validationErrors }) => {
             <TextField
               label="Full Name"
               variant="outlined"
-              sx={{ marginLeft: 3, width: "610px", marginTop: 0.1 }}
+              sx={{ marginLeft: 3, width: "380px", marginTop: 0.1 }}
               margin="normal"
               name="name"
               {...formik.getFieldProps("name")}
@@ -101,9 +109,9 @@ const Step1Component = ({ formik, validationErrors }) => {
 
           {/* Phone Number */}
           <TextField
-            label="Phone Number"
+          
             variant="outlined"
-            sx={{ width: "700px", marginTop: 0.1 }}
+            sx={{ width: "505px", marginTop: 0.9 }}
             margin="normal"
             name="contact"
             {...formik.getFieldProps("contact")}
@@ -186,7 +194,7 @@ const Step1Component = ({ formik, validationErrors }) => {
           <TextField
             label="Confirm Phone Number"
             variant="outlined"
-            sx={{ width: "700px", marginTop: 8.4 }}
+            sx={{ width: "505px", marginTop: 10.4, marginLeft:'-60px' }}
             margin="normal"
             name="confirmPhoneNumber"
             {...formik.getFieldProps("confirmPhoneNumber")}
@@ -226,6 +234,8 @@ const Step1Component = ({ formik, validationErrors }) => {
               label="Departments"
               onChange={formik.handleChange}
               name="departments"
+              IconComponent={ArrowDropDownIcon} // Use ArrowDropDownIcon as the icon component
+              sx={{ '& .MuiSvgIcon-root': { color: 'darkblue' } }}
             >
               <MenuItem value="1">IT departments</MenuItem>
               <MenuItem value="2">Finance departments</MenuItem>

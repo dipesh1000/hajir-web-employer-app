@@ -1,5 +1,5 @@
-"use client";
 
+"use client"
 import React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
@@ -8,18 +8,14 @@ import SearchIcon from "@mui/icons-material/Search";
 const SearchContainer = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: theme.palette.common.white, // Set to white
-  border: "1px solid black", // Add black border
+  backgroundColor: theme.palette.common.white,
+  border: "1px solid black",
   "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.85), // Lighten the background on hover
+    backgroundColor: alpha(theme.palette.common.white, 0.85),
   },
   marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
+  marginLeft: "4px",
+  width: "250px",
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
@@ -30,32 +26,28 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  color: "black", // Set the color of the search icon to black
+  color: "black",
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "black", // Set the text color to black
+  color: "black",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    // transition: theme.transitions.create("width"),
     width: "100%",
-    // [theme.breakpoints.up("md")]: {
-    //   width: "20ch",
-    // },
   },
 }));
 
-const Search = () => (
+const Searchh = () => (
   <SearchContainer>
     <SearchIconWrapper>
-      <SearchIcon style={{color:'#0000A0'}}/>
+      <SearchIcon style={{ color: "#0000A0" }} />
     </SearchIconWrapper>
     <StyledInputBase
-      placeholder="Search…"
+      placeholder="Employee Name…"
       inputProps={{ "aria-label": "search" }}
     />
   </SearchContainer>
 );
 
-export default Search;
+export default Searchh;

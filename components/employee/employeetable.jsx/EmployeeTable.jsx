@@ -20,10 +20,13 @@ import {
   TextField,
   FormControl,
   Select,
+  Menu,
   MenuItem,
   InputLabel,
   Avatar, // Added TablePagination import
 } from "@mui/material";
+import ShareIcon from "@mui/icons-material/Share";
+
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
@@ -33,8 +36,12 @@ import {
   useInviteCandidateMutation,
 } from "@/services/api";
 import { useParams } from "next/navigation";
-
+import { useRouter } from "next/navigation";
+import { Edit, MoreVert } from "@mui/icons-material";
+import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
 const EmployeeTable = ({ candidateData, statusFilter }) => {
+  const router = useRouter();
+
   const { companyId } = useParams();
 
   // const candidates =
@@ -62,8 +69,36 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [inviteCandidate] = useInviteCandidateMutation();
   const deleteCandidate = useDeleteCandidateQuery();
-  console.log(deleteCandidate, "sss");
-  const [selectedCandidateId, setSelectedCandidateId] = useState();
+  // const [selectedCandidateId, setSelectedCandidateId] = useState();
+  const { companyId } = useParams();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedCandidateId, setSelectedCandidateId] = useState(null);
+  const handleClickMenu = (event, candidate_id) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedCandidateId(candidate_id);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleMenuItemClick = (action) => {
+    handleCloseMenu();
+
+    switch (action) {
+      case "edit":
+        setIsUpdateDialogOpen(true);
+        break;
+      case "inactive":
+        setIsStatusChangeDialogOpen(true);
+        break;
+      case "invitation":
+        openInviteDialog(selectedCandidate);
+        break;
+      default:
+        break;
+    }
+  };
 
   const handleSearchTextChange = (event) => {
     const text = event.target.value.toLowerCase();
@@ -142,9 +177,7 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
     setIsConfirmationDialogOpen(true);
   };
 
-  const handleUpdate = () => {
-    // Implement update functionality here
-  };
+  const handleUpdate = () => {};
 
   const handleStatusChange = () => {
     // Implement status change functionality here
@@ -163,18 +196,8 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
 
         <FormControl variant="outlined" size="small" sx={{ ml: 2, width: 200 }}>
           <InputLabel>Department</InputLabel>
-          <Select
-            // value={selectedDepartment}
-            // onChange={handleDepartmentChange}
-            label="Department"
-            autoWidth={false}
-          >
+          <Select label="Department" autoWidth={false}>
             <MenuItem value="">All Departments</MenuItem>
-            {/* {departments.map((dept) => (
-              <MenuItem key={dept} value={dept}>
-                {dept}
-              </MenuItem>
-            ))} */}
           </Select>
         </FormControl>
         <br />
@@ -187,13 +210,13 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
               <TableCell>Employee ID</TableCell>
               <TableCell>Employee photo</TableCell>
               <TableCell>Employee Name</TableCell>
-              <TableCell>Designation</TableCell>
-              <TableCell>Phone</TableCell>
+              <TableCell>Department</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>Code</TableCell>
-              <TableCell>Marriage Status</TableCell>
-              <TableCell>Actions</TableCell>
-              <TableCell>Candidate ID</TableCell>
+              <TableCell>Phone</TableCell>
+
+              <TableCell>Staff ID</TableCell>
+
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -202,7 +225,10 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
               filteredData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((candidate) => (
-                  <TableRow key={candidate.id}>
+                  <TableRow
+                    key={candidate.id}
+                    sx={{ borderBottom: "0.7px dotted #ccc" }}
+                  >
                     <TableCell>{candidate.id}</TableCell>
                     <TableCell>
                       <label htmlFor="photo">
@@ -220,36 +246,134 @@ const EmployeeTable = ({ candidateData, statusFilter }) => {
 
                     <TableCell>{candidate.name}</TableCell>
                     <TableCell>{candidate.designation}</TableCell>
+                    <TableCell
+                      sx={{
+                        backgroundColor:
+                          candidate.status === "inactive"
+                            ? "#FF505033"
+                            : "#00800033",
+                        color:
+                          candidate.status === "inactive" ? "red" : "green",
+                        padding: "7px",
+                        borderRadius: "4px",
+                        marginTop: "20px",
+                        textAlign: "center",
+                        justifyContent: "center",
+                        marginRight: "10px",
+                        height: "34px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {candidate.status}
+                    </TableCell>
                     <TableCell>{candidate.phone}</TableCell>
-                    <TableCell>{candidate.status}</TableCell>
                     <TableCell>{candidate.code}</TableCell>
-                    <TableCell>{candidate.marriage_status}</TableCell>
-                    <TableCell>{candidate.candidate_id}</TableCell>
                     <TableCell>
-                      <IconButton
-                        aria-label="invite"
-                        onClick={() => openInviteDialog(candidate)}
-                      >
-                        <InsertInvitationIcon />
-                      </IconButton>
                       <IconButton
                         aria-label="update"
                         onClick={() => setIsUpdateDialogOpen(true)}
                       >
-                        <EditIcon />
+                        <Edit />
                       </IconButton>
                       <IconButton
-                        aria-label="delete"
-                        onClick={() => handleDeleteClick(candidate)}
+                        aria-label="menu"
+                        onClick={(event) =>
+                          handleClickMenu(event, candidate.id)
+                        }
                       >
-                        <DeleteOutlineIcon />
+                        <MoreVert />
                       </IconButton>
-                      <IconButton
-                        aria-label="status change"
-                        onClick={() => setIsStatusChangeDialogOpen(true)}
+                      <Menu
+                        id="candidate-menu"
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleCloseMenu}
+                        PaperProps={{
+                          style: {
+                            height: "114px",
+                            width: "115px",
+                            elevation: 0,
+                            padding: "0px",
+                            marginLeft: "-105px",
+                            marginTop: "-70px",
+                            boxShadow: "none",
+                            border: "0.3px solid #eee",
+                          },
+                        }}
                       >
-                        <StatusChangeIcon />
-                      </IconButton>
+                        {/* <MenuItem onClick={() => handleMenuItemClick("edit")} dense > <Edit /> <span style={{marginLeft:'6px'}}>Edit</span></MenuItem>
+    <MenuItem onClick={() => handleMenuItemClick("inactive")} dense><DoNotDisturbAltIcon/><span style={{color:'black',marginLeft:'6px'}}>Inactive</span></MenuItem>
+    <MenuItem onClick={() => handleMenuItemClick("invitation")} dense><ShareIcon /><span style={{marginLeft:'6px'}}>invitation</span></MenuItem>
+   */}
+                        <MenuItem
+                          onClick={() => handleMenuItemClick("edit")}
+                          dense
+                        >
+                          <Edit />
+                          <span style={{ marginLeft: "6px" }}>Edit</span>
+                        </MenuItem>
+
+                        {selectedCandidate &&
+                        selectedCandidate.status === "active" ? (
+                          <>
+                            <MenuItem
+                              onClick={() => handleMenuItemClick("inactive")}
+                              dense
+                            >
+                              <DoNotDisturbAltIcon />
+                              <span
+                                style={{ color: "black", marginLeft: "6px" }}
+                              >
+                                Inactive
+                              </span>
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => handleMenuItemClick("invitation")}
+                              dense
+                            >
+                              <ShareIcon />
+                              <span style={{ marginLeft: "6px" }}>
+                                Invitation
+                              </span>
+                            </MenuItem>
+                          </>
+                        ) : (
+                          selectedCandidate && (
+                            <>
+                              <MenuItem
+                                onClick={() => handleMenuItemClick("active")}
+                                dense
+                              >
+                                <StatusChangeIcon />
+                                <span style={{ marginLeft: "6px" }}>
+                                  Activate
+                                </span>
+                              </MenuItem>
+                              <MenuItem
+                                onClick={() => handleMenuItemClick("delete")}
+                                dense
+                              >
+                                <DeleteOutlineIcon />
+                                <span style={{ marginLeft: "6px" }}>
+                                  Delete
+                                </span>
+                              </MenuItem>
+                              <MenuItem
+                                onClick={() =>
+                                  handleMenuItemClick("invitation")
+                                }
+                                dense
+                              >
+                                <InsertInvitationIcon />
+                                <span style={{ marginLeft: "6px" }}>
+                                  Invitation
+                                </span>
+                              </MenuItem>
+                            </>
+                          )
+                        )}
+                      </Menu>
                     </TableCell>
                   </TableRow>
                 ))}

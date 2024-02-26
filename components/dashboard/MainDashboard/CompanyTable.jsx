@@ -23,8 +23,16 @@ import {
   InputLabel,
   MenuItem,
   Typography,
+  Menu,
 } from "@mui/material";
-import { DeleteOutline, Edit, UpdateSharp } from "@mui/icons-material";
+import {
+  DeleteOutline,
+  DoNotDisturbAlt,
+  Edit,
+  MoreVert,
+  UpdateSharp,
+} from "@mui/icons-material";
+import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import useImage from "../../../hooks/useImage";
@@ -35,9 +43,11 @@ import {
   useUpdateCompanyStatusMutation,
   useGenerateQrCodeQuery,
 } from "@/services/api";
+import { handleClientScriptLoad } from "next/script";
 
 const CompanyTable = ({ companies, statusFilter }) => {
   const router = useRouter();
+
   const [filteredData, setFilteredData] = useState(companies);
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [isDeleteConfirmationDialogOpen, setDeleteConfirmationDialogOpen] =
@@ -58,6 +68,16 @@ const CompanyTable = ({ companies, statusFilter }) => {
   const [qrCodeContent, setQrCodeContent] = useState("");
   const [companyIdForQrCode, setCompanyIdForQrCode] = useState(null);
   const generateQrCode = useGenerateQrCodeQuery(); // This line initializes the hook
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedMenuCompanyId, setSelectedMenuCompanyId] = useState(null);
+  const handleOpenMenu = (event, companyId) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedMenuCompanyId(companyId);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
 
   const handleSearchTextChange = (event) => {
     const text = event.target.value.toLowerCase();
@@ -99,10 +119,10 @@ const CompanyTable = ({ companies, statusFilter }) => {
   const handleCloseConfirmationDialog = () => {
     setDeleteConfirmationDialogOpen(false);
     setStatusUpdateConfirmationDialogOpen(false);
+    setUpdateDialogOpen(false);
   };
-
-  const handleUpdateClick = (company) => {
-    setSelectedCompanyId(company.id);
+  const handleUpdateClick = () => {
+    setSelectedCompanyId(selectedMenuCompanyId); // Set the selected company ID
     setUpdateDialogOpen(true);
   };
 
@@ -181,8 +201,8 @@ const CompanyTable = ({ companies, statusFilter }) => {
               <TableCell>Company Name</TableCell>
               <TableCell>Employee Count</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>OQ Code</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>QR Code</TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -191,28 +211,35 @@ const CompanyTable = ({ companies, statusFilter }) => {
               filteredData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((company) => (
-                  <TableRow key={company.id}>
+                  <TableRow
+                    key={company.id}
+                    sx={{ borderBottom: "0.7px dotted #ccc" }}
+                  >
                     <TableCell>
                       <Link href={`/dashboard/company/${company.id}`} passHref>
                         <Button color="primary">{company.name}</Button>
                       </Link>
                     </TableCell>
                     <TableCell>{company.employee_count}</TableCell>
-                    <TableCell>
-                      <span
-                        style={{
-                          background:
-                            company.status === "Active"
-                              ? "#00800033"
-                              : "#FF505033",
-                          color:
-                            company.status === "Inactive" ? "red " : "green",
-                          padding: "7px",
-                          borderRadius: "4px",
-                        }}
-                      >
-                        {company.status}
-                      </span>
+                    <TableCell
+                      sx={{
+                        backgroundColor:
+                          company.status === "active"
+                            ? "#FF505033"
+                            : "#00800033",
+                        color: company.status === "active" ? "red" : "green",
+                        padding: "7px",
+                        borderRadius: "4px",
+                        marginTop: "20px",
+                        textAlign: "center",
+                        justifyContent: "center",
+                        marginRight: "10px",
+                        height: "34px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {company.status}
                     </TableCell>
                     <TableCell>
                       {useImage({
@@ -226,22 +253,13 @@ const CompanyTable = ({ companies, statusFilter }) => {
                     </TableCell>
                     <TableCell>
                       <IconButton
-                        aria-label="delete"
-                        onClick={() => handleDeleteClick(company.id)}
-                      >
-                        <DeleteOutline />
-                      </IconButton>
-                      <IconButton
                         aria-label="edit"
                         onClick={() => handleUpdateClick(company)}
                       >
                         <Edit />
                       </IconButton>
-                      <IconButton
-                        aria-label="status"
-                        onClick={() => handleUpdateStatusClick(company.id)}
-                      >
-                        <UpdateSharp />
+                      <IconButton onClick={handleOpenMenu}>
+                        <MoreVert />
                       </IconButton>
                     </TableCell>
                   </TableRow>
@@ -258,7 +276,43 @@ const CompanyTable = ({ companies, statusFilter }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </TableContainer>
-      {/* Delete Confirmation Dialog */}
+      <Menu
+        id="company-actions-menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+        PaperProps={{
+          style: {
+            maxHeight: "70px", // Adjust this value as needed
+            width: "130px",
+            padding: 0, // Remove padding
+            marginTop: "-60px",
+            marginLeft: "-120px",
+            boxShadow: "none",
+          },
+        }}
+      >
+        <MenuItem
+          onClick={() => handleUpdateClick(selectedCompanyId)}
+          style={{ marginTop: "0px", padding: 0 }}
+        >
+          <Edit
+            style={{ marginRight: "5px", marginBottom: "0px", padding: 0 }}
+          />
+          Edit
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => handleUpdateStatusClick(selectedCompanyId)}
+          style={{ padding: 0 }}
+        >
+          <DoNotDisturbAltIcon
+            style={{ marginRight: "5px", marginBottom: "0px", padding: 0 }}
+          />
+          Inactive
+        </MenuItem>
+      </Menu>
+
       <Dialog
         open={isDeleteConfirmationDialogOpen}
         onClose={handleCloseConfirmationDialog}
