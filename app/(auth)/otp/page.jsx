@@ -11,42 +11,6 @@ import { useAuth } from "@/context/AuthContext";
 import { useFormik } from "formik";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useMediaQuery } from "@mui/material";
-const styles = {
-  container: {
-    flexGrow: 1,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    display: "block",
-    maxWidth: "100%",
-    // Hide the image on screens smaller than 600px
-    "@media (maxWidth: 600px)": {
-      display: "none",
-    },
-  },
-};
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "100%",
-  boxShadow: "none",
-  elevation: 0,
-  background: "transparent",
-}));
-
-const LogoContainer = styled("div")({
-  marginBottom: "16px",
-});
-
 const Otp = () => {
   const router = useRouter(); // Define the router object using the useRouter hook
 
@@ -179,28 +143,53 @@ const Otp = () => {
 
   const timerMinutes = Math.floor(timer / 60);
   const timerSeconds = timer % 60;
+  const isMobile = useMediaQuery("(max-width:900px)");
 
   return (
-    <Box sx={{ flexGrow: 1, height: "100vh" }}>
-      <Grid container spacing={2}>
+    <Box sx={{flexGrow: 1,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "100vh", // Adjusted minHeight instead of maxHeight
+      objectFit: "cover",
+      overflow: "hidden",}}>
+      <Grid container  spacing={3} justifyContent="center" alignItems="center">
         <Grid item xs={6}>
-          <Image
+          
+          {!isMobile && ( // Hide the image on mobile screens
+            <Image
             src="/auth/login.png"
-            width={950}
-            height={925}
-            alt="Logo"
-            style={{
-              ...styles.image,
-              display: isScreenSmall ? "none" : "block",
-            }}
-          />
+              alt="login image"
+              // layout="responsive" // Making the image responsive
+              width={isMobile ? 300 : 900} // Adjusted width based on screen size
+              height={900}
+              style={ {  display: "block",
+              maxWidth: "100%",
+              height: "auto",}}
+              priority
+            />
+          )}
         </Grid>
         <Grid item xs={12} md={6}>
-          <Item>
-            <LogoContainer>
+        <Paper style={{
+          
+            typography: "body2",
+            padding: "16px",
+            textAlign: "center",
+            color: "gray",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            boxShadow: "none",
+            elevation: 0,
+            background: "transparent",
+          }}>
+            <div style={{marginTop:"50px"}}>
               <Image src="/hajir-logo.png" width={140} height={50} alt="Logo" />
-            </LogoContainer>
-            <div>
+            </div>
+            {/* <div>
               <h2>Authentication</h2>
               <p style={{ whiteSpace: "pre-line" }}>
                 Salary calculation made easy, track your
@@ -211,7 +200,20 @@ const Otp = () => {
                 <br />
                 Enter the one-time password sent to your mobile number
               </p>
-            </div>
+            </div> */}
+             <div>
+              
+              <h1 style={{ color: 'rgba(34, 64, 139, 0.87)' , fontWeight:'500', fontSize:'18px', marginTop:'-10px'}}>Smart attendance system</h1>
+                        
+                           <h1 style={{fontWeight:'400', fontSize:'14px',whiteSpace: "pre-line",marginTop:'5px'}}>Enter the OTP code that has been sent to your mobile number </h1>
+                         </div>
+            <Image
+src="/auth/maskotp.png"
+    width={175}
+    height={170}
+   style={{marginTop:'20px', marginBottom:'60px'}}
+   alt="otp"
+/>
 
             <Box
               component="form"
@@ -255,6 +257,7 @@ const Otp = () => {
                         marginRight: "20px",
                         alignItems: "center",
                         paddingLeft: "8px", // Add marginRight to create a gap between input boxes
+                        marginTop:'-20px'
                       }}
                     />
                   ))}
@@ -263,7 +266,8 @@ const Otp = () => {
                 <br />
 
                 {/* Verify button */}
-                <Button type="submit" variant="contained" color="primary">
+            
+                <Button type="submit" variant="contained" color="primary" sx={{marginTop:'5px', width:'260px'}}>
                   Verify
                 </Button>
               </div>
@@ -275,6 +279,7 @@ const Otp = () => {
                 marginTop: "8px",
                 display: "flex",
                 alignItems: "center",
+                marginTop:'2px'
               }}
             >
               <p style={{ color: timer === 0 ? "red" : "inherit" }}>
@@ -311,7 +316,7 @@ const Otp = () => {
             >
               Change number again{" "}
             </p>
-          </Item>
+          </Paper>
         </Grid>
       </Grid>
     </Box>

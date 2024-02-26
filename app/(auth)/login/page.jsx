@@ -13,40 +13,6 @@ import { useRouter } from "next/navigation";
 import ScrollDialog from "@/components/Auth/ScrollDialog";
 import { postRequest } from "@/services/ApiRequestService";
 
-const BasicGridStyles = {
-  container: {
-    flexGrow: 1,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100vh",
-    objectFit: "cover",
-    overflow: "hidden",
-  },
-  image: {
-    display: "block",
-    maxWidth: "100%",
-    height: "auto",
-  },
-};
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "100%",
-  boxShadow: "none",
-  elevation: 0,
-  background: "transparent",
-}));
-const LogoContainer = styled("div")({
-  marginBottom: "16px",
-});
 const validationSchema = yup.object({
   phone: yup
     .string()
@@ -167,29 +133,59 @@ export default function Signin() {
   });
 
   return (
-    <Box sx={BasicGridStyles.container}>
+    <Box sx={{
+      flexGrow: 1,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "100vh",
+      objectFit: "cover",
+      overflow: "hidden",
+    
+    }}>
       <Grid container spacing={3} justifyContent="center" alignItems="center">
         <Grid item xs={12} md={6}>
           {!isScreenSmall && (
             <Image
               src="/auth/login.png"
               alt="login image"
-              layout="responsive" // Making the image responsive
+              // layout="responsive" // Making the image responsive
               width={isScreenSmall ? 300 : 900} // Adjusted width based on screen size
               height={900}
-              style={BasicGridStyles.image}
+              style={{   display: "block",
+              maxWidth: "100%",
+              height: "auto",}}
+              priority
             />
           )}
         </Grid>
         <Grid item xs={12} md={6}>
-          <Item>
-            <LogoContainer>
-              <Image src="/hajir-logo.png" width={140} height={50} alt="Logo" />
-            </LogoContainer>
 
-            <h2>Authentication</h2>
+        <Paper
+            sx={{
+              backgroundColor: theme => theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+              typography: "body2",
+              padding: "16px",
+              textAlign: "center",
+              color: theme => theme.palette.text.secondary,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+              boxShadow: "none",
+              elevation: 0,
+              background: "transparent",
+            }}
+          >
+          
+            <div style={{marginTop:'50px', marginBottom:'0px'}}>
+              <Image src="/hajir-logo.png" width={140} height={50} alt="Logo"/>
+            </div>
 
-            <div style={{ marginBottom: "10px" }}>
+            <h2 style={{marginBottom:'0px', marginTop:'0px'}}>Authentication</h2>
+
+            <div style={{ marginBottom: "0px" }}>
               {images[selectedImageIndex].content}
             </div>
 
@@ -240,11 +236,11 @@ export default function Signin() {
               </Button>
             </Box>
 
-            <p style={{ whiteSpace: "pre-line", marginTop: "8px" }}>
+            <p style={{ whiteSpace: "pre-line", marginTop: "0px" }}>
               We will send you a one-time password on this mobile number
             </p>
 
-            <p style={{ whiteSpace: "pre-line" }}>
+            <p style={{ whiteSpace: "pre-line" , marginTop:'4px'}}>
               I have read and agree to the{" "}
               <span
                 style={{ textDecoration: "underline", cursor: "pointer" }}
@@ -255,7 +251,8 @@ export default function Signin() {
             </p>
 
             <ScrollDialog open={open} onClose={handleClose} />
-          </Item>
+          
+          </Paper>
         </Grid>
       </Grid>
     </Box>
