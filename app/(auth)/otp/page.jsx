@@ -16,19 +16,25 @@ import { postRequest } from "@/services/ApiRequestService";
 
 // Styles for components
 const styles = {
+  // container: {
+  //   flexGrow: 1,
+  //   display: "flex",
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  // },
   container: {
     flexGrow: 1,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    height: "100vh", // Adjusted minHeight instead of maxHeight
+    objectFit: "cover",
+    overflow: "hidden",
   },
   image: {
     display: "block",
     maxWidth: "100%",
-    // Hide the image on screens smaller than 600px
-    "@media (maxWidth: 600px)": {
-      display: "none",
-    },
+    height: "auto", // Ensuring the image maintains aspect ratio
   },
 };
 const Item = styled(Paper)(({ theme }) => ({
@@ -88,7 +94,7 @@ const Otp = () => {
           setIsLoggedIn(true);
           setAuthUser({ user: data.data.user, token: data.data.token });
           router.push("/dashboard");
-          refetch();
+          // refetch();
         } else {
           console.error("OTP verification failed. Message:", data.message);
           alert("Wrong OTP. Please enter the correct OTP.");
@@ -167,21 +173,25 @@ const Otp = () => {
 
   const timerMinutes = Math.floor(timer / 60);
   const timerSeconds = timer % 60;
+  const isMobile = useMediaQuery("(max-width:900px)");
 
   return (
-    <Box sx={{ flexGrow: 1, height: "100vh" }}>
-      <Grid container spacing={2}>
+    <Box sx={styles.container}>
+      <Grid container spacing={3} justifyContent="center" alignItems="center">
         <Grid item xs={6}>
-          <Image
+
+          
+{!isMobile && ( // Hide the image on mobile screens
+            <Image
             src="/auth/login.png"
-            width={950}
-            height={925}
-            alt="Logo"
-            style={{
-              ...styles.image,
-              display: isScreenSmall ? "none" : "block",
-            }}
-          />
+              alt="login image"
+              // layout="responsive" // Making the image responsive
+              width={isMobile ? 300 : 900} // Adjusted width based on screen size
+              height={900}
+              style={styles.image}
+              priority
+            />
+          )}
         </Grid>
         <Grid item xs={12} md={6}>
           <Item>
@@ -234,7 +244,7 @@ const Otp = () => {
                       value={digit}
                       onChange={(e) => handleInputChange(index, e.target.value)}
                       variant="outlined"
-                      size="large"
+                      size="small"
                       sx={{
                         width: "50px", // Adjust the width as needed
                         height: "40px", // Adjust the height as needed

@@ -91,10 +91,11 @@ export default function BasicGrid() {
             <Image
               src="/auth/login-image-default.png"
               alt="login image"
-              layout="responsive" // Making the image responsive
+              // layout="responsive" // Making the image responsive
               width={isMobile ? 300 : 900} // Adjusted width based on screen size
               height={900}
               style={BasicGridStyles.image}
+              priority
             />
           )}
         </Grid>
