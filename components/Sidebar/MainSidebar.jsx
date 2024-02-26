@@ -139,7 +139,7 @@ const MainSidebar = () => {
               selected={selectedItem === href || router.pathname === href}
              
               onClick={() => setSelectedItem(href)}
-              style={{ backgroundColor: selectedItem === href || router.pathname === href ? '#eee' : 'transparent' }}
+              style={{ backgroundColor: selectedItem === href || router.pathname === href ? '#22408B1F' : 'transparent' }}
               
               
             >

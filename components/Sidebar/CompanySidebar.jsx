@@ -20,12 +20,16 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import Collapse from "@mui/material/Collapse";
 import { useParams } from "next/navigation";
 import { Button } from "@mui/material";
-import TestProfileCard from "../testprofile/TestProfileCard";
 
+import TestProfileCard from "../testprofile/TestProfileCard";
+import { useRouter } from "next/navigation"
 const CompanySidebar = () => {
+  const router = useRouter();
+
   const [openSettings, setOpenSettings] = useState(false);
   const [openReport, setOpenReport] = useState(false); // Add this line
   const { companyId } = useParams();
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const onLogoutClick = (e) => {
     console.log(e, "click in 29");
@@ -136,7 +140,7 @@ const CompanySidebar = () => {
         {LINKS.map(({ text, href, icon: Icon, sublinks }) => (
           <div key={href || text}>
             <ListItem disablePadding>
-              <ListItemButton
+               <ListItemButton
                 component={href ? Link : undefined}
                 href={href}
                 onClick={
@@ -146,8 +150,13 @@ const CompanySidebar = () => {
                       : handleSettingsClick
                     : undefined
                 }
-              >
-                <ListItemIcon>
+                selected={selectedItem === href || router.pathname === href}
+             
+             
+                style={{ backgroundColor: selectedItem === href || router.pathname === href ? '#22408B1F' : 'transparent' }}
+                
+              > 
+     <ListItemIcon>
                   <Icon />
                 </ListItemIcon>
                 <ListItemText primary={text} />
@@ -176,6 +185,12 @@ const CompanySidebar = () => {
                     <ListItemButton
                       component={href ? Link : undefined}
                       href={href}
+                      selected={selectedItem === href || router.pathname === href}
+             
+                      onClick={() => setSelectedItem(href)}
+                      style={{ backgroundColor: selectedItem === href || router.pathname === href ? '#22408B1F' : 'transparent' }}
+                      
+                      
                       sx={{ pl: 4 }}
                     >
                       <ListItemIcon>
