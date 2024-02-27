@@ -160,8 +160,7 @@ const Otp = () => {
             <Image
             src="/auth/login.png"
               alt="login image"
-              // layout="responsive" // Making the image responsive
-              width={isMobile ? 300 : 900} // Adjusted width based on screen size
+              width={isMobile ? 300 : 900} 
               height={900}
               style={ {  display: "block",
               maxWidth: "100%",
@@ -187,23 +186,11 @@ const Otp = () => {
             background: "transparent",
           }}>
             <div style={{marginTop:"50px"}}>
-              <Image src="/hajir-logo.png" width={140} height={50} alt="Logo" />
+              <Image src="/hajir-logo.png" width={140} height={50} alt="Logo"  priority/>
             </div>
-            {/* <div>
-              <h2>Authentication</h2>
-              <p style={{ whiteSpace: "pre-line" }}>
-                Salary calculation made easy, track your
-                <br />
-                staffs overtime, leave day, late day, and
-                <br />
-                live daily wages interactive reports.
-                <br />
-                Enter the one-time password sent to your mobile number
-              </p>
-            </div> */}
              <div>
               
-              <h1 style={{ color: 'rgba(34, 64, 139, 0.87)' , fontWeight:'500', fontSize:'18px', marginTop:'-10px'}}>Smart attendance system</h1>
+              <h1 style={{ color: 'rgba(34, 64, 139, 0.87)' , fontWeight:'500', fontSize:'18px', marginTop:'7px'}}>Smart attendance system</h1>
                         
                            <h1 style={{fontWeight:'400', fontSize:'14px',whiteSpace: "pre-line",marginTop:'5px'}}>Enter the OTP code that has been sent to your mobile number </h1>
                          </div>
@@ -213,6 +200,7 @@ src="/auth/maskotp.png"
     height={170}
    style={{marginTop:'20px', marginBottom:'60px'}}
    alt="otp"
+   priority
 />
 
             <Box
@@ -304,8 +292,8 @@ src="/auth/maskotp.png"
                 </Button>
               )}
             </div>
-
-            <p
+            
+            {/* <p
               style={{
                 whiteSpace: "pre-line",
                 textDecoration: "underline",
@@ -315,7 +303,7 @@ src="/auth/maskotp.png"
               onClick={() => router.push("/login")}
             >
               Change number again{" "}
-            </p>
+            </p> */}
           </Paper>
         </Grid>
       </Grid>
