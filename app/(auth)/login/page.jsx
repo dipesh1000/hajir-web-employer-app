@@ -42,36 +42,38 @@ export default function Signin() {
     {
       src: "/auth/otp1111.png",
       width: 175,
-      height: 190,
+      height: 180,
       alt: "First Image",
+   
       content: (
         <>
-          <p>Login with employer will help you to track your</p>
-          <p>all the staff activities from your smart devices.</p>
+          <p>Login with employer will help you to <br/>track your
+         all the staff activities from your <br/>smart devices.</p>
         </>
       ),
     },
     {
       src: "/auth/otp2222.png",
       width: 175,
-      height: 190,
+      height: 180,
       alt: "Second Image",
       content: (
         <>
-          <p>You can manage your employee attendance, salary,</p>
-          <p>overtime and payroll anywhere in the world.</p>
+          <p>You can manage your employee <br/>
+           attendance, salary,overtime and payroll <br/>
+           anywhere in the world.</p>
         </>
       ),
     },
     {
       src: "/auth/otp3333.png",
       width: 175,
-      height: 190,
+      height: 180,
       alt: "Third Image",
       content: (
         <>
-          <p>Live attendance, quick reports, allowance & overtime</p>
-          <p>expense calculation and export reports in csv/excel/pdf.</p>
+          <p>Live attendance, quick reports,<br/>allowance & overtime
+          expense calculation  <br/> and export reports in csv/excel/pdf.</p>
         </>
       ),
     },
@@ -183,9 +185,9 @@ export default function Signin() {
               <Image src="/hajir-logo.png" width={140} height={50} alt="Logo"/>
             </div>
 
-            <h2 style={{marginBottom:'0px', marginTop:'0px'}}>Authentication</h2>
-
-            <div style={{ marginBottom: "0px" }}>
+         <h1 style={{ color: 'rgba(34, 64, 139, 0.87)' , fontWeight:'500', fontSize:'18px', marginTop:'1px'}}>Smart attendance system</h1>
+       
+            <div style={{ marginBottom: "0px" , fontWeight:'500', marginTop:'-7px', paddingTop:'0px', paddingBottom:'0px', marginTop:'-6px'}}>
               {images[selectedImageIndex].content}
             </div>
 
@@ -194,7 +196,8 @@ export default function Signin() {
               width={images[selectedImageIndex].width}
               height={images[selectedImageIndex].height}
               alt={images[selectedImageIndex].alt}
-              style={{ marginTop: "15px" }}
+              style={{ marginTop: "0px" }}
+              priority
             />
             <Box
               component="form"
@@ -209,6 +212,7 @@ export default function Signin() {
               onSubmit={formik.handleSubmit}
               style={{ width: "250px" }}
             >
+      
               <TextField
                 fullWidth
                 id="phone"
@@ -221,30 +225,34 @@ export default function Signin() {
                 error={formik.touched.phone && Boolean(formik.errors.phone)}
                 helperText={formik.touched.phone && formik.errors.phone}
                 style={{
-                  marginTop: "20px",
+                  marginTop: "26px",
                   width: "300px",
-                  marginLeft: "56px",
+                  marginLeft: "6px",
+              justifyContent:'center',
+              alignItems:'center'
                 }}
               />
               <Button
                 variant="contained"
                 type="submit"
                 disabled={buttonClicked}
-                style={{ width: "300px", marginLeft: "60px" }}
+                style={{ width: "300px", marginLeft: "10px", marginTop:'2px' }}
               >
                 Get OTP
               </Button>
+        
             </Box>
 
-            <p style={{ whiteSpace: "pre-line", marginTop: "0px" }}>
-              We will send you a one-time password on this mobile number
+            <p style={{ whiteSpace: "pre-line", marginTop: "10px" , marginBottom:'13px', color:'black', fontSize:'14px'}}>
+              We will send OTP on this mobile number
             </p>
 
-            <p style={{ whiteSpace: "pre-line" , marginTop:'4px'}}>
-              I have read and agree to the{" "}
+            <p style={{ whiteSpace: "pre-line" , marginTop:'-6px', color:'black', marginBottom:'20px'}}>
+              I have read and agree {" "}
               <span
-                style={{ textDecoration: "underline", cursor: "pointer" }}
+                style={{ textDecoration: "none", cursor: "pointer" }}
                 onClick={handleOpen}
+
               >
                 Terms & Services
               </span>

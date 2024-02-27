@@ -53,11 +53,6 @@ export default function TabsActiveInactive({
         <Tab
           label={
             <div
-            // style={{
-            //   fontSize: "1rem",
-            //   marginBottom: "4px",
-            //   marginRight: "6px",
-            // }}
             >
               Active{" "}
               <span
@@ -81,11 +76,7 @@ export default function TabsActiveInactive({
         <Tab
           label={
             <div
-            // style={{
-            //   fontSize: "1rem",
-            //   marginBottom: "4px",
-            //   marginRight: "6px",
-            // }}
+         
             >
               Inactive{" "}
               <span

@@ -22,7 +22,8 @@ export default function ScrollDialog({ open, onClose }) {
       aria-describedby="scroll-dialog-description"
       sx={{
         padding: "16px",
-        fontWeight:"100"
+        fontWeight:"100",
+       
       }}   >
       <DialogTitle id="scroll-dialog-title">
         HajirApp Terms of Service

@@ -31,8 +31,9 @@ export default function BasicGrid() {
       alt: "First Image",
       content: (
         <>
-          <p>Hajir will help you to manage your staffs attendance, payroll,</p>
-          <p>and personal reports of your company.</p>
+          <p>Hajir will help you to manage your <br/>
+          staffs attendance, payroll,
+          and personal <br/>reports of your company.</p>
         </>
       ),
       marginTop: "30px",
@@ -44,8 +45,9 @@ export default function BasicGrid() {
       alt: "Second Image",
       content: (
         <>
-          <p>Candidate can login and logout on official hours</p>
-          <p>and employer can notice staffs activities and generate reports.</p>
+          <p>Candidate can login and logout <br/>
+           on official hours
+          and employer can notice <br/>staffs activities and generate reports.</p>
         </>
       ),
       marginTop: "30px",
@@ -57,8 +59,8 @@ export default function BasicGrid() {
       alt: "Third Image",
       content: (
         <>
-          <p>Salary calculation made easy, track your staffs overtime,</p>
-          <p>leave day, late day, and live daily wages interactive reports.</p>
+          <p>Salary calculation made easy, track your  <br/> staffs overtime,
+          leave day, late day <br/> and live daily wages interactive reports.</p>
         </>
       ),
       marginTop: "30px",
@@ -118,8 +120,9 @@ export default function BasicGrid() {
               background: "transparent",
             }}
           >
-            <div style={{ marginBottom: "16px" }}>
-              <Image src="/hajir-logo.png" width={140} height={60} alt="Logo" />
+         
+            <div style={{marginTop:'50px', marginBottom:'0px'}}>
+              <Image src="/hajir-logo.png" width={140} height={50} alt="Logo"/>
             </div>
             <div>
               <h1
@@ -134,7 +137,7 @@ export default function BasicGrid() {
               <div
                 style={{
                   fontSize: "14px",
-                  fontWeight: "400",
+                  fontWeight: "500",
                   marginTop: images[selectedImageIndex].marginTop,
                 }}
               >
