@@ -24,12 +24,19 @@ import {
   MenuItem,
   Typography,
   Menu,
+  Tooltip,
 } from "@mui/material";
 import {
+  BlockSharp,
+  Check,
+  CheckCircleOutline,
+  Delete,
   DeleteOutline,
   DoNotDisturbAlt,
   Edit,
+  EditAttributes,
   MoreVert,
+  Update,
   UpdateSharp,
 } from "@mui/icons-material";
 import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
@@ -43,7 +50,6 @@ import {
   useUpdateCompanyStatusMutation,
   useGenerateQrCodeQuery,
 } from "@/services/api";
-import { handleClientScriptLoad } from "next/script";
 
 const CompanyTable = ({ companies, statusFilter }) => {
   const router = useRouter();
@@ -70,6 +76,8 @@ const CompanyTable = ({ companies, statusFilter }) => {
   const generateQrCode = useGenerateQrCodeQuery(); // This line initializes the hook
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedMenuCompanyId, setSelectedMenuCompanyId] = useState(null);
+  const [selectedCompany, setSelectedCompany] = useState(null); // Add state for selected company
+
   const handleOpenMenu = (event, companyId) => {
     setAnchorEl(event.currentTarget);
     setSelectedMenuCompanyId(companyId);
@@ -121,24 +129,34 @@ const CompanyTable = ({ companies, statusFilter }) => {
     setStatusUpdateConfirmationDialogOpen(false);
     setUpdateDialogOpen(false);
   };
-  const handleUpdateClick = () => {
-    setSelectedCompanyId(selectedMenuCompanyId); // Set the selected company ID
+  const handleUpdateClick = (companyId) => {
+    setSelectedCompanyId(companyId);
     setUpdateDialogOpen(true);
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = (companyId) => {
     setUpdateDialogOpen(false);
+
     router.push(`/dashboard/company/editcompany/${selectedCompanyId}`);
   };
 
   const handleUpdateStatusClick = (companyId) => {
     setSelectedCompanyId(companyId);
+    const company = companies.find((company) => company.id === companyId);
+    setSelectedCompany(company);
     setStatusUpdateConfirmationDialogOpen(true);
   };
 
   const handleConfirmStatusUpdate = async () => {
     try {
-      const newStatus = "inactive";
+      let newStatus = "Inactive"; // Default new status is "Inactive"
+
+      if (selectedCompany && selectedCompany.status === "Active") {
+        newStatus = "Inactive"; // If current status is "Active", set new status to "Inactive"
+      } else {
+        newStatus = "Active"; // If current status is not "Active" (i.e., it's "Inactive"), set new status to "Active"
+      }
+
       await updateCompanyStatus({
         company_id: selectedCompanyId,
         status: newStatus,
@@ -153,10 +171,10 @@ const CompanyTable = ({ companies, statusFilter }) => {
     setQrCodeContent(content);
     setOpenQrCodeModal(true);
   };
-  const generateQrCodeClick = (companyId) => {
-    setCompanyIdForQrCode(companyId); // Set the companyIdForQrCode
-    setOpenQrCodeModal(true); // Open the QR code modal
-  };
+  // const generateQrCodeClick = (companyId) => {
+  //   setCompanyIdForQrCode(companyId); // Set the companyIdForQrCode
+  //   setOpenQrCodeModal(true); // Open the QR code modal
+  // };
 
   const generateNewQrCode = async () => {
     console.log("Generating new QR code for company:", companyIdForQrCode);
@@ -180,18 +198,13 @@ const CompanyTable = ({ companies, statusFilter }) => {
     <Box sx={{ display: "flex", flexDirection: "column", height: 1000, mt: 3 }}>
       <Box sx={{ mb: 2 }}>
         <TextField
-          label="Search by Employee Name"
+          label="Search by Company Name"
           variant="outlined"
           size="small"
           onChange={handleSearchTextChange}
           value={searchText}
         />
-        <FormControl variant="outlined" size="small" sx={{ ml: 2, width: 200 }}>
-          <InputLabel>Department</InputLabel>
-          <Select label="Department" autoWidth={false}>
-            <MenuItem value="">All Departments</MenuItem>
-          </Select>
-        </FormControl>
+
         <br />
       </Box>
       <TableContainer component={Paper}>
@@ -200,6 +213,7 @@ const CompanyTable = ({ companies, statusFilter }) => {
             <TableRow>
               <TableCell>Company Name</TableCell>
               <TableCell>Employee Count</TableCell>
+              <TableCell>Approver Count</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>QR Code</TableCell>
               <TableCell>Action</TableCell>
@@ -213,7 +227,7 @@ const CompanyTable = ({ companies, statusFilter }) => {
                 .map((company) => (
                   <TableRow
                     key={company.id}
-                    sx={{ borderBottom: "0.7px dotted #ccc" }}
+                    // sx={{ borderBottom: "0.7px dotted #ccc" }}
                   >
                     <TableCell>
                       <Link href={`/dashboard/company/${company.id}`} passHref>
@@ -221,13 +235,14 @@ const CompanyTable = ({ companies, statusFilter }) => {
                       </Link>
                     </TableCell>
                     <TableCell>{company.employee_count}</TableCell>
+                    <TableCell>{company.approver_count}</TableCell>
                     <TableCell
                       sx={{
                         backgroundColor:
-                          company.status === "active"
-                            ? "#FF505033"
-                            : "#00800033",
-                        color: company.status === "active" ? "red" : "green",
+                          company.status === "Active"
+                            ? "#00800033"
+                            : "#FF505033",
+                        color: company.status === "Active" ? "green" : "red",
                         padding: "7px",
                         borderRadius: "4px",
                         marginTop: "20px",
@@ -252,15 +267,35 @@ const CompanyTable = ({ companies, statusFilter }) => {
                       })}
                     </TableCell>
                     <TableCell>
-                      <IconButton
-                        aria-label="edit"
-                        onClick={() => handleUpdateClick(company)}
-                      >
-                        <Edit />
-                      </IconButton>
-                      <IconButton onClick={handleOpenMenu}>
-                        <MoreVert />
-                      </IconButton>
+                      {company.status === "Active" ? (
+                        <>
+                          <IconButton
+                            onClick={() => handleUpdateClick(company)}
+                          >
+                            <Edit />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => handleUpdateStatusClick(company.id)}
+                          >
+                            <Update />
+                          </IconButton>
+                        </>
+                      ) : (
+                        <>
+                          <IconButton
+                            onClick={() => {
+                              handleDeleteClick(company.id);
+                            }}
+                          >
+                            <Delete />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => handleUpdateStatusClick(company.id)}
+                          >
+                            <Update />
+                          </IconButton>
+                        </>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -276,43 +311,7 @@ const CompanyTable = ({ companies, statusFilter }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </TableContainer>
-      <Menu
-        id="company-actions-menu"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleCloseMenu}
-        PaperProps={{
-          style: {
-            maxHeight: "70px", // Adjust this value as needed
-            width: "130px",
-            padding: 0, // Remove padding
-            marginTop: "-60px",
-            marginLeft: "-120px",
-            boxShadow: "none",
-          },
-        }}
-      >
-        <MenuItem
-          onClick={() => handleUpdateClick(selectedCompanyId)}
-          style={{ marginTop: "0px", padding: 0 }}
-        >
-          <Edit
-            style={{ marginRight: "5px", marginBottom: "0px", padding: 0 }}
-          />
-          Edit
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => handleUpdateStatusClick(selectedCompanyId)}
-          style={{ padding: 0 }}
-        >
-          <DoNotDisturbAltIcon
-            style={{ marginRight: "5px", marginBottom: "0px", padding: 0 }}
-          />
-          Inactive
-        </MenuItem>
-      </Menu>
-
+      {/* delete dialog  */}
       <Dialog
         open={isDeleteConfirmationDialogOpen}
         onClose={handleCloseConfirmationDialog}
@@ -357,7 +356,15 @@ const CompanyTable = ({ companies, statusFilter }) => {
         <DialogTitle>Confirm Status Update</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to change the status of this company?
+            Are you sure you want to change the status of{" "}
+            <span style={{ color: "red" }}>
+              {selectedCompany && selectedCompany.name}
+            </span>{" "}
+            to{" "}
+            {selectedCompany && selectedCompany.status === "Active"
+              ? "Inactive"
+              : "Active"}
+            ?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -1,27 +1,11 @@
 "use client";
 import { Grid, Typography } from "@mui/material";
 import * as React from "react";
-import { experimentalStyled as styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import { Stack } from "@mui/system";
 import { useParams } from "next/navigation";
 import { useGetEmployerCompaniesQuery } from "@/services/api";
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(4),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-
-  width: "100vh",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  marginTop: "20px",
-}));
 
 const DashboardDetailedbottom = () => {
   const { companyId } = useParams();
@@ -32,17 +16,19 @@ const DashboardDetailedbottom = () => {
     isLoading,
     refetch,
   } = useGetEmployerCompaniesQuery(companyId);
-  // console.log("use client", candidateData, isLoading);
   console.log(companyData?.data?.active_companies, "active_companies");
   console.log(companyData?.data?.inactive_companies, "inactive_companies");
 
-  const totalCompany =
-    companyData?.data?.active_companies?.length +
-    companyData?.data?.inactive_companies?.length;
+  const activeCompaniesLength =
+    companyData?.data?.active_companies?.length || 0;
+  const inactiveCompaniesLength =
+    companyData?.data?.inactive_companies?.length || 0;
+
+  const totalCompany = activeCompaniesLength + inactiveCompaniesLength;
 
   return (
     <Box
-      style={{
+      sx={{
         flexGrow: 1,
         height: "100%",
         display: "flex",
@@ -51,14 +37,23 @@ const DashboardDetailedbottom = () => {
       }}
     >
       <Stack
-        container
+        container="true"
         direction={{ xs: "column", sm: "row" }}
         sx={{ width: "100%", marginTop: "10px" }}
         spacing={{ xs: 1, sm: 2, md: 1 }}
       >
-      
-        <Item
-          sx={{ backgroundColor: "rgba(34, 64, 139, 0.08)", height: "120px" }}
+        <Paper
+          sx={{
+            backgroundColor: "rgba(34, 64, 139, 0.08)",
+            height: "120px",
+            padding: (theme) => theme.spacing(4),
+            textAlign: "center",
+            color: (theme) => theme.palette.text.secondary,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           <Typography variant="body1" sx={{ color: "black", fontSize: "20px" }}>
             Total Company
@@ -66,9 +61,20 @@ const DashboardDetailedbottom = () => {
           <Typography sx={{ color: "#22408B", fontSize: "28px" }} variant="h6">
             {totalCompany}
           </Typography>
-        </Item>
-        <Item
-          sx={{ backgroundColor: "rgba(34, 64, 139, 0.09)", height: "120px" }}
+        </Paper>
+
+        <Paper
+          sx={{
+            backgroundColor: "rgba(34, 64, 139, 0.09)",
+            height: "120px",
+            padding: (theme) => theme.spacing(4),
+            textAlign: "center",
+            color: (theme) => theme.palette.text.secondary,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           <Typography variant="body1" sx={{ color: "black", fontSize: "20px" }}>
             Total Employee
@@ -76,9 +82,20 @@ const DashboardDetailedbottom = () => {
           <Typography sx={{ color: "#22408B", fontSize: "28px" }} variant="h6">
             0
           </Typography>
-        </Item>
-        <Item
-          sx={{ backgroundColor: "rgba(0, 128, 0, 0.08)", height: "120px" }}
+        </Paper>
+
+        <Paper
+          sx={{
+            backgroundColor: "rgba(0, 128, 0, 0.08)",
+            height: "120px",
+            padding: (theme) => theme.spacing(4),
+            textAlign: "center",
+            color: (theme) => theme.palette.text.secondary,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           <Typography variant="body1" sx={{ color: "black", fontSize: "20px" }}>
             Active Employee
@@ -86,9 +103,20 @@ const DashboardDetailedbottom = () => {
           <Typography sx={{ color: "#22408B", fontSize: "28px" }} variant="h6">
             0
           </Typography>
-        </Item>
-        <Item
-          sx={{ backgroundColor: "rgba(255, 80, 80, 0.08)", height: "120px" }}
+        </Paper>
+
+        <Paper
+          sx={{
+            backgroundColor: "rgba(255, 80, 80, 0.08)",
+            height: "120px",
+            padding: (theme) => theme.spacing(4),
+            textAlign: "center",
+            color: (theme) => theme.palette.text.secondary,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           <Typography variant="body1" sx={{ color: "black", fontSize: "20px" }}>
             InActive Employee
@@ -96,7 +124,7 @@ const DashboardDetailedbottom = () => {
           <Typography sx={{ color: "#22408B", fontSize: "28px" }} variant="h6">
             0
           </Typography>
-        </Item>
+        </Paper>
       </Stack>
     </Box>
   );
