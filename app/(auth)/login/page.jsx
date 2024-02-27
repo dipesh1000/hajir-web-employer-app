@@ -185,7 +185,7 @@ export default function Signin() {
               <Image src="/hajir-logo.png" width={140} height={50} alt="Logo"/>
             </div>
 
-         <h1 style={{ color: 'rgba(34, 64, 139, 0.87)' , fontWeight:'500', fontSize:'18px', marginTop:'3px'}}>Smart attendance system</h1>
+         <h1 style={{ color: 'rgba(34, 64, 139, 0.87)' , fontWeight:'500', fontSize:'18px', marginTop:'1px'}}>Smart attendance system</h1>
        
             <div style={{ marginBottom: "0px" , fontWeight:'500', marginTop:'-7px', paddingTop:'0px', paddingBottom:'0px', marginTop:'-6px'}}>
               {images[selectedImageIndex].content}
